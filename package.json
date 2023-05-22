@@ -1,0 +1,73 @@
+{
+  "name": "package-manager-intellisense",
+  "displayName": "package-manager-intellisense",
+  "description": "Intellisense for package managers files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "author": {
+    "name": "Faissal Wahabali"
+  },
+  "publisher": "faissaloux",
+  "license": "MIT",
+  "homepage": "https://github.com/faissaloux/vscode-package-manager-intellisense/blob/master/README.md",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/faissaloux/vscode-package-manager-intellisense"
+  },
+  "bugs": {
+      "url": "https://github.com/faissaloux/vscode-package-manager-intellisense/issues"
+  },
+  "keywords": [
+      "npm",
+      "yarn",
+      "pnpm",
+      "dependency",
+      "manager",
+      "installed package version",
+      "package hints in VS Code",
+      "package hints",
+      "package.json"
+  ],
+  "activationEvents": [
+    "onLanguage:json"
+  ],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.78.0",
+    "@types/yarnpkg__lockfile": "^1.1.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "@vscode/test-electron": "^2.3.0",
+    "eslint": "^8.39.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "@yarnpkg/lockfile": "^1.1.0",
+    "js-yaml": "^4.1.0"
+  }
+}
