@@ -14,6 +14,7 @@
   },
   "publisher": "faissaloux",
   "license": "MIT",
+  "icon": "images/icon.png",
   "homepage": "https://github.com/faissaloux/vscode-package-manager-intellisense/blob/master/README.md",
   "repository": {
       "type": "git",
