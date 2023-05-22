@@ -1,8 +1,7 @@
 # VSCode package manager intellisense
 
-This extensions shows you versions of your installed packages.
+Extension that shows you versions of your installed packages.
 
-Packages installed versions hint
 ![hint](images/packages-installed-versions.png)
 
 ## Installation
