@@ -66,6 +66,7 @@ export class Packages {
         } else if (this.packageManager === 'yarn') {
             parsed = yarnlockfile.parse(content).object;
         } else {
+            // @ts-ignore
             parsed = jsYaml.load(content).packages;
         }
 
