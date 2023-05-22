@@ -14,7 +14,7 @@ export class Packages {
         'npm': 'packageName',
         'yarn': 'packageName@',
         'pnpm': '/packageName/',
-    }
+    };
 
     constructor(packageJsonFilePath: string) {
         this.rootPath = packageJsonFilePath.replace('package.json', '');
@@ -27,7 +27,7 @@ export class Packages {
 
         const installedPackages = this.parse(lockFileContent.toString());
 
-        if (this.packageManager == 'pnpm') {
+        if (this.packageManager === 'pnpm') {
             this.appendVersion(installedPackages);
         }
         
@@ -46,7 +46,7 @@ export class Packages {
             try{
                 await vscode.workspace.fs.readFile(lockFile);
 
-                return lock
+                return lock;
             } catch (error) {}
         }
         return Object.keys(this.locks)[0];
