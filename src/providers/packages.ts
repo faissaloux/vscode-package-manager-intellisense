@@ -74,7 +74,11 @@ export class Packages {
 
     appendVersion(packages: {[key: string]: any}) {
         for ( const pkg in packages) {
-            packages[pkg]['version'] = pkg.match(/\d+(\.\d+)+/)[0];
+            let version = pkg.match(/\d+(\.\d+)+/);
+
+            if (version) {
+                packages[pkg]['version'] = version[0];
+            }
         }
     }
 }
