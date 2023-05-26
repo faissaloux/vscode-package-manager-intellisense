@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Parser } from '../../parser/parser';
 
-export class javascript {
+export class javascript implements PackageManager {
     rootPath: string;
     packageManager: string = 'npm';
     locks: {[key: string]: string} = {

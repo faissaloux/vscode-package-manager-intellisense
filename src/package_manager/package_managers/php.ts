@@ -3,7 +3,7 @@ import { pathJoin } from '../../util/globals';
 import * as types from '../../types/types';
 import { Parser } from '../../parser/parser';
 
-export class Php {
+export class Php implements PackageManager {
     rootPath: string;
 
     constructor(packageJsonFilePath: string) {
