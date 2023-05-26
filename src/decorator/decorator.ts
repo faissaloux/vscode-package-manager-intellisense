@@ -36,7 +36,7 @@ export class Decorator {
                 let version = this.defaultVersion;
 
                 if(installedPackage?.version) {
-                    version = installedPackage?.version;
+                    version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
                 decorations.push(this.decoration(version, line));
