@@ -1,15 +1,18 @@
 import * as vscode from 'vscode';
 import * as globals from './util/globals';
 import { Decorator } from './decorator/decorator';
+import { PackageManager } from './package_manager/package_manager';
 
 export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidOpenTextDocument(() => {
 		const openEditor = vscode.window.visibleTextEditors.filter(
 			editor => editor.document.fileName.endsWith('package.json')
+				|| editor.document.fileName.endsWith('composer.json')
 		);
 
 		if (openEditor.length) {
-			new Decorator(openEditor[0]).decorate();
+			const packageManager = new PackageManager(openEditor[0]).get();
+			new Decorator(openEditor[0], packageManager).decorate();
 		}
 	});
 }
