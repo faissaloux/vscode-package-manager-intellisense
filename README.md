@@ -13,10 +13,11 @@ Extension that shows you versions of your installed packages.
 - npm
 - yarn
 - pnpm
+- composer
 
 ## Usage
-- Install your packages using `npm`, `yarn` or `pnpm`.
-- Open your `package.json` file.
+- Install your packages using `npm`, `yarn`, `pnpm` or `composer`.
+- Open your `package.json` or `composer.json` file.
 - Installed versions gonna be displayed to you.
 
 **Enjoy!**
