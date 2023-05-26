@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
 import * as globals from '../util/globals';
-import { Packages } from '../providers/packages';
+import { PackageManager } from '../package_manager/package_manager';
 
 export class Decorator {
     defaultVersion: string = 'n/a';
+    packagesToExclude: string[] = [
+        'php',
+    ];
 
-    constructor (private readonly editor: vscode.TextEditor) {
+    constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManager) {
         return this;
     }
 
@@ -14,20 +17,26 @@ export class Decorator {
         let contentJson = JSON.parse(content);
     
         const packagesNames: string[] = [
-            ...Object.keys(contentJson.dependencies || {}),
-            ...Object.keys(contentJson.devDependencies || {}),
+            ...Object.keys(contentJson['dependencies'] || {}),
+            ...Object.keys(contentJson['devDependencies'] || {}),
+            ...Object.keys(contentJson['require'] || {}),
+            ...Object.keys(contentJson['require-dev'] || {}),
         ];
     
         const decorations: vscode.DecorationOptions[] = [];
     
         for (const packageName of packagesNames) {
+            if (this.packagesToExclude.indexOf(packageName) !== -1) {
+                continue;
+            }
+
             let lines = this.getLines(this.editor.document, packageName);
             for (const line of lines) {
-                let installedPackage = await new Packages(this.editor.document.fileName).getInstalled(packageName);
+                let installedPackage = await this.packageManager.getInstalled(packageName);
                 let version = this.defaultVersion;
 
                 if(installedPackage?.version) {
-                    version = installedPackage?.version;
+                    version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
                 decorations.push(this.decoration(version, line));
