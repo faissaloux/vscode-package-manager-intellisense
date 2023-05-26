@@ -1,4 +1,3 @@
-import path = require('path');
 import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import * as types from '../../types/types';
