@@ -2,6 +2,7 @@ import path = require('path');
 import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import * as types from '../../types/types';
+import { Parser } from '../../parser/parser';
 
 export class Php {
     rootPath: string;
@@ -16,16 +17,12 @@ export class Php {
         const lockFile = vscode.Uri.file(lockPath);
         const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
 
-        const installedPackages = this.parse(lockFileContent.toString());
+        const installedPackages = new Parser("composer").parse(lockFileContent.toString());
 
         return installedPackages.find((pkg: types.InstalledPackage) => pkg.name === packageName);
     }
 
     async getLockPath(): Promise<string> {
         return pathJoin(this.rootPath, 'vendor', 'composer', 'installed.json');
-    }
-
-    parse(content: string): {[key: string]: any} {
-        return JSON.parse(content).packages;
     }
 }

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import * as yarnlockfile from '@yarnpkg/lockfile';
-import * as jsYaml from 'js-yaml';
+import { Parser } from '../../parser/parser';
 
 export class javascript {
     rootPath: string;
@@ -25,7 +24,7 @@ export class javascript {
         const lockFile = vscode.Uri.file(lockPath);
         const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
 
-        const installedPackages = this.parse(lockFileContent.toString());
+        const installedPackages = new Parser(this.packageManager).parse(lockFileContent.toString());
 
         if (this.packageManager === 'pnpm') {
             this.appendVersion(installedPackages);
@@ -54,23 +53,6 @@ export class javascript {
 
     lockPackageStartsWith(packageName: string): string {
         return this.startsWith[this.packageManager].replace('packageName', packageName);
-    }
-
-    parse(content: string): {[key: string]: any} {
-        let parsed;
-
-        if (this.packageManager === 'npm') {
-            parsed = JSON.parse(content).dependencies;
-
-            return parsed;
-        } else if (this.packageManager === 'yarn') {
-            parsed = yarnlockfile.parse(content).object;
-        } else {
-            // @ts-ignore
-            parsed = jsYaml.load(content).packages;
-        }
-
-        return parsed;
     }
 
     appendVersion(packages: {[key: string]: any}) {
