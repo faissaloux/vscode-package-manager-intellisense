@@ -1,9 +1,7 @@
-export type InstalledPackage = {
+export type ComposerInstalledPackage = {
     name: string,
-    source: {
-        url: string
-    },
-    description: string,
     version: string,
-    version_normalized: string
+    source: {
+        url: string,
+    },
 };

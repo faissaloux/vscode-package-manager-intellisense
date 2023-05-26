@@ -26,7 +26,9 @@ export class Decorator {
         const decorations: vscode.DecorationOptions[] = [];
     
         for (const packageName of packagesNames) {
-            if (this.packagesToExclude.indexOf(packageName) !== -1) continue;
+            if (this.packagesToExclude.indexOf(packageName) !== -1) {
+                continue;
+            }
 
             let lines = this.getLines(this.editor.document, packageName);
             for (const line of lines) {

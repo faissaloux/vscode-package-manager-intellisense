@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { javascript } from './package_managers/javascript';
+import { Javascript } from './package_managers/javascript';
 import { Php } from './package_managers/php';
 
 export class PackageManager {
@@ -28,7 +28,7 @@ export class PackageManager {
         if (this.packageManager === 'php') {
             installedPackage = await new Php(this.editorFileName).getInstalled(packageName);
         } else if (this.packageManager === 'javascript') {
-            installedPackage = await new javascript(this.editorFileName).getInstalled(packageName);
+            installedPackage = await new Javascript(this.editorFileName).getInstalled(packageName);
         }
         
         return installedPackage;

@@ -18,7 +18,7 @@ export class Php implements PackageManager {
 
         const installedPackages = new Parser("composer").parse(lockFileContent.toString());
 
-        return installedPackages.find((pkg: types.InstalledPackage) => pkg.name === packageName);
+        return installedPackages.find((pkg: types.ComposerInstalledPackage) => pkg.name === packageName);
     }
 
     async getLockPath(): Promise<string> {
