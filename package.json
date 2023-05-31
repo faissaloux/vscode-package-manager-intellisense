@@ -27,12 +27,14 @@
       "npm",
       "yarn",
       "pnpm",
+      "composer",
       "dependency",
       "manager",
       "installed package version",
       "package hints in VS Code",
       "package hints",
-      "package.json"
+      "package.json",
+      "composer.json"
   ],
   "activationEvents": [
     "onLanguage:json"
