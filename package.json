@@ -2,7 +2,7 @@
   "name": "package-manager-intellisense",
   "displayName": "package-manager-intellisense",
   "description": "Intellisense for package managers files",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "vscode": "^1.78.0"
   },

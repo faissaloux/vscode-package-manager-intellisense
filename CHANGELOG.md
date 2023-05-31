@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.2...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.3...main)
+
+## [v0.1.3](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.2...v0.1.3) - 2023-05-31
+### FIXED
+- Fix decoration on updating ([#6](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/6))
 
 ## [v0.1.2](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.1...v0.1.2) - 2023-05-26
 ### FIXED
