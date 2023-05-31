@@ -15,6 +15,31 @@ export function activate(context: vscode.ExtensionContext) {
 			new Decorator(openEditor[0], packageManager).decorate();
 		}
 	});
+
+	vscode.workspace.onDidChangeTextDocument(() => {
+		const openEditor = vscode.window.visibleTextEditors.filter(
+			editor => editor.document.fileName.endsWith('package.json')
+				|| editor.document.fileName.endsWith('composer.json')
+		);
+
+		if (openEditor.length) {
+			vscode.window.visibleTextEditors.forEach(textEditor => {
+				textEditor.setDecorations(globals.decorationType, []);
+			});
+		}
+	});
+
+	vscode.workspace.onWillSaveTextDocument(() => {
+		const openEditor = vscode.window.visibleTextEditors.filter(
+			editor => editor.document.fileName.endsWith('package.json')
+				|| editor.document.fileName.endsWith('composer.json')
+		);
+
+		if (openEditor.length) {
+			const packageManager = new PackageManager(openEditor[0]).get();
+			new Decorator(openEditor[0], packageManager).decorate();
+		}
+	});
 }
 
 export function deactivate() {
