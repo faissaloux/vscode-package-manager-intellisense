@@ -7,7 +7,7 @@ export class Php implements PackageManager {
     rootPath: string;
 
     constructor(packageJsonFilePath: string) {
-        this.rootPath = packageJsonFilePath.replace('composer.json', '');
+        this.rootPath = packageJsonFilePath.replace(new RegExp('composer.json$'), '');
     }
 
     async getInstalled(packageName: string): Promise<any> {
