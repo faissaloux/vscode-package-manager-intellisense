@@ -17,6 +17,8 @@ export class PackageManager {
             this.packageManager = 'php';
         } else if (this.editorFileName.endsWith('package.json')) {
             this.packageManager = 'javascript';
+        } else if (this.editorFileName.endsWith('Gemfile')) {
+            this.packageManager = 'ruby';
         }
         
         return this;

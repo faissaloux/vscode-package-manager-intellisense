@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
+import { Parser } from '@faissaloux/gemfile';
 
 export class Decorator {
     defaultVersion: string = 'n/a';
@@ -14,15 +15,30 @@ export class Decorator {
 
     async decorate() {
         let content = this.editor.document.getText();
-        let contentJson = JSON.parse(content);
+        let packagesNames: string[] = [];
+        let contentJson;
+
+        if (this.packageManager["packageManager"] === "ruby") {
+            let formatted: {[key: string]: string} = {};
+            contentJson = new Parser().parse(this.packageManager["editorFileName"]);
+            contentJson = JSON.parse(contentJson);
+
+            contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
+                formatted[dependency["name"]] = dependency["version"] ?? this.defaultVersion;
+            });
+
+            contentJson['dependencies'] = formatted;
+        } else {
+            contentJson = JSON.parse(content);
+        }
     
-        const packagesNames: string[] = [
+        packagesNames = [
             ...Object.keys(contentJson['dependencies'] || {}),
             ...Object.keys(contentJson['devDependencies'] || {}),
             ...Object.keys(contentJson['require'] || {}),
             ...Object.keys(contentJson['require-dev'] || {}),
         ];
-    
+
         const decorations: vscode.DecorationOptions[] = [];
     
         for (const packageName of packagesNames) {
@@ -52,7 +68,13 @@ export class Decorator {
         
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
             let lineText = document.lineAt(lineNumber).text;
-            let regex = '"' + packageName + '":';
+            let regex = "";
+
+            if (this.packageManager["packageManager"] === "ruby") {
+                regex = 'gem "' + packageName + '"';
+            } else {
+                regex = '"' + packageName + '":';
+            }
 
             if (lineText.match(regex)) {
                 lineNumbers.push(lineNumber);

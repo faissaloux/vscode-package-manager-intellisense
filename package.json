@@ -17,24 +17,24 @@
   "icon": "images/packages-installed-versions.png",
   "homepage": "https://github.com/faissaloux/vscode-package-manager-intellisense/blob/master/README.md",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/faissaloux/vscode-package-manager-intellisense"
+    "type": "git",
+    "url": "https://github.com/faissaloux/vscode-package-manager-intellisense"
   },
   "bugs": {
-      "url": "https://github.com/faissaloux/vscode-package-manager-intellisense/issues"
+    "url": "https://github.com/faissaloux/vscode-package-manager-intellisense/issues"
   },
   "keywords": [
-      "npm",
-      "yarn",
-      "pnpm",
-      "composer",
-      "dependency",
-      "manager",
-      "installed package version",
-      "package hints in VS Code",
-      "package hints",
-      "package.json",
-      "composer.json"
+    "npm",
+    "yarn",
+    "pnpm",
+    "composer",
+    "dependency",
+    "manager",
+    "installed package version",
+    "package hints in VS Code",
+    "package hints",
+    "package.json",
+    "composer.json"
   ],
   "activationEvents": [
     "onLanguage:json"
@@ -70,6 +70,7 @@
     "webpack-cli": "^5.0.2"
   },
   "dependencies": {
+    "@faissaloux/gemfile": "^0.1.4",
     "@yarnpkg/lockfile": "^1.1.0",
     "js-yaml": "^4.1.0"
   }

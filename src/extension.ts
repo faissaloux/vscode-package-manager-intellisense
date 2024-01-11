@@ -8,6 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const openEditor = vscode.window.visibleTextEditors.filter(
 			editor => editor.document.fileName.endsWith('package.json')
 				|| editor.document.fileName.endsWith('composer.json')
+				|| editor.document.fileName.endsWith('Gemfile')
 		);
 
 		if (openEditor.length) {
@@ -20,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const openEditor = vscode.window.visibleTextEditors.filter(
 			editor => editor.document.fileName.endsWith('package.json')
 				|| editor.document.fileName.endsWith('composer.json')
+				|| editor.document.fileName.endsWith('Gemfile')
 		);
 
 		if (openEditor.length) {
@@ -33,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const openEditor = vscode.window.visibleTextEditors.filter(
 			editor => editor.document.fileName.endsWith('package.json')
 				|| editor.document.fileName.endsWith('composer.json')
+				|| editor.document.fileName.endsWith('Gemfile')
 		);
 
 		if (openEditor.length) {

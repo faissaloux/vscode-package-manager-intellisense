@@ -29,4 +29,9 @@ export class Parser {
     composer(content: string): {[key: string]: any} {
         return JSON.parse(content).packages;
     }
+
+    rubygems(content: string)/*: {[key:string]: any}*/ {
+        console.log("CONTENT: ");
+        console.log(content);
+    }
 }
