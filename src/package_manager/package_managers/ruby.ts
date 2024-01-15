@@ -9,23 +9,27 @@ export class Ruby implements PackageManager {
         this.rootPath = packageJsonFilePath.replace(new RegExp('Gemfile$'), '');
     }
 
-    async getInstalled(packageName: string): Promise<any> {
+    async getInstalled(packageName: string): Promise<{[key: string]: string}| undefined> {
         const lockPath = await this.getLockPath();
         const lockFile = vscode.Uri.file(lockPath);
         const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
 
         const installedPackages = new Parser("rubygems").parse(lockFileContent.toString());
 
-        const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName)) || "";
+        const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
 
-        const packageAndVersion = packageFound.split(" ");
-        const betweenParenthesesRegExp = /\(([^)]+)\)/;
-        const matches = betweenParenthesesRegExp.exec(packageAndVersion[1]) || "n/a";
+        if (packageFound) {
+            const packageAndVersion = packageFound.split(" ");
+            const betweenParenthesesRegExp = /\(([^)]+)\)/;
+            const matches = betweenParenthesesRegExp.exec(packageAndVersion[1]) || "n/a";
 
-        return {
-            "name": packageAndVersion[0],
-            "version": matches[1],
-        };
+            return {
+                "name": packageAndVersion[0],
+                "version": matches[1],
+            };         
+        }
+
+        return;
     }
 
     async getLockPath(): Promise<string> {
