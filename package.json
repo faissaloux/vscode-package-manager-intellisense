@@ -70,7 +70,7 @@
     "webpack-cli": "^5.0.2"
   },
   "dependencies": {
-    "@faissaloux/gemfile": "^0.1.4",
+    "@faissaloux/gemfile": "^0.3.0",
     "@yarnpkg/lockfile": "^1.1.0",
     "js-yaml": "^4.1.0"
   }

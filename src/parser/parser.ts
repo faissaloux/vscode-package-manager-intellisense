@@ -1,5 +1,6 @@
 import * as yarnlockfile from '@yarnpkg/lockfile';
 import * as jsYaml from 'js-yaml';
+import { LockParser } from '@faissaloux/gemfile';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -30,8 +31,7 @@ export class Parser {
         return JSON.parse(content).packages;
     }
 
-    rubygems(content: string)/*: {[key:string]: any}*/ {
-        console.log("CONTENT: ");
-        console.log(content);
+    rubygems(content: string): {[key:string]: any} {
+        return JSON.parse(new LockParser().text(content).parse());
     }
 }

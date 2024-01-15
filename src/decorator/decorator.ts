@@ -20,7 +20,7 @@ export class Decorator {
 
         if (this.packageManager["packageManager"] === "ruby") {
             let formatted: {[key: string]: string} = {};
-            contentJson = new Parser().parse(this.packageManager["editorFileName"]);
+            contentJson = new Parser().file(this.packageManager["editorFileName"]).parse();
             contentJson = JSON.parse(contentJson);
 
             contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
