@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.4...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.2.0...main)
+
+## [v0.2.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.4...v0.2.0) - 2024-01-16
+### ADDED
+- RubyGems support ([#8](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/8))
 
 ## [v0.1.4](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.3...v0.1.4) - 2023-06-22
 ### FIXED
