@@ -16,7 +16,7 @@ export class Javascript implements PackageManager {
     };
 
     constructor(packageJsonFilePath: string) {
-        this.rootPath = packageJsonFilePath.replace('package.json', '');
+        this.rootPath = packageJsonFilePath.replace(new RegExp('package.json$'), '');
     }
     
     async getInstalled(packageName: string): Promise<any> {
