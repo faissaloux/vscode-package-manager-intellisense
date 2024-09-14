@@ -1,9 +1,9 @@
-import { LockParser } from '@faissaloux/gemfile';
 import { NpmLockV2 } from './npmLockV2';
 import { NpmLockV3 } from './npmLockV3';
 import { YarnLock } from './yarnLock';
 import { ComposerLock } from './composerLock';
 import { PnpmLock } from './pnpmLock';
+import { GemfileLock } from './gemfileLock';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -41,6 +41,6 @@ export class Parser {
     }
 
     rubygems(content: string): {[key:string]: any} {
-        return JSON.parse(new LockParser().text(content).parse());
+        return new GemfileLock(content).dependencies();
     }
 }
