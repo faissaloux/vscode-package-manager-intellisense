@@ -1,9 +1,9 @@
-import * as jsYaml from 'js-yaml';
 import { LockParser } from '@faissaloux/gemfile';
 import { NpmLockV2 } from './npmLockV2';
 import { NpmLockV3 } from './npmLockV3';
 import { YarnLock } from './yarnLock';
 import { ComposerLock } from './composerLock';
+import { PnpmLock } from './pnpmLock';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -33,8 +33,7 @@ export class Parser {
     }
 
     pnpm(content: string): {[key: string]: any} {
-        // @ts-ignore
-        return jsYaml.load(content).packages;
+        return new PnpmLock(content).dependencies();
     }
 
     composer(content: string): {[key: string]: any} {
