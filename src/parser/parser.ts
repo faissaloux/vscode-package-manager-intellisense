@@ -3,6 +3,7 @@ import { LockParser } from '@faissaloux/gemfile';
 import { NpmLockV2 } from './npmLockV2';
 import { NpmLockV3 } from './npmLockV3';
 import { YarnLock } from './yarnLock';
+import { ComposerLock } from './composerLock';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -37,7 +38,7 @@ export class Parser {
     }
 
     composer(content: string): {[key: string]: any} {
-        return JSON.parse(content).packages;
+        return new ComposerLock(content).dependencies();
     }
 
     rubygems(content: string): {[key:string]: any} {
