@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
-import { Parser } from '@faissaloux/gemfile';
+import { Parser as GemfileParser } from '@faissaloux/gemfile';
 
 export class Decorator {
     defaultVersion: string = 'n/a';
@@ -20,7 +20,7 @@ export class Decorator {
 
         if (this.packageManager["packageManager"] === "ruby") {
             let formatted: {[key: string]: string} = {};
-            contentJson = new Parser().file(this.packageManager["editorFileName"]).parse();
+            contentJson = new GemfileParser().file(this.packageManager["editorFileName"]).parse();
             contentJson = JSON.parse(contentJson);
 
             contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
