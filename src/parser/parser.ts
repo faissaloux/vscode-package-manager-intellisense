@@ -1,9 +1,8 @@
-import { NpmLockV2 } from './npmLockV2';
-import { NpmLockV3 } from './npmLockV3';
 import { YarnLock } from './yarnLock';
 import { ComposerLock } from './composerLock';
 import { PnpmLock } from './pnpmLock';
 import { GemfileLock } from './gemfileLock';
+import { NpmLock } from './npmLock';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -18,14 +17,7 @@ export class Parser {
     }
 
     npm(content: string): {[key: string]: any} {
-        const parsed: {[key: string]: any} = JSON.parse(content);
-        const lockfileVersion = parsed.lockfileVersion;
-
-        if (lockfileVersion === 3) {
-            return new NpmLockV3(parsed).dependencies();
-        }
-
-        return new NpmLockV2(parsed).dependencies();
+        return new NpmLock(content).dependencies();
     }
 
     yarn(content: string): {[key: string]: any} {
