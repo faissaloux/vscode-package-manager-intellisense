@@ -1,8 +1,8 @@
-import * as yarnlockfile from '@yarnpkg/lockfile';
 import * as jsYaml from 'js-yaml';
 import { LockParser } from '@faissaloux/gemfile';
 import { NpmLockV2 } from './npmLockV2';
 import { NpmLockV3 } from './npmLockV3';
+import { YarnLock } from './yarnLock';
 
 export class Parser {
     constructor(private readonly packageManager: string) {
@@ -17,7 +17,7 @@ export class Parser {
     }
 
     npm(content: string): {[key: string]: any} {
-        const parsed = JSON.parse(content);
+        const parsed: {[key: string]: any} = JSON.parse(content);
         const lockfileVersion = parsed.lockfileVersion;
 
         if (lockfileVersion === 3) {
@@ -28,7 +28,7 @@ export class Parser {
     }
 
     yarn(content: string): {[key: string]: any} {
-        return yarnlockfile.parse(content).object;
+        return new YarnLock(content).dependencies();
     }
 
     pnpm(content: string): {[key: string]: any} {
