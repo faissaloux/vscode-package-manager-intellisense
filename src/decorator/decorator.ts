@@ -4,8 +4,10 @@ import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 
 export class Decorator {
-    defaultVersion: string = 'n/a';
-    packagesToExclude: string[] = [
+    private readonly defaultVersion: string = 'n/a';
+    private readonly color: string = 'grey';
+    private readonly margin: string = '0 0 0 1rem';
+    private readonly packagesToExclude: string[] = [
         'php',
     ];
 
@@ -85,14 +87,12 @@ export class Decorator {
     }
 
     decoration(text: string, line: number): vscode.DecorationOptions {
-        const color: string = 'grey';
-        const margin: string = '0 0 0 1rem';
         const range: vscode.Range = new vscode.Range(line, 1024, line, 1024);
         const renderOptions = {
             after: {
                 contentText: text,
-                color: color,
-                margin: margin,
+                color: this.color,
+                margin: this.margin,
             }
         };
 
