@@ -4,7 +4,7 @@ export class LanguagePackageManager {
     constructor(protected rootPath: string) {}
 
     async lockFileContent(): Promise<string> {
-        const lockPath = await this.getLockPath();
+        const lockPath = this.getLockPath();
         const lockFile = vscode.Uri.file(lockPath);
         const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
 
