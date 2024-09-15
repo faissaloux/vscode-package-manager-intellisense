@@ -1,28 +1,17 @@
-import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import * as types from '../../types/types';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
+import { LanguagePackageManager } from '../language_package_manager';
 
-export class Php implements PackageManager {
-    rootPath: string;
-
-    constructor(packageJsonFilePath: string) {
-        this.rootPath = packageJsonFilePath.replace(new RegExp('composer.json$'), '');
-    }
-
+export class Php extends LanguagePackageManager implements PackageManager {
     async getInstalled(packageName: string): Promise<any> {
-        const lockPath = await this.getLockPath();
-
-        const lockFile = vscode.Uri.file(lockPath);
-        const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
-
-        const installedPackages = new Parser("composer").parse(lockFileContent.toString());
+        const installedPackages = new Parser("composer").parse(await this.lockFileContent());
 
         return installedPackages.find((pkg: types.ComposerInstalledPackage) => pkg.name === packageName);
     }
 
-    async getLockPath(): Promise<string> {
+    override getLockPath(): string {
         return pathJoin(this.rootPath, 'vendor', 'composer', 'installed.json');
     }
 }

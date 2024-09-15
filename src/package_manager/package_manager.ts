@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Javascript } from './package_managers/javascript';
 import { Php } from './package_managers/php';
 import { Ruby } from './package_managers/ruby';
+import path = require('path');
 
 export class PackageManager {
     private editorFileName: string;
@@ -36,6 +37,6 @@ export class PackageManager {
 
     async getInstalled(packageName: string): Promise<any> {
         // @ts-ignore
-        return await new this.packageManagers[this.packageManager](this.editorFileName).getInstalled(packageName);
+        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName);
     }
 }

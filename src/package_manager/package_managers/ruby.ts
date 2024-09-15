@@ -1,21 +1,11 @@
-import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
+import { LanguagePackageManager } from '../language_package_manager';
 
-export class Ruby implements PackageManager {
-    rootPath: string;
-
-    constructor(packageJsonFilePath: string) {
-        this.rootPath = packageJsonFilePath.replace(new RegExp('Gemfile$'), '');
-    }
-
+export class Ruby extends LanguagePackageManager implements PackageManager {
     async getInstalled(packageName: string): Promise<{[key: string]: string}| undefined> {
-        const lockPath = await this.getLockPath();
-        const lockFile = vscode.Uri.file(lockPath);
-        const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
-
-        const installedPackages = new Parser("rubygems").parse(lockFileContent.toString());
+        const installedPackages = new Parser("rubygems").parse(await this.lockFileContent());
 
         const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
 
@@ -27,13 +17,13 @@ export class Ruby implements PackageManager {
             return {
                 "name": packageAndVersion[0],
                 "version": matches[1],
-            };         
+            };
         }
 
         return;
     }
 
-    async getLockPath(): Promise<string> {
+    override getLockPath(): string {
         return pathJoin(this.rootPath, 'Gemfile.lock');
     }
 }
