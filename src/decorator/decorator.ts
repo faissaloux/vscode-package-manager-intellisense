@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
-import { Parser } from '@faissaloux/gemfile';
+import { Parser as GemfileParser } from '@faissaloux/gemfile';
 
 export class Decorator {
-    defaultVersion: string = 'n/a';
-    packagesToExclude: string[] = [
+    private readonly defaultVersion: string = 'n/a';
+    private readonly color: string = 'grey';
+    private readonly margin: string = '0 0 0 1rem';
+    private readonly packagesToExclude: string[] = [
         'php',
     ];
 
@@ -20,7 +22,7 @@ export class Decorator {
 
         if (this.packageManager["packageManager"] === "ruby") {
             let formatted: {[key: string]: string} = {};
-            contentJson = new Parser().file(this.packageManager["editorFileName"]).parse();
+            contentJson = new GemfileParser().file(this.packageManager["editorFileName"]).parse();
             contentJson = JSON.parse(contentJson);
 
             contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
@@ -85,14 +87,12 @@ export class Decorator {
     }
 
     decoration(text: string, line: number): vscode.DecorationOptions {
-        const color: string = 'grey';
-        const margin: string = '0 0 0 1rem';
         const range: vscode.Range = new vscode.Range(line, 1024, line, 1024);
         const renderOptions = {
             after: {
                 contentText: text,
-                color: color,
-                margin: margin,
+                color: this.color,
+                margin: this.margin,
             }
         };
 

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import * as types from '../../types/types';
 import { Parser } from '../../parser/parser';
+import { PackageManager } from '../../interfaces/package_manager';
 
 export class Php implements PackageManager {
     rootPath: string;

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Parser } from '../../parser/parser';
+import { PackageManager } from '../../interfaces/package_manager';
 
 export class Javascript implements PackageManager {
     rootPath: string;
