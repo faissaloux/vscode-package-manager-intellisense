@@ -3,50 +3,43 @@ import * as globals from './util/globals';
 import { Decorator } from './decorator/decorator';
 import { PackageManager } from './package_manager/package_manager';
 
-export function activate(context: vscode.ExtensionContext) {
-	vscode.workspace.onDidOpenTextDocument(() => {
-		const openEditor = vscode.window.visibleTextEditors.filter(
-			editor => editor.document.fileName.endsWith('package.json')
-				|| editor.document.fileName.endsWith('composer.json')
-				|| editor.document.fileName.endsWith('Gemfile')
-		);
+function supportedOpenEditors(): vscode.TextEditor[] {
+	return vscode.window.visibleTextEditors.filter(
+		editor => editor.document.fileName.endsWith('package.json')
+			|| editor.document.fileName.endsWith('composer.json')
+			|| editor.document.fileName.endsWith('Gemfile')
+	);
+}
 
-		if (openEditor.length) {
-			const packageManager = new PackageManager(openEditor[0]).get();
-			new Decorator(openEditor[0], packageManager).decorate();
-		}
-	});
+function decorate(): void {
+	const openEditors = supportedOpenEditors();
 
-	vscode.workspace.onDidChangeTextDocument(() => {
-		const openEditor = vscode.window.visibleTextEditors.filter(
-			editor => editor.document.fileName.endsWith('package.json')
-				|| editor.document.fileName.endsWith('composer.json')
-				|| editor.document.fileName.endsWith('Gemfile')
-		);
+	if (openEditors.length) {
+		const packageManager = new PackageManager(openEditors[0]).get();
+		new Decorator(openEditors[0], packageManager).decorate();
+	}
+}
 
-		if (openEditor.length) {
-			vscode.window.visibleTextEditors.forEach(textEditor => {
-				textEditor.setDecorations(globals.decorationType, []);
-			});
-		}
-	});
-
-	vscode.workspace.onWillSaveTextDocument(() => {
-		const openEditor = vscode.window.visibleTextEditors.filter(
-			editor => editor.document.fileName.endsWith('package.json')
-				|| editor.document.fileName.endsWith('composer.json')
-				|| editor.document.fileName.endsWith('Gemfile')
-		);
-
-		if (openEditor.length) {
-			const packageManager = new PackageManager(openEditor[0]).get();
-			new Decorator(openEditor[0], packageManager).decorate();
-		}
+function clearDecoration(): void {
+	vscode.window.visibleTextEditors.forEach(textEditor => {
+		textEditor.setDecorations(globals.decorationType, []);
 	});
 }
 
+export function activate(context: vscode.ExtensionContext) {
+	vscode.workspace.onDidOpenTextDocument(() => decorate());
+
+	vscode.workspace.onDidChangeTextDocument(() => {
+		const openEditors = supportedOpenEditors();
+
+		if (openEditors.length) {
+			clearDecoration();
+		}
+	});
+
+	vscode.workspace.onWillSaveTextDocument(() => decorate());
+}
+
 export function deactivate() {
-	vscode.window.visibleTextEditors.forEach(textEditor => {
-        textEditor.setDecorations(globals.decorationType, []);
-    });
+	clearDecoration();
 }
