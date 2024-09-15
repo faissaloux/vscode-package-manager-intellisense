@@ -27,6 +27,8 @@ function clearDecoration(): void {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	decorate();
+
 	vscode.workspace.onDidOpenTextDocument(() => decorate());
 
 	vscode.workspace.onDidChangeTextDocument(() => {
