@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { pathJoin } from '../../util/globals';
 import { Parser } from '../../parser/parser';
+import { PackageManager } from '../../interfaces/package_manager';
 
 export class Ruby implements PackageManager {
     rootPath: string;

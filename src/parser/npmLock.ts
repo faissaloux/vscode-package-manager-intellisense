@@ -1,7 +1,8 @@
+import { LockParser } from "../interfaces/lock_parser";
 import { NpmLockV2 } from "./npmLockV2";
 import { NpmLockV3 } from "./npmLockV3";
 
-export class NpmLock {
+export class NpmLock implements LockParser {
     private content: {[key: string]: any};
     private lockfileVersion: number;
 

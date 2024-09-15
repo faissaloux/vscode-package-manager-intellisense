@@ -1,6 +1,8 @@
-export class NpmLockV3 {
+import { LockParser } from "../interfaces/lock_parser";
+
+export class NpmLockV3 implements LockParser {
     constructor(private readonly content: {[key: string]: any}) {
-        return this;       
+        return this;
     }
 
     dependencies(): {[key: string]: any} {
