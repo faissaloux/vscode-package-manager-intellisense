@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
+import { LanguagePackageManager } from '../language_package_manager';
+import { pathJoin } from '../../util/globals';
 
-export class Javascript implements PackageManager {
-    rootPath: string;
+export class Javascript extends LanguagePackageManager implements PackageManager {
     packageManager: string = 'npm';
     locks: {[key: string]: string} = {
         'npm': 'package-lock.json',
@@ -16,16 +17,9 @@ export class Javascript implements PackageManager {
         'pnpm': '/packageName/',
     };
 
-    constructor(packageJsonFilePath: string) {
-        this.rootPath = packageJsonFilePath.replace(new RegExp('package.json$'), '');
-    }
-    
     async getInstalled(packageName: string): Promise<any> {
-        const lockPath = await this.getLockPath();
-        const lockFile = vscode.Uri.file(lockPath);
-        const lockFileContent = await vscode.workspace.fs.readFile(lockFile);
-
-        const installedPackages = new Parser(this.packageManager).parse(lockFileContent.toString());
+        this.packageManager = await this.getPackageManager();
+        const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
 
         if (this.packageManager === 'pnpm') {
             this.appendVersion(installedPackages);
@@ -34,21 +28,21 @@ export class Javascript implements PackageManager {
         return Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName)))?.[1];
     }
 
-    async getLockPath(): Promise<string> {
-        this.packageManager = await this.getPackageManager();
-
-        return this.rootPath + this.locks[this.packageManager];
+    override getLockPath(): string {
+        return pathJoin(this.rootPath, this.locks[this.packageManager]);
     }
 
     async getPackageManager(): Promise<string> {
         for (const lock in this.locks) {
-            let lockFile = vscode.Uri.file(this.rootPath + this.locks[lock]);
+            let lockFile = vscode.Uri.file(pathJoin(this.rootPath, this.locks[lock]));
+
             try{
                 await vscode.workspace.fs.readFile(lockFile);
 
                 return lock;
             } catch (error) {}
         }
+
         return Object.keys(this.locks)[0];
     }
 

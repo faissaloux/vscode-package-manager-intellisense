@@ -2,10 +2,21 @@ import * as vscode from 'vscode';
 import { Javascript } from './package_managers/javascript';
 import { Php } from './package_managers/php';
 import { Ruby } from './package_managers/ruby';
+import path = require('path');
 
 export class PackageManager {
     private editorFileName: string;
     private packageManager: string = '';
+    private languagesPackagesFiles: {[key: string]: string} = {
+        'php': 'composer.json',
+        'javascript': 'package.json',
+        'ruby': 'Gemfile',
+    };
+    private packageManagers = {
+        'php': Php,
+        'javascript': Javascript,
+        'ruby': Ruby,
+    };
 
     constructor(private readonly editor: vscode.TextEditor) {
         this.editorFileName = this.editor.document.fileName;
@@ -14,28 +25,18 @@ export class PackageManager {
     }
 
     get(): this {
-        if (this.editorFileName.endsWith('composer.json')){
-            this.packageManager = 'php';
-        } else if (this.editorFileName.endsWith('package.json')) {
-            this.packageManager = 'javascript';
-        } else if (this.editorFileName.endsWith('Gemfile')) {
-            this.packageManager = 'ruby';
+        for (const [language, packagesFile] of Object.entries(this.languagesPackagesFiles)) {
+            if (this.editorFileName.endsWith(packagesFile)){
+                this.packageManager = language;
+                break;
+            }
         }
-        
+
         return this;
     }
 
     async getInstalled(packageName: string): Promise<any> {
-        let installedPackage;
-
-        if (this.packageManager === 'php') {
-            installedPackage = await new Php(this.editorFileName).getInstalled(packageName);
-        } else if (this.packageManager === 'javascript') {
-            installedPackage = await new Javascript(this.editorFileName).getInstalled(packageName);
-        }  else if (this.packageManager === 'ruby') {
-            installedPackage = await new Ruby(this.editorFileName).getInstalled(packageName);
-        }
-
-        return installedPackage;
+        // @ts-ignore
+        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName);
     }
 }
