@@ -1,4 +1,17 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.2.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.0.0...main)
+
+## [v1.0.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.2.0...v1.0.0) - 2024-09-16
+### ADDED
+- Support npm lockfile v3 ([#12](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/12))
+
+### FIXED
+- Show Installed Versions on launch ([#18](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/18))
+- Show Installed Versions on multiple open editors ([#19](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/19))
+
+### REFACTOR
+- Refactor parser ([#13](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/13))
+- Refactor package manager ([#14](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/14))
+- Refactor `extension.ts` ([#17](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/17))
 
 ## [v0.2.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.1.4...v0.2.0) - 2024-01-16
 ### ADDED
