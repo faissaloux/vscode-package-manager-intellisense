@@ -15,8 +15,10 @@ function decorate(): void {
 	const openEditors = supportedOpenEditors();
 
 	if (openEditors.length) {
-		const packageManager = new PackageManager(openEditors[0]).get();
-		new Decorator(openEditors[0], packageManager).decorate();
+		for (const openEditor of openEditors) {
+			const packageManager = new PackageManager(openEditor).get();
+			new Decorator(openEditor, packageManager).decorate();
+		}
 	}
 }
 
