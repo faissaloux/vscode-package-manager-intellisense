@@ -4,10 +4,18 @@ import { Decorator } from './decorator/decorator';
 import { PackageManager } from './package_manager/package_manager';
 
 function supportedOpenEditors(): vscode.TextEditor[] {
+	const packagesFiles = ['package.json'];
+
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.composer.enable')) {
+		packagesFiles.push('composer.json');
+	}
+
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.bundler.enable')) {
+		packagesFiles.push('Gemfile');
+	}
+
 	return vscode.window.visibleTextEditors.filter(
-		editor => editor.document.fileName.endsWith('package.json')
-			|| editor.document.fileName.endsWith('composer.json')
-			|| editor.document.fileName.endsWith('Gemfile')
+		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
 	);
 }
 
