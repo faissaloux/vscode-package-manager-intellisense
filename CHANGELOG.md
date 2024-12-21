@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.0.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.1.0...main)
+
+## [v1.1.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.0.0...v1.1.0) - 2024-12-21
+### ADDED
+- Allow user to enable/disable package managers ([#21](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/21))
 
 ## [v1.0.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v0.2.0...v1.0.0) - 2024-09-16
 ### ADDED
