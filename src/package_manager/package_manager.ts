@@ -6,7 +6,7 @@ import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
 
 type Language = 'php' | 'javascript' | 'ruby';
-type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile';
+export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile';
 
 export class PackageManager {
     private editorFileName: string;

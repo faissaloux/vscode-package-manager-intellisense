@@ -79,6 +79,7 @@
   "contributes": {
     "configuration": [
       {
+        "title": "package-manager-intellisense",
         "properties": {
             "package-manager-intellisense.npm.enable": {
                 "type": "boolean",

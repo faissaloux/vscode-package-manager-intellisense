@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import * as globals from './util/globals';
 import { Decorator } from './decorator/decorator';
-import { PackageManager } from './package_manager/package_manager';
+import { DependenciesFile, PackageManager } from './package_manager/package_manager';
 
 function supportedOpenEditors(): vscode.TextEditor[] {
-	const packagesFiles = ['package.json'];
+	const packagesFiles: DependenciesFile[] = ['package.json'];
 
 	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.composer.enable')) {
 		packagesFiles.push('composer.json');
