@@ -4,14 +4,17 @@ import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { pathJoin } from '../../util/globals';
 
+type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm';
+type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml';
+
 export class Javascript extends LanguagePackageManager implements PackageManager {
-    packageManager: string = 'npm';
-    locks: {[key: string]: string} = {
+    packageManager: JavascriptPackageManager = 'npm';
+    locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
         'npm': 'package-lock.json',
         'yarn': 'yarn.lock',
         'pnpm': 'pnpm-lock.yaml',
     };
-    startsWith: {[key: string]: string} = {
+    startsWith: {[key in JavascriptPackageManager]: string} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
         'pnpm': '/packageName/',
@@ -20,6 +23,10 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     async getInstalled(packageName: string): Promise<any> {
         this.packageManager = await this.getPackageManager();
         const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
+
+        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
+            return null;
+        }
 
         if (this.packageManager === 'pnpm') {
             this.appendVersion(installedPackages);
@@ -32,18 +39,18 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         return pathJoin(this.rootPath, this.locks[this.packageManager]);
     }
 
-    async getPackageManager(): Promise<string> {
+    async getPackageManager(): Promise<JavascriptPackageManager> {
         for (const lock in this.locks) {
-            let lockFile = vscode.Uri.file(pathJoin(this.rootPath, this.locks[lock]));
+            let lockFile = vscode.Uri.file(pathJoin(this.rootPath, this.locks[lock as JavascriptPackageManager]));
 
             try{
                 await vscode.workspace.fs.readFile(lockFile);
 
-                return lock;
+                return lock as JavascriptPackageManager;
             } catch (error) {}
         }
 
-        return Object.keys(this.locks)[0];
+        return (Object.keys(this.locks) as JavascriptPackageManager[])[0];
     }
 
     lockPackageStartsWith(packageName: string): string {

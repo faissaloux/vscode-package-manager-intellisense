@@ -75,5 +75,39 @@
     "@faissaloux/gemfile": "^0.3.0",
     "@yarnpkg/lockfile": "^1.1.0",
     "js-yaml": "^4.1.0"
+  },
+  "contributes": {
+    "configuration": [
+      {
+        "title": "package-manager-intellisense",
+        "properties": {
+            "package-manager-intellisense.npm.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable npm package manager."
+            },
+            "package-manager-intellisense.yarn.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable yarn package manager."
+            },
+            "package-manager-intellisense.pnpm.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable pnpm package manager."
+            },
+            "package-manager-intellisense.composer.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable composer package manager."
+            },
+            "package-manager-intellisense.bundler.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable bundler package manager."
+            }
+        }
+      }
+    ]
   }
 }
