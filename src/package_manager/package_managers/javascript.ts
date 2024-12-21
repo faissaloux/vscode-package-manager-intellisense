@@ -21,6 +21,10 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         this.packageManager = await this.getPackageManager();
         const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
 
+        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
+            return null;
+        }
+
         if (this.packageManager === 'pnpm') {
             this.appendVersion(installedPackages);
         }

@@ -57,7 +57,9 @@ export class Decorator {
                     version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
-                decorations.push(this.decoration(version, line));
+                if (installedPackage !== null) {
+                    decorations.push(this.decoration(version, line));
+                }
             }
         }
     
