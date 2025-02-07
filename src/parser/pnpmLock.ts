@@ -12,6 +12,14 @@ export class PnpmLock implements LockParser {
     }
 
     dependencies(): {[key: string]: any} {
+        Object.keys(this.content.packages).map(pkg => {
+            let version = pkg.match(/\d+(\.\d+)+/);
+
+            if (version) {
+                this.content.packages[pkg]['version'] = version[0];
+            }
+        });
+
         return this.content.packages;
     }
 }

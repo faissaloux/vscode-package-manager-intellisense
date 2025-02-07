@@ -28,10 +28,6 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             return null;
         }
 
-        if (this.packageManager === 'pnpm') {
-            this.appendVersion(installedPackages);
-        }
-        
         return Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName)))?.[1];
     }
 
@@ -55,15 +51,5 @@ export class Javascript extends LanguagePackageManager implements PackageManager
 
     lockPackageStartsWith(packageName: string): string {
         return this.startsWith[this.packageManager].replace('packageName', packageName);
-    }
-
-    appendVersion(packages: {[key: string]: any}) {
-        for ( const pkg in packages) {
-            let version = pkg.match(/\d+(\.\d+)+/);
-
-            if (version) {
-                packages[pkg]['version'] = version[0];
-            }
-        }
     }
 }
