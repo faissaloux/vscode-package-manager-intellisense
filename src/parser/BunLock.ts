@@ -6,15 +6,12 @@ export class BunLock implements LockParser {
     constructor(content: string) {
         content = this.removeTrailingCommas(content);
         this.content = JSON.parse(content);
+        this.appendVersions();
 
         return this;
     }
 
     dependencies(): {[key: string]: any} {
-        Object.keys(this.content.packages).map(pkg => {
-            const version = this.content.packages[pkg][0].split('@').at(-1);
-            this.content.packages[pkg]['version'] = version;
-        });
         return this.content.packages;
     }
 
@@ -22,5 +19,12 @@ export class BunLock implements LockParser {
         const regex = /\,(?!\s*?[\{\[\"\'\w])/g;
 
         return content.replace(regex, '');
+    }
+
+    appendVersions(): void {
+        Object.keys(this.content.packages).map(pkg => {
+            const version = this.content.packages[pkg][0].split('@').at(-1);
+            this.content.packages[pkg]['version'] = version;
+        });
     }
 }
