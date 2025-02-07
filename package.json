@@ -96,6 +96,11 @@
                 "default": true,
                 "description": "Enable pnpm package manager."
             },
+            "package-manager-intellisense.bun.enable": {
+                "type": "boolean",
+                "default": true,
+                "description": "Enable bun package manager."
+            },
             "package-manager-intellisense.composer.enable": {
                 "type": "boolean",
                 "default": true,

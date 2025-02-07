@@ -4,8 +4,8 @@ import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { pathJoin } from '../../util/globals';
 
-type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm';
-type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml';
+type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
+type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     packageManager: JavascriptPackageManager = 'npm';
@@ -13,15 +13,18 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'npm': 'package-lock.json',
         'yarn': 'yarn.lock',
         'pnpm': 'pnpm-lock.yaml',
+        'bun': 'bun.lock',
     };
     startsWith: {[key in JavascriptPackageManager]: string} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
         'pnpm': '/packageName/',
+        'bun': 'packageName',
     };
 
     async getInstalled(packageName: string): Promise<any> {
         this.packageManager = await this.getPackageManager();
+
         const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
 
         if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
