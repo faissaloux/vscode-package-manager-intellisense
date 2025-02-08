@@ -16,11 +16,12 @@ Extension that shows you versions of your installed packages.
 - npm
 - yarn
 - pnpm
+- bun
 - composer
 - bundler
 
 ## Usage
-- Install your packages using `npm`, `yarn`, `pnpm`, `composer` or `bundler`.
+- Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer` or `bundler`.
 - Open your `package.json`, `composer.json` or `Gemfile` file.
 - Installed versions gonna be displayed to you.
 
