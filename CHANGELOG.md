@@ -1,4 +1,14 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.1.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.2.0...main)
+
+## [v1.2.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.1.0...v1.2.0) - 2025-02-08
+### ADDED
+- `Bun` support ([#22](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/22))
+
+### Chore
+- Append version from lock class ([#23](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/23))
+
+### Documentation
+- Add Bun to documentation ([#24](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/24))
 
 ## [v1.1.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.0.0...v1.1.0) - 2024-12-21
 ### ADDED
