@@ -8,7 +8,7 @@ type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
-    packageManager: JavascriptPackageManager = 'npm';=
+    packageManager: JavascriptPackageManager = 'npm';
     packageManagerVersion: number | null = null;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
         'npm': 'package-lock.json',
@@ -19,12 +19,14 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     startsWith: {[key: string]: string | {[version: string | number]: string}} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
+        /* eslint-disable @typescript-eslint/naming-convention */
         'pnpm': {
             '5.4': '/packageName/',
             '6': '/packageName@',
             '7': '/packageName@',
             '9': 'packageName@',
         },
+        /* eslint-enable */
         'bun': 'packageName',
     };
 
