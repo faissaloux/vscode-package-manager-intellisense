@@ -15,6 +15,10 @@ export class BunLock implements LockParser {
         return this.content.packages;
     }
 
+    lockVersion(): null {
+        return null;
+    }
+
     removeTrailingCommas(content: string): string {
         const regex = /\,(?!\s*?[\{\[\"\'\w])/g;
 
