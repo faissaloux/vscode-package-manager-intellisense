@@ -9,7 +9,7 @@ type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     packageManager: JavascriptPackageManager = 'npm';
-    packageManagerVersion: number | null = null;
+    lockVersion: number | null = null;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
         'npm': 'package-lock.json',
         'yarn': 'yarn.lock',
@@ -34,7 +34,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         this.packageManager = await this.getPackageManager();
         const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
         const installedPackages = lockFileParsed['dependencies'];
-        this.packageManagerVersion = lockFileParsed['lockVersion'];
+        this.lockVersion = lockFileParsed['lockVersion'];
 
         if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
             return null;
@@ -63,13 +63,21 @@ export class Javascript extends LanguagePackageManager implements PackageManager
 
     lockPackageStartsWith(packageName: string): string {
         const pattern =  this.startsWith[this.packageManager];
-        if (typeof pattern === 'object' && this.packageManagerVersion) {
-            if (pattern[Number(this.packageManagerVersion)]) {
-                return pattern[Number(this.packageManagerVersion)].replace('packageName', packageName);
+        if (typeof pattern === 'object' && this.lockVersion) {
+            const lockVersion = Number(this.lockVersion);
+            if (pattern[lockVersion]) {
+                return pattern[lockVersion].replace('packageName', packageName);
             } else {
-                if (Number(this.packageManagerVersion) < Number(Object.keys(pattern).sort().at(0))) {
+                if (lockVersion < Number(Object.keys(pattern).sort().at(0))) {
                     return pattern[Object.keys(pattern).sort().at(0)].replace('packageName', packageName);
                 } else {
+                    let lastVersion = Object.keys(pattern).sort()[0];
+                    for (const version of Object.keys(pattern).sort()) {
+                        if (Number(version) > lockVersion) {
+                            return pattern[lastVersion].replace('packageName', packageName);
+                        }
+                        lastVersion = version;
+                    }
                     return pattern[Object.keys(pattern).sort().at(-1)].replace('packageName', packageName);
                 }
             }
