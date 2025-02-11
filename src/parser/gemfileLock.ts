@@ -13,4 +13,8 @@ export class GemfileLock implements LockParser {
     dependencies(): {[key: string]: any} {
         return this.content;
     }
+
+    lockVersion(): null {
+        return null;
+    }
 }

@@ -20,4 +20,8 @@ export class NpmLock implements LockParser {
 
         return new NpmLockV2(this.content).dependencies();
     }
+
+    lockVersion(): number {
+        return this.lockfileVersion;
+    }
 }

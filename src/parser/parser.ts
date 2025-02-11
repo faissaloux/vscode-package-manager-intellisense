@@ -19,8 +19,13 @@ export class Parser {
         return this;
     }
 
-    parse(content: string): {[key: string]: any} {
+    parse(content: string): {'lockVersion': number | null, 'dependencies': any} {
         // @ts-ignore
-        return new this.parsers[this.packageManager](content).dependencies();
+        const lockParser = new this.parsers[this.packageManager](content);
+
+        return {
+            'lockVersion': lockParser.lockVersion(),
+            'dependencies': lockParser.dependencies(),
+        };
     }
 }

@@ -8,24 +8,31 @@ type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
-    packageManager: JavascriptPackageManager = 'npm';
+    packageManager: JavascriptPackageManager = 'npm';=
+    packageManagerVersion: number | null = null;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
         'npm': 'package-lock.json',
         'yarn': 'yarn.lock',
         'pnpm': 'pnpm-lock.yaml',
         'bun': 'bun.lock',
     };
-    startsWith: {[key in JavascriptPackageManager]: string} = {
+    startsWith: {[key: string]: string | {[version: string | number]: string}} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
-        'pnpm': '/packageName/',
+        'pnpm': {
+            '5.4': '/packageName/',
+            '6': '/packageName@',
+            '7': '/packageName@',
+            '9': 'packageName@',
+        },
         'bun': 'packageName',
     };
 
     async getInstalled(packageName: string): Promise<any> {
         this.packageManager = await this.getPackageManager();
-
-        const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
+        const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
+        const installedPackages = lockFileParsed['dependencies'];
+        this.packageManagerVersion = lockFileParsed['lockVersion'];
 
         if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
             return null;
@@ -53,6 +60,19 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     lockPackageStartsWith(packageName: string): string {
-        return this.startsWith[this.packageManager].replace('packageName', packageName);
+        const pattern =  this.startsWith[this.packageManager];
+        if (typeof pattern === 'object' && this.packageManagerVersion) {
+            if (pattern[Number(this.packageManagerVersion)]) {
+                return pattern[Number(this.packageManagerVersion)].replace('packageName', packageName);
+            } else {
+                if (Number(this.packageManagerVersion) < Number(Object.keys(pattern).sort().at(0))) {
+                    return pattern[Object.keys(pattern).sort().at(0)].replace('packageName', packageName);
+                } else {
+                    return pattern[Object.keys(pattern).sort().at(-1)].replace('packageName', packageName);
+                }
+            }
+        }
+
+        return (pattern as string).replace('packageName', packageName);
     }
 }

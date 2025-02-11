@@ -14,4 +14,8 @@ export class NpmLockV3 implements LockParser {
 
         return dependencies;
     }
+
+    lockVersion(): number {
+        return 3;
+    }
 }

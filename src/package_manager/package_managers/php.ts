@@ -6,7 +6,7 @@ import { LanguagePackageManager } from '../language_package_manager';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     async getInstalled(packageName: string): Promise<any> {
-        const installedPackages = new Parser("composer").parse(await this.lockFileContent());
+        const installedPackages = new Parser("composer").parse(await this.lockFileContent())['dependencies'];
 
         return installedPackages.find((pkg: types.ComposerInstalledPackage) => pkg.name === packageName);
     }
