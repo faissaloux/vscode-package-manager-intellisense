@@ -67,18 +67,14 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             if (pattern[lockVersion]) {
                 return pattern[lockVersion].replace('packageName', packageName);
             } else {
-                if (lockVersion < Number(Object.keys(pattern).sort().at(0))) {
-                    return pattern[Object.keys(pattern).sort().at(0)].replace('packageName', packageName);
-                } else {
-                    let lastVersion = Object.keys(pattern).sort()[0];
-                    for (const version of Object.keys(pattern).sort()) {
-                        if (Number(version) > lockVersion) {
-                            return pattern[lastVersion].replace('packageName', packageName);
-                        }
-                        lastVersion = version;
+                let lastVersion = Object.keys(pattern).sort().at(0);
+                for (const version of Object.keys(pattern).sort()) {
+                    if (Number(version) > lockVersion) {
+                        return pattern[lastVersion].replace('packageName', packageName);
                     }
-                    return pattern[Object.keys(pattern).sort().at(-1)].replace('packageName', packageName);
+                    lastVersion = version;
                 }
+                return pattern[Object.keys(pattern).sort().at(-1)].replace('packageName', packageName);
             }
         }
 
