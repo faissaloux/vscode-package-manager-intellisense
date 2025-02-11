@@ -23,7 +23,6 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'pnpm': {
             '5.4': '/packageName/',
             '6': '/packageName@',
-            '7': '/packageName@',
             '9': 'packageName@',
         },
         /* eslint-enable */
