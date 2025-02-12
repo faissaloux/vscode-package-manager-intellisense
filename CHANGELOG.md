@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.2.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.3.0...main)
+
+## [v1.3.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.2.0...v1.3.0) - 2025-02-12
+### ADDED
+- [pnpm] support all pnpm lockfile versions ([#25](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/25))
 
 ## [v1.2.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.1.0...v1.2.0) - 2025-02-08
 ### ADDED
