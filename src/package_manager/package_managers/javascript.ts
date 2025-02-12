@@ -21,7 +21,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'yarn': 'packageName@',
         /* eslint-disable @typescript-eslint/naming-convention */
         'pnpm': {
-            '5.4': '/packageName/',
+            '5.3': '/packageName/',
             '6': '/packageName@',
             '9': 'packageName@',
         },
