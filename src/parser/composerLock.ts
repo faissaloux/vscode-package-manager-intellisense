@@ -12,4 +12,8 @@ export class ComposerLock implements LockParser {
     dependencies(): {[key: string]: any} {
         return this.content.packages;
     }
+
+    lockVersion(): null {
+        return null;
+    }
 }

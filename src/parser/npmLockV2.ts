@@ -8,4 +8,8 @@ export class NpmLockV2 implements LockParser {
     dependencies(): {[key: string]: any} {
         return this.content.dependencies;
     }
+
+    lockVersion(): number {
+        return 2;
+    }
 }

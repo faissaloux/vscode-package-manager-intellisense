@@ -9,23 +9,31 @@ type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     packageManager: JavascriptPackageManager = 'npm';
+    lockVersion: number | null = null;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
         'npm': 'package-lock.json',
         'yarn': 'yarn.lock',
         'pnpm': 'pnpm-lock.yaml',
         'bun': 'bun.lock',
     };
-    startsWith: {[key in JavascriptPackageManager]: string} = {
+    startsWith: {[key: string]: string | {[version: string | number]: string}} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
-        'pnpm': '/packageName/',
+        'pnpm': {
+            /* eslint-disable @typescript-eslint/naming-convention */
+            '5.3': '/packageName/',
+            '6': '/packageName@',
+            '9': 'packageName@',
+            /* eslint-enable */
+        },
         'bun': 'packageName',
     };
 
     async getInstalled(packageName: string): Promise<any> {
         this.packageManager = await this.getPackageManager();
-
-        const installedPackages = new Parser(this.packageManager).parse(await this.lockFileContent());
+        const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
+        const installedPackages = lockFileParsed['dependencies'];
+        this.lockVersion = lockFileParsed['lockVersion'];
 
         if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
             return null;
@@ -53,6 +61,30 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     lockPackageStartsWith(packageName: string): string {
-        return this.startsWith[this.packageManager].replace('packageName', packageName);
+        const pattern =  this.startsWith[this.packageManager];
+
+        if (typeof pattern === 'object' && this.lockVersion) {
+            const lockVersion = Number(this.lockVersion);
+
+            if (pattern[lockVersion]) {
+                return pattern[lockVersion].replace('packageName', packageName);
+            }
+
+            let lastVersion = Object.keys(pattern).sort().at(0);
+
+            if (lastVersion !== undefined) {
+                for (const version of Object.keys(pattern).sort()) {
+                    if (Number(version) > lockVersion ) {
+                        return pattern[lastVersion].replace('packageName', packageName);
+                    }
+
+                    lastVersion = version;
+                }
+
+                return pattern[lastVersion].replace('packageName', packageName);
+            }
+        }
+
+        return (pattern as string).replace('packageName', packageName);
     }
 }

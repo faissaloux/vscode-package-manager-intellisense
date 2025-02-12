@@ -5,7 +5,7 @@ import { LanguagePackageManager } from '../language_package_manager';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
     async getInstalled(packageName: string): Promise<{[key: string]: string}| undefined> {
-        const installedPackages = new Parser("rubygems").parse(await this.lockFileContent());
+        const installedPackages = new Parser("rubygems").parse(await this.lockFileContent())['dependencies'];
 
         const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
 

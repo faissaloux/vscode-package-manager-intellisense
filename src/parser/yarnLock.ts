@@ -13,4 +13,8 @@ export class YarnLock implements LockParser {
     dependencies(): {[key: string]: any} {
         return this.content.object;
     }
+
+    lockVersion(): null {
+        return null;
+    }
 }
