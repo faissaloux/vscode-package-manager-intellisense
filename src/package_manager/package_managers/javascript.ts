@@ -19,13 +19,13 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     startsWith: {[key: string]: string | {[version: string | number]: string}} = {
         'npm': 'packageName',
         'yarn': 'packageName@',
-        /* eslint-disable @typescript-eslint/naming-convention */
         'pnpm': {
+            /* eslint-disable @typescript-eslint/naming-convention */
             '5.3': '/packageName/',
             '6': '/packageName@',
             '9': 'packageName@',
+            /* eslint-enable */
         },
-        /* eslint-enable */
         'bun': 'packageName',
     };
 
