@@ -62,19 +62,26 @@ export class Javascript extends LanguagePackageManager implements PackageManager
 
     lockPackageStartsWith(packageName: string): string {
         const pattern =  this.startsWith[this.packageManager];
+
         if (typeof pattern === 'object' && this.lockVersion) {
             const lockVersion = Number(this.lockVersion);
+
             if (pattern[lockVersion]) {
                 return pattern[lockVersion].replace('packageName', packageName);
-            } else {
-                let lastVersion = Object.keys(pattern).sort().at(0);
+            }
+
+            let lastVersion = Object.keys(pattern).sort().at(0);
+
+            if (lastVersion !== undefined) {
                 for (const version of Object.keys(pattern).sort()) {
-                    if (Number(version) > lockVersion) {
+                    if (Number(version) > lockVersion ) {
                         return pattern[lastVersion].replace('packageName', packageName);
                     }
+
                     lastVersion = version;
                 }
-                return pattern[Object.keys(pattern).sort().at(-1)].replace('packageName', packageName);
+
+                return pattern[lastVersion].replace('packageName', packageName);
             }
         }
 
