@@ -47,29 +47,31 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     override getLockPath(): string {
-        if (typeof this.locks[this.packageManager] === 'object') {
-            for (const lockFile of this.locks[this.packageManager]) {
-                const lockPath: string = pathJoin(this.rootPath, lockFile);
-                if (fs.existsSync(lockPath)) {
-                    return lockPath;
-                }
-            };
+        let lockFiles: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[] = this.locks[this.packageManager];
+
+        if (typeof lockFiles === 'string') {
+            lockFiles = [lockFiles as JavascriptDependenciesLockFile];
         }
 
-        return pathJoin(this.rootPath, this.locks[this.packageManager] as string);
+        for (const lockFile of lockFiles as JavascriptDependenciesLockFile[]) {
+            const lockPath: string = pathJoin(this.rootPath, lockFile);
+
+            if (fs.existsSync(lockPath)) {
+                return lockPath;
+            }
+        };
+
+        return '';
     }
 
     async getPackageManager(): Promise<JavascriptPackageManager> {
-        for (const [packageManager, lockFiles] of Object.entries(this.locks)) {
-            if (typeof lockFiles === 'object') {
-                for (const lockFile of lockFiles) {
-                    const lockPath: string = pathJoin(this.rootPath, lockFile);
-                    if (fs.existsSync(lockPath)) {
-                        return packageManager as JavascriptPackageManager;
-                    }
-                };
-            } else {
-                const lockPath: string = pathJoin(this.rootPath, lockFiles);
+        for (let [packageManager, lockFiles] of Object.entries(this.locks)) {
+            if (typeof lockFiles === 'string') {
+                lockFiles = [lockFiles];
+            }
+
+            for (const lockFile of lockFiles) {
+                const lockPath: string = pathJoin(this.rootPath, lockFile);
                 if (fs.existsSync(lockPath)) {
                     return packageManager as JavascriptPackageManager;
                 }
