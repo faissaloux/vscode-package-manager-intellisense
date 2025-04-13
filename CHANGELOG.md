@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.3.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.4.0...main)
+
+## [v1.4.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.3.0...v1.4.0) - 2025-04-13
+### ADDED
+- `npm-shrinkwrap` support ([#26](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/26))
 
 ## [v1.3.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.2.0...v1.3.0) - 2025-02-12
 ### ADDED
