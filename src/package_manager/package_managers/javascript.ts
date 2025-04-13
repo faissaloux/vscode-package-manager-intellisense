@@ -1,17 +1,21 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { pathJoin } from '../../util/globals';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
-type JavascriptDependenciesLockFile = 'package-lock.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
+type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     packageManager: JavascriptPackageManager = 'npm';
     lockVersion: number | null = null;
-    locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile} = {
-        'npm': 'package-lock.json',
+    locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[]} = {
+        'npm': [
+            'package-lock.json',
+            'npm-shrinkwrap.json',
+        ],
         'yarn': 'yarn.lock',
         'pnpm': 'pnpm-lock.yaml',
         'bun': 'bun.lock',
@@ -43,18 +47,35 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, this.locks[this.packageManager]);
+        let lockFiles: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[] = this.locks[this.packageManager];
+
+        if (typeof lockFiles === 'string') {
+            lockFiles = [lockFiles as JavascriptDependenciesLockFile];
+        }
+
+        for (const lockFile of lockFiles as JavascriptDependenciesLockFile[]) {
+            const lockPath: string = pathJoin(this.rootPath, lockFile);
+
+            if (fs.existsSync(lockPath)) {
+                return lockPath;
+            }
+        };
+
+        return '';
     }
 
     async getPackageManager(): Promise<JavascriptPackageManager> {
-        for (const lock in this.locks) {
-            let lockFile = vscode.Uri.file(pathJoin(this.rootPath, this.locks[lock as JavascriptPackageManager]));
+        for (let [packageManager, lockFiles] of Object.entries(this.locks)) {
+            if (typeof lockFiles === 'string') {
+                lockFiles = [lockFiles];
+            }
 
-            try{
-                await vscode.workspace.fs.readFile(lockFile);
-
-                return lock as JavascriptPackageManager;
-            } catch (error) {}
+            for (const lockFile of lockFiles) {
+                const lockPath: string = pathJoin(this.rootPath, lockFile);
+                if (fs.existsSync(lockPath)) {
+                    return packageManager as JavascriptPackageManager;
+                }
+            };
         }
 
         return (Object.keys(this.locks) as JavascriptPackageManager[])[0];
