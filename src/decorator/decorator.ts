@@ -81,7 +81,7 @@ export class Decorator {
             if (this.packageManager["packageManager"] === "ruby") {
                 regex = 'gem "' + packageName + '"';
             } else if (this.packageManager["packageManager"] === "rust") {
-                regex = packageName;
+                regex = packageName + ' ';
             } else {
                 regex = '"' + packageName + '":';
             }
