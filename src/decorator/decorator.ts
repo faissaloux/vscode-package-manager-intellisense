@@ -42,6 +42,7 @@ export class Decorator {
             ...Object.keys(contentJson['devDependencies'] || {}),
             ...Object.keys(contentJson['require'] || {}),
             ...Object.keys(contentJson['require-dev'] || {}),
+            ...Object.keys(contentJson['dev-dependencies'] || {}),
         ];
 
         const decorations: vscode.DecorationOptions[] = [];
