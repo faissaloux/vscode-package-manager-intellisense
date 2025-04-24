@@ -66,9 +66,7 @@ export class Decorator {
                 }
             }
         }
-    
-        console.log('decorations');
-        console.log(decorations);
+
         this.editor.setDecorations(globals.decorationType, decorations);
     }
 
