@@ -14,6 +14,10 @@ function supportedOpenEditors(): vscode.TextEditor[] {
 		packagesFiles.push('Gemfile');
 	}
 
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.cargo.enable')) {
+		packagesFiles.push('Cargo.toml');
+	}
+
 	return vscode.window.visibleTextEditors.filter(
 		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
 	);

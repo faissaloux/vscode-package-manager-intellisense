@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as toml from 'toml';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
@@ -30,6 +31,8 @@ export class Decorator {
             });
 
             contentJson['dependencies'] = formatted;
+        } else if (this.packageManager["packageManager"] === "rust") {
+            contentJson = toml.parse(content);
         } else {
             contentJson = JSON.parse(content);
         }
@@ -63,6 +66,8 @@ export class Decorator {
             }
         }
     
+        console.log('decorations');
+        console.log(decorations);
         this.editor.setDecorations(globals.decorationType, decorations);
     }
 
@@ -76,6 +81,8 @@ export class Decorator {
 
             if (this.packageManager["packageManager"] === "ruby") {
                 regex = 'gem "' + packageName + '"';
+            } else if (this.packageManager["packageManager"] === "rust") {
+                regex = packageName;
             } else {
                 regex = '"' + packageName + '":';
             }
