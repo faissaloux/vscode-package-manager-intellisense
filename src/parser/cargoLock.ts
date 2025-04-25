@@ -1,4 +1,4 @@
-import * as toml from 'toml';
+import * as toml from '@iarna/toml';
 import { LockParser } from '../interfaces/lock_parser';
 
 export class CargoLock implements LockParser {

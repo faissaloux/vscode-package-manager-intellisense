@@ -74,9 +74,9 @@
   },
   "dependencies": {
     "@faissaloux/gemfile": "^0.3.0",
+    "@iarna/toml": "^2.2.5",
     "@yarnpkg/lockfile": "^1.1.0",
-    "js-yaml": "^4.1.0",
-    "toml": "^3.0.0"
+    "js-yaml": "^4.1.0"
   },
   "contributes": {
     "configuration": [

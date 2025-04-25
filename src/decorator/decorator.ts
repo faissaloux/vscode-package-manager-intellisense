@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as toml from 'toml';
+import * as toml from '@iarna/toml';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
