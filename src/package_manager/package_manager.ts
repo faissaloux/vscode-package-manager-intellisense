@@ -4,9 +4,10 @@ import { Php } from './package_managers/php';
 import { Ruby } from './package_managers/ruby';
 import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
+import { Rust } from './package_managers/rust';
 
-type Language = 'php' | 'javascript' | 'ruby';
-export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile';
+type Language = 'php' | 'javascript' | 'ruby' | 'rust';
+export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml';
 
 export class PackageManager {
     private editorFileName: string;
@@ -15,11 +16,13 @@ export class PackageManager {
         'php': 'composer.json',
         'javascript': 'package.json',
         'ruby': 'Gemfile',
+        'rust': 'Cargo.toml',
     };
     private packageManagers: {[key in Language]: typeof LanguagePackageManager} = {
         'php': Php,
         'javascript': Javascript,
         'ruby': Ruby,
+        'rust': Rust,
     };
 
     constructor(private readonly editor: vscode.TextEditor) {

@@ -29,6 +29,7 @@
     "pnpm",
     "composer",
     "bundler",
+    "cargo",
     "dependency",
     "manager",
     "installed package version",
@@ -73,6 +74,7 @@
   },
   "dependencies": {
     "@faissaloux/gemfile": "^0.3.0",
+    "@iarna/toml": "^2.2.5",
     "@yarnpkg/lockfile": "^1.1.0",
     "js-yaml": "^4.1.0"
   },
@@ -81,36 +83,41 @@
       {
         "title": "package-manager-intellisense",
         "properties": {
-            "package-manager-intellisense.npm.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable npm package manager."
-            },
-            "package-manager-intellisense.yarn.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable yarn package manager."
-            },
-            "package-manager-intellisense.pnpm.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable pnpm package manager."
-            },
-            "package-manager-intellisense.bun.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable bun package manager."
-            },
-            "package-manager-intellisense.composer.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable composer package manager."
-            },
-            "package-manager-intellisense.bundler.enable": {
-                "type": "boolean",
-                "default": true,
-                "description": "Enable bundler package manager."
-            }
+          "package-manager-intellisense.npm.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable npm package manager."
+          },
+          "package-manager-intellisense.yarn.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable yarn package manager."
+          },
+          "package-manager-intellisense.pnpm.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable pnpm package manager."
+          },
+          "package-manager-intellisense.bun.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable bun package manager."
+          },
+          "package-manager-intellisense.composer.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable composer package manager."
+          },
+          "package-manager-intellisense.bundler.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable bundler package manager."
+          },
+          "package-manager-intellisense.cargo.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable cargo package manager."
+          }
         }
       }
     ]

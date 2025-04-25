@@ -14,6 +14,10 @@ function supportedOpenEditors(): vscode.TextEditor[] {
 		packagesFiles.push('Gemfile');
 	}
 
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.cargo.enable')) {
+		packagesFiles.push('Cargo.toml');
+	}
+
 	return vscode.window.visibleTextEditors.filter(
 		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
 	);
@@ -41,13 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.workspace.onDidOpenTextDocument(() => decorate());
 
-	vscode.workspace.onDidChangeTextDocument(() => {
-		const openEditors = supportedOpenEditors();
-
-		if (openEditors.length) {
-			clearDecoration();
-		}
-	});
+	vscode.workspace.onDidChangeTextDocument(() => decorate());
 
 	vscode.workspace.onWillSaveTextDocument(() => decorate());
 }
