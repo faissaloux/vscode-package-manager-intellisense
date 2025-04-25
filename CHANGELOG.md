@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.4.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.5.0...main)
+
+## [v1.5.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.4.0...v1.5.0) - 2025-04-25
+### ADDED
+- Cargo support ([#27](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/27))
 
 ## [v1.4.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.3.0...v1.4.0) - 2025-04-13
 ### ADDED
