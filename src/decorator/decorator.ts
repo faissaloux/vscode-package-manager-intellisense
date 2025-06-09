@@ -3,6 +3,7 @@ import * as toml from '@iarna/toml';
 import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
+import { Link } from './link';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
@@ -46,6 +47,7 @@ export class Decorator {
         ];
 
         const decorations: vscode.DecorationOptions[] = [];
+        const link = new Link;
     
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
@@ -57,21 +59,26 @@ export class Decorator {
                 let installedPackage = await this.packageManager.getInstalled(packageName);
                 let version = this.defaultVersion;
 
+                if (this.packageManager["packageManager"] === 'php') {
+                    link.addPackageLink(installedPackage, line);
+                }
+
                 if(installedPackage?.version) {
                     version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
                 if (installedPackage !== null) {
-                    decorations.push(this.decoration(version, line));
+                    decorations.push(this.decoration(version, line["lineNumber"]));
                 }
             }
         }
 
+        link.registerLinks();
         this.editor.setDecorations(globals.decorationType, decorations);
     }
 
-    getLines(document: vscode.TextDocument, packageName: string): number[] {
-        let lineNumbers: number[] = [];
+    getLines(document: vscode.TextDocument, packageName: string): {content: string, lineNumber: number}[] {
+        let line: {content: string, lineNumber: number}[] = [];
         let lineCount = document.lineCount;
         
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
@@ -87,11 +94,11 @@ export class Decorator {
             }
 
             if (lineText.match(regex)) {
-                lineNumbers.push(lineNumber);
+                line.push({content: lineText, lineNumber});
             }
         }
         
-        return lineNumbers;
+        return line;
     }
 
     decoration(text: string, line: number): vscode.DecorationOptions {
