@@ -18,8 +18,8 @@ export class Decorator {
     }
 
     async decorate() {
-        let content = this.editor.document.getText();
-        let packagesNames: string[] = [];
+        let content: string = this.editor.document.getText();
+        let packagesNames: Set<string>;
         let contentJson;
 
         if (this.packageManager["packageManager"] === "ruby") {
@@ -37,18 +37,19 @@ export class Decorator {
         } else {
             contentJson = JSON.parse(content);
         }
-    
-        packagesNames = [
+
+        packagesNames = new Set<string>([
             ...Object.keys(contentJson['dependencies'] || {}),
             ...Object.keys(contentJson['devDependencies'] || {}),
             ...Object.keys(contentJson['require'] || {}),
             ...Object.keys(contentJson['require-dev'] || {}),
+            ...Object.keys(contentJson['conflict'] || {}),
             ...Object.keys(contentJson['dev-dependencies'] || {}),
-        ];
+        ]);
 
         const decorations: vscode.DecorationOptions[] = [];
         const link = new Link;
-    
+
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
                 continue;
@@ -80,7 +81,7 @@ export class Decorator {
     getLines(document: vscode.TextDocument, packageName: string): {content: string, lineNumber: number}[] {
         let line: {content: string, lineNumber: number}[] = [];
         let lineCount = document.lineCount;
-        
+
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
             let lineText = document.lineAt(lineNumber).text;
             let regex = "";
@@ -97,7 +98,7 @@ export class Decorator {
                 line.push({content: lineText, lineNumber});
             }
         }
-        
+
         return line;
     }
 
