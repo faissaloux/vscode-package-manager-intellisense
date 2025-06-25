@@ -37,18 +37,20 @@ export class Decorator {
         } else {
             contentJson = JSON.parse(content);
         }
-    
+
         packagesNames = [
             ...Object.keys(contentJson['dependencies'] || {}),
             ...Object.keys(contentJson['devDependencies'] || {}),
             ...Object.keys(contentJson['require'] || {}),
             ...Object.keys(contentJson['require-dev'] || {}),
+            ...Object.keys(contentJson['conflict'] || {}),
             ...Object.keys(contentJson['dev-dependencies'] || {}),
         ];
 
         const decorations: vscode.DecorationOptions[] = [];
         const link = new Link;
-    
+
+        packagesNames = [...new Set(packagesNames)];
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
                 continue;
@@ -80,7 +82,7 @@ export class Decorator {
     getLines(document: vscode.TextDocument, packageName: string): {content: string, lineNumber: number}[] {
         let line: {content: string, lineNumber: number}[] = [];
         let lineCount = document.lineCount;
-        
+
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
             let lineText = document.lineAt(lineNumber).text;
             let regex = "";
@@ -97,7 +99,7 @@ export class Decorator {
                 line.push({content: lineText, lineNumber});
             }
         }
-        
+
         return line;
     }
 
