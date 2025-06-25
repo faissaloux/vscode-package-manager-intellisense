@@ -18,8 +18,8 @@ export class Decorator {
     }
 
     async decorate() {
-        let content = this.editor.document.getText();
-        let packagesNames: string[] = [];
+        let content: string = this.editor.document.getText();
+        let packagesNames: Set<string>;
         let contentJson;
 
         if (this.packageManager["packageManager"] === "ruby") {
@@ -38,19 +38,18 @@ export class Decorator {
             contentJson = JSON.parse(content);
         }
 
-        packagesNames = [
+        packagesNames = new Set<string>([
             ...Object.keys(contentJson['dependencies'] || {}),
             ...Object.keys(contentJson['devDependencies'] || {}),
             ...Object.keys(contentJson['require'] || {}),
             ...Object.keys(contentJson['require-dev'] || {}),
             ...Object.keys(contentJson['conflict'] || {}),
             ...Object.keys(contentJson['dev-dependencies'] || {}),
-        ];
+        ]);
 
         const decorations: vscode.DecorationOptions[] = [];
         const link = new Link;
 
-        packagesNames = [...new Set(packagesNames)];
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
                 continue;
