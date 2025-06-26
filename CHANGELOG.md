@@ -1,4 +1,11 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.6.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.0...main)
+
+## [v1.7.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.6.0...v1.7.0) - 2025-06-26
+### ADDED
+- Support composer `conflict` section ([#29](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/29))
+
+### FIXED
+- Fix multiple links on same package ([#31](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/31))
 
 ## [v1.6.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.5.0...v1.6.0) - 2025-06-09
 ### ADDED
