@@ -1,8 +1,13 @@
 import * as vscode from 'vscode';
 
 export class Link {
-    links: vscode.DocumentLink[] = [];
-    suppportedFiles = ["composer.json"];
+    private registered: boolean = false;
+    private links: vscode.DocumentLink[] = [];
+    private suppportedFiles = ["composer.json"];
+
+    constructor() {
+        this.links = [];
+    }
 
     addPackageLink(pkg: any, line: {content: string, lineNumber: number}): void {
         const link = new vscode.DocumentLink(
@@ -10,7 +15,7 @@ export class Link {
                 new vscode.Position(line["lineNumber"], line["content"].indexOf(pkg.name)),
                 new vscode.Position(line["lineNumber"], line["content"].indexOf(pkg.name) + pkg.name.length)
             ),
-            vscode.Uri.parse(pkg.source.url),
+            vscode.Uri.parse(pkg.source.url.replace(".git", "")),
         );
 
         this.links.push(link);
@@ -20,7 +25,9 @@ export class Link {
         vscode.languages.registerDocumentLinkProvider({scheme: 'file'}, {provideDocumentLinks: (document) => {
             const fileName = document.uri.path.split('/').pop();
 
-            if (fileName && this.suppportedFiles.includes(fileName)) {
+            if (!this.registered && fileName && this.suppportedFiles.includes(fileName)) {
+                this.registered = true;
+
                 return this.links;
             }
         }});
