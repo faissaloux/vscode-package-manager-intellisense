@@ -1,4 +1,9 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.1...main)
+
+## [v1.7.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.0...v1.7.1) - 2025-07-03
+### FIXED
+- Fix showing wrong version when using `yarn` ([#34](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/34))
+- Don't show version on package config object ([#35](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/35))
 
 ## [v1.7.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.6.0...v1.7.0) - 2025-06-26
 ### ADDED
