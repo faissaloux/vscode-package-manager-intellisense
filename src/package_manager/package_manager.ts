@@ -42,8 +42,8 @@ export class PackageManager {
         return this;
     }
 
-    async getInstalled(packageName: string): Promise<any> {
+    async getInstalled(packageName: string, line: string): Promise<any> {
         // @ts-ignore
-        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName);
+        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName, line);
     }
 }
