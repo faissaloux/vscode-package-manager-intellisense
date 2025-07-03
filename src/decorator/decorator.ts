@@ -91,7 +91,7 @@ export class Decorator {
             } else if (this.packageManager["packageManager"] === "rust") {
                 regex = packageName + ' ';
             } else {
-                regex = '"' + packageName + '":';
+                regex = '"' + packageName + '": "';
             }
 
             if (lineText.match(regex)) {
