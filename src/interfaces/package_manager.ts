@@ -1,4 +1,4 @@
 export interface PackageManager {
-    getInstalled(packageName: string): Promise<any>
+    getInstalled(packageName: string, line: string): Promise<any>
     getLockPath(): string
 }

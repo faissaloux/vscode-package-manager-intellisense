@@ -22,7 +22,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     };
     startsWith: {[key: string]: string | {[version: string | number]: string}} = {
         'npm': 'packageName',
-        'yarn': 'packageName@',
+        'yarn': 'packageName@version',
         'pnpm': {
             /* eslint-disable @typescript-eslint/naming-convention */
             '5.3': '/packageName/',
@@ -33,7 +33,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'bun': 'packageName',
     };
 
-    async getInstalled(packageName: string): Promise<any> {
+    async getInstalled(packageName: string, line: string): Promise<any> {
         this.packageManager = await this.getPackageManager();
         const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
         const installedPackages = lockFileParsed['dependencies'];
@@ -43,7 +43,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             return null;
         }
 
-        return Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName)))?.[1];
+        return Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
     }
 
     override getLockPath(): string {
@@ -81,14 +81,14 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         return (Object.keys(this.locks) as JavascriptPackageManager[])[0];
     }
 
-    lockPackageStartsWith(packageName: string): string {
+    lockPackageStartsWith(packageName: string, version: string): string {
         const pattern =  this.startsWith[this.packageManager];
 
         if (typeof pattern === 'object' && this.lockVersion) {
             const lockVersion = Number(this.lockVersion);
 
             if (pattern[lockVersion]) {
-                return pattern[lockVersion].replace('packageName', packageName);
+                return pattern[lockVersion].replace('packageName', packageName).replace('version', version);
             }
 
             let lastVersion = Object.keys(pattern).sort().at(0);
@@ -96,16 +96,27 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             if (lastVersion !== undefined) {
                 for (const version of Object.keys(pattern).sort()) {
                     if (Number(version) > lockVersion ) {
-                        return pattern[lastVersion].replace('packageName', packageName);
+                        return pattern[lastVersion].replace('packageName', packageName).replace('version', version);
                     }
 
                     lastVersion = version;
                 }
 
-                return pattern[lastVersion].replace('packageName', packageName);
+                return pattern[lastVersion].replace('packageName', packageName).replace('version', version);
             }
         }
 
-        return (pattern as string).replace('packageName', packageName);
+        return (pattern as string).replace('packageName', packageName).replace('version', version);
+    }
+
+    getVersion(line: string): string {
+        let version = '';
+
+        const insideDoubleQuotes = line.match(/"(.*?)"/g);
+        if (insideDoubleQuotes) {
+            version = insideDoubleQuotes[1]?.replaceAll('"', '');
+        }
+
+        return version;
     }
 }

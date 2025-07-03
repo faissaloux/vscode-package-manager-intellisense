@@ -57,7 +57,7 @@ export class Decorator {
 
             let lines = this.getLines(this.editor.document, packageName);
             for (const line of lines) {
-                let installedPackage = await this.packageManager.getInstalled(packageName);
+                let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
 
                 if (this.packageManager["packageManager"] === 'php') {
