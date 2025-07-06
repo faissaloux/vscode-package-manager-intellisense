@@ -1,4 +1,14 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.0...main)
+
+## [v1.8.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.1...v1.8.0) - 2025-07-06
+### ADDED
+- javascript package link support ([#37](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/37))
+
+### DOCUMENTATION
+- links documentation ([#38](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/38))
+
+### REFACTOR
+- [refactor] InstalledPackage ([#36](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/36))
 
 ## [v1.7.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.0...v1.7.1) - 2025-07-03
 ### FIXED
