@@ -4,6 +4,7 @@ import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { pathJoin } from '../../util/globals';
+import { InstalledPackage } from '../../types/types';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
@@ -33,17 +34,23 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'bun': 'packageName',
     };
 
-    async getInstalled(packageName: string, line: string): Promise<any> {
+    async getInstalled(packageName: string, line: string): Promise<InstalledPackage|undefined> {
         this.packageManager = await this.getPackageManager();
         const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
         const installedPackages = lockFileParsed['dependencies'];
         this.lockVersion = lockFileParsed['lockVersion'];
 
         if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
-            return null;
+            return;
         }
 
-        return Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
+        const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
+
+        return {
+            name: packageName,
+            version: installedPackage.version,
+            link: installedPackage.resolved.split('/-/')[0].replace('://registry', '://www'),
+        };
     }
 
     override getLockPath(): string {
