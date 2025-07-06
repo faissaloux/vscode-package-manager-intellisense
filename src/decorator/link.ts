@@ -4,7 +4,7 @@ import { InstalledPackage, Line } from '../types/types';
 export class Link {
     private registered: boolean = false;
     private links: vscode.DocumentLink[] = [];
-    private suppportedFiles = ["composer.json"];
+    private suppportedFiles = ["composer.json", "package.json"];
 
     constructor() {
         this.links = [];

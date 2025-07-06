@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import axios from 'axios';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
@@ -45,11 +46,20 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         }
 
         const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
+        let link: string = '';
+
+        await axios.get(`https://registry.npmjs.org/${packageName}`)
+            .then(response => response.data)
+            .then(data => {
+                link = data.repository ? data.repository.url : data.homepage;
+
+                link = link.replace(".git", "").replace("git+", "").replace("git:", "https:")
+            });
 
         return {
             name: packageName,
             version: installedPackage.version,
-            link: installedPackage.resolved.split('/-/')[0].replace('://registry', '://www'),
+            link: link,
         };
     }
 
