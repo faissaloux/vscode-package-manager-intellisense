@@ -1,9 +1,9 @@
 # VSCode package manager intellisense
 
-Extension that shows you versions of your installed packages.
+Extension that shows you versions of your installed packages, and allow you to go to their links by clicking on them.
 
 ##### Javascript
-![hint](images/node-packages-installed-versions.png)
+![hint](images/javascript-packages-installed-versions.png)
 
 ##### php
 ![hint](images/php-packages-installed-versions.png)
@@ -27,6 +27,13 @@ Extension that shows you versions of your installed packages.
 - composer
 - bundler
 - cargo
+
+### Links support
+- npm
+- yarn
+- pnpm
+- bun
+- composer
 
 ## Usage
 - Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer`, `bundler` or `cargo`.
