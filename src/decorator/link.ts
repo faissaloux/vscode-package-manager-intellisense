@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { InstalledPackage } from '../types/types';
+import { InstalledPackage, Line } from '../types/types';
 
 export class Link {
     private registered: boolean = false;
@@ -10,7 +10,7 @@ export class Link {
         this.links = [];
     }
 
-    addPackageLink(pkg: InstalledPackage, line: {content: string, lineNumber: number}): void {
+    addPackageLink(pkg: InstalledPackage, line: Line): void {
         if (!pkg.link) {
             return;
         }
