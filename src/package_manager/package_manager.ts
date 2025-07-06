@@ -5,6 +5,7 @@ import { Ruby } from './package_managers/ruby';
 import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
 import { Rust } from './package_managers/rust';
+import { InstalledPackage } from '../types/types';
 
 type Language = 'php' | 'javascript' | 'ruby' | 'rust';
 export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml';
@@ -42,7 +43,7 @@ export class PackageManager {
         return this;
     }
 
-    async getInstalled(packageName: string, line: string): Promise<any> {
+    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         // @ts-ignore
         return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName, line);
     }

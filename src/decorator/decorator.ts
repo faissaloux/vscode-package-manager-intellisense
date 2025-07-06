@@ -4,6 +4,7 @@ import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 import { Link } from './link';
+import { Line } from '../types/types';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
@@ -60,7 +61,7 @@ export class Decorator {
                 let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
 
-                if (this.packageManager["packageManager"] === 'php') {
+                if (installedPackage?.link) {
                     link.addPackageLink(installedPackage, line);
                 }
 
@@ -78,8 +79,8 @@ export class Decorator {
         this.editor.setDecorations(globals.decorationType, decorations);
     }
 
-    getLines(document: vscode.TextDocument, packageName: string): {content: string, lineNumber: number}[] {
-        let line: {content: string, lineNumber: number}[] = [];
+    getLines(document: vscode.TextDocument, packageName: string): Line[] {
+        let line: Line[] = [];
         let lineCount = document.lineCount;
 
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
