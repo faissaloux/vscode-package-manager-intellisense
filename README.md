@@ -28,6 +28,13 @@ Extension that shows you versions of your installed packages, and allow you to g
 - bundler
 - cargo
 
+### Links support
+- npm
+- yarn
+- pnpm
+- bun
+- composer
+
 ## Usage
 - Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer`, `bundler` or `cargo`.
 - Open your `package.json`, `composer.json`, `Gemfile` or `Cargo.toml` file.
