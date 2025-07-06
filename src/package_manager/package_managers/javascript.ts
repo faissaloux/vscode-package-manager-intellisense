@@ -58,6 +58,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
 
         return {
             name: packageName,
+            // @ts-ignore
             version: installedPackage.version,
             link: link,
         };
