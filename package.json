@@ -40,7 +40,10 @@
     "gemfile"
   ],
   "activationEvents": [
-    "onLanguage:json"
+    "onLanguage:json",
+    "onLanguage:toml",
+    "onLanguage:text",
+    "onFileSystem:**"
   ],
   "main": "./dist/extension.js",
   "scripts": {
