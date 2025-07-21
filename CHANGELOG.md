@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.1...main)
+
+## [v1.8.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.0...v1.8.1) - 2025-07-21
+### FIXED
+- [Fix] Decoration does not work on open a package manager file ([#39](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/39))
 
 ## [v1.8.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.7.1...v1.8.0) - 2025-07-06
 ### ADDED
