@@ -41,7 +41,7 @@ export class Decorator {
             contentJson = toml.parse(content);
 
             contentJson['project']['dependencies'].map((dependency: string) => {
-                const [dep, version] = dependency.split(' ');
+                const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
 
                 formatted[dep] = version;
             });
@@ -124,12 +124,12 @@ export class Decorator {
             } else if (this.packageManager["packageManager"] === "rust") {
                 regex = packageName + ' ';
             } else if (this.packageManager["packageManager"] === "python") {
-                regex = '"' + packageName;
+                regex = '^\\s*"' + packageName + '(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
             } else {
                 regex = '"' + packageName + '": "';
             }
 
-            if (lineText.match(regex)) {
+            if (lineText.match(new RegExp(regex))) {
                 line.push({content: lineText, lineNumber});
             }
         }
