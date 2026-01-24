@@ -14,4 +14,6 @@ export class LanguagePackageManager {
     getLockPath(): string {
         throw new Error("Not Implemented!");
     }
+
+    async getLinkOfPackage(packageName: string): Promise<string|void> {}
 }

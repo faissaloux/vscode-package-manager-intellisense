@@ -46,6 +46,15 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         }
 
         const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
+
+        return {
+            name: packageName,
+            // @ts-ignore
+            version: installedPackage.version,
+        };
+    }
+
+    async getLinkOfPackage(packageName: string): Promise<string|void> {
         let link: string = '';
 
         await axios.get(`https://registry.npmjs.org/${packageName}`)
@@ -53,15 +62,10 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             .then(data => {
                 link = data.repository ? data.repository.url : data.homepage;
 
-                link = link.replace(".git", "").replace("git+", "").replace("git:", "https:")
+                link = link.replace(".git", "").replace("git+", "").replace("git:", "https:");
             });
 
-        return {
-            name: packageName,
-            // @ts-ignore
-            version: installedPackage.version,
-            link: link,
-        };
+        return link;
     }
 
     override getLockPath(): string {
