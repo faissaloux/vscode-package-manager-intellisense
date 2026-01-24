@@ -35,6 +35,18 @@ export class Decorator {
             contentJson['dependencies'] = formatted;
         } else if (this.packageManager["packageManager"] === "rust") {
             contentJson = toml.parse(content);
+        } else if (this.packageManager["packageManager"] === "python") {
+            let formatted: {[key: string]: string} = {};
+
+            contentJson = toml.parse(content);
+
+            contentJson['project']['dependencies'].map((dependency: string) => {
+                const [dep, version] = dependency.split(' ');
+
+                formatted[dep] = version;
+            });
+
+            contentJson['dependencies'] = formatted;
         } else {
             contentJson = JSON.parse(content);
         }
@@ -111,6 +123,8 @@ export class Decorator {
                 regex = 'gem "' + packageName + '"';
             } else if (this.packageManager["packageManager"] === "rust") {
                 regex = packageName + ' ';
+            } else if (this.packageManager["packageManager"] === "python") {
+                regex = '"' + packageName;
             } else {
                 regex = '"' + packageName + '": "';
             }

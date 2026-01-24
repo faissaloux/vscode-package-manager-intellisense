@@ -6,9 +6,10 @@ import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
 import { Rust } from './package_managers/rust';
 import { InstalledPackage } from '../types/types';
+import { Python } from './package_managers/python';
 
-type Language = 'php' | 'javascript' | 'ruby' | 'rust';
-export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml';
+type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python';
+export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml' | 'pyproject.toml';
 
 export class PackageManager {
     private editorFileName: string;
@@ -18,12 +19,14 @@ export class PackageManager {
         'javascript': 'package.json',
         'ruby': 'Gemfile',
         'rust': 'Cargo.toml',
+        'python': 'pyproject.toml',
     };
     private packageManagers: {[key in Language]: typeof LanguagePackageManager} = {
         'php': Php,
         'javascript': Javascript,
         'ruby': Ruby,
         'rust': Rust,
+        'python': Python,
     };
 
     constructor(private readonly editor: vscode.TextEditor) {
