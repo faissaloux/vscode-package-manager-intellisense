@@ -27,6 +27,7 @@ Extension that shows you versions of your installed packages, and allow you to g
 - composer
 - bundler
 - cargo
+- poetry
 
 ### Links support
 - npm
@@ -36,8 +37,8 @@ Extension that shows you versions of your installed packages, and allow you to g
 - composer
 
 ## Usage
-- Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer`, `bundler` or `cargo`.
-- Open your `package.json`, `composer.json`, `Gemfile` or `Cargo.toml` file.
+- Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer`, `bundler`, `cargo` or `poetry`.
+- Open your `package.json`, `composer.json`, `Gemfile`, `Cargo.toml` or `pyproject.toml` file.
 - Installed versions gonna be displayed to you.
 
 **Enjoy!**
