@@ -4,7 +4,7 @@ import { Decorator } from './decorator/decorator';
 import { DependenciesFile, PackageManager } from './package_manager/package_manager';
 
 function supportedOpenEditors(): vscode.TextEditor[] {
-	const packagesFiles: DependenciesFile[] = ['package.json', 'pyproject.toml'];
+	const packagesFiles: DependenciesFile[] = ['package.json'];
 
 	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.composer.enable')) {
 		packagesFiles.push('composer.json');
@@ -16,6 +16,10 @@ function supportedOpenEditors(): vscode.TextEditor[] {
 
 	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.cargo.enable')) {
 		packagesFiles.push('Cargo.toml');
+	}
+
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.poetry.enable')) {
+		packagesFiles.push('pyproject.toml');
 	}
 
 	return vscode.window.visibleTextEditors.filter(

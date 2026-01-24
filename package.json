@@ -121,6 +121,11 @@
             "type": "boolean",
             "default": true,
             "description": "Enable cargo package manager."
+          },
+          "package-manager-intellisense.poetry.enable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable poetry package manager."
           }
         }
       }
