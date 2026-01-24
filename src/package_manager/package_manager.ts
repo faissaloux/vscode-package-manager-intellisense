@@ -47,4 +47,9 @@ export class PackageManager {
         // @ts-ignore
         return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName, line);
     }
+
+    async getLinkOfPackage(packageName: string): Promise<string> {
+        // @ts-ignore
+        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLinkOfPackage(packageName);
+    }
 }

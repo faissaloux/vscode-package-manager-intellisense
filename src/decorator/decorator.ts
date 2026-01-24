@@ -4,7 +4,7 @@ import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 import { Link } from './link';
-import { Line } from '../types/types';
+import { Line, InstalledPackage } from '../types/types';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
@@ -48,8 +48,12 @@ export class Decorator {
             ...Object.keys(contentJson['dev-dependencies'] || {}),
         ]);
 
+        await this.showPackagesVersions(packagesNames);
+        await this.showPackagesLinks(packagesNames);
+    }
+
+    async showPackagesVersions(packagesNames: Set<string>) {
         const decorations: vscode.DecorationOptions[] = [];
-        const link = new Link;
 
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
@@ -61,10 +65,6 @@ export class Decorator {
                 let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
 
-                if (installedPackage?.link) {
-                    link.addPackageLink(installedPackage, line);
-                }
-
                 if(installedPackage?.version) {
                     version = `v${installedPackage?.version.replace('v', '')}`;
                 }
@@ -75,8 +75,28 @@ export class Decorator {
             }
         }
 
-        link.registerLinks();
         this.editor.setDecorations(globals.decorationType, decorations);
+    }
+
+    async showPackagesLinks(packagesNames: Set<string>) {
+        const link = new Link;
+        for (const packageName of packagesNames) {
+            let lines = this.getLines(this.editor.document, packageName);
+            let pkg: InstalledPackage = {
+                name: packageName,
+                version: '',
+            };
+
+            for (const line of lines) {
+                pkg['link'] = await this.packageManager.getLinkOfPackage(packageName);
+
+                if (pkg['link']) {
+                    link.addPackageLink(pkg, line);
+                }
+            }
+        }
+
+        link.registerLinks();
     }
 
     getLines(document: vscode.TextDocument, packageName: string): Line[] {
