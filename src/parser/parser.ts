@@ -5,6 +5,7 @@ import { GemfileLock } from './gemfileLock';
 import { NpmLock } from './npmLock';
 import { BunLock } from './BunLock';
 import { CargoLock } from './cargoLock';
+import { PoetryLock } from './poetryLock';
 
 export class Parser {
     private readonly parsers = {
@@ -15,6 +16,7 @@ export class Parser {
         "composer": ComposerLock,
         "rubygems": GemfileLock,
         "cargo": CargoLock,
+        "poetry": PoetryLock,
     };
 
     constructor(private readonly packageManager: string) {

@@ -18,6 +18,10 @@ function supportedOpenEditors(): vscode.TextEditor[] {
 		packagesFiles.push('Cargo.toml');
 	}
 
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.poetry.enable')) {
+		packagesFiles.push('pyproject.toml');
+	}
+
 	return vscode.window.visibleTextEditors.filter(
 		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
 	);
