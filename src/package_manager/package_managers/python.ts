@@ -15,10 +15,6 @@ export class Python extends LanguagePackageManager implements PackageManager {
         };
     }
 
-    getLinkOfPackage(packageName: string): Promise<string|void> {
-        return '';
-    }
-
     override getLockPath(): string {
         return pathJoin(this.rootPath, 'poetry.lock');
     }
