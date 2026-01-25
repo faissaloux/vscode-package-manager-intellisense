@@ -11,10 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
         node: [ 20.x ]
 
-    name: Node ${{ matrix.node }} - ${{ matrix.os }}
+    name: Node ${{ matrix.node }} - ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
