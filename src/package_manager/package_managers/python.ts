@@ -7,7 +7,7 @@ import { Parser } from '../../parser/parser';
 export class Python extends LanguagePackageManager implements PackageManager {
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("poetry").parse(await this.lockFileContent())['dependencies'];
-        const packageFound = installedPackages.find((pkg: string) => pkg.name === packageName);
+        const packageFound = installedPackages.find((pkg: {[key: string]: any}) => pkg.name === packageName);
 
         return {
             name: packageFound.name,

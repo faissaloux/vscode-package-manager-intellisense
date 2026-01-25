@@ -40,6 +40,7 @@ export class Decorator {
 
             contentJson = toml.parse(content);
 
+            // @ts-ignore
             contentJson['project']['dependencies'].map((dependency: string) => {
                 const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
 
