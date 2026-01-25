@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.2...main)
+
+## [v1.9.2](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.1...v1.9.2) - 2026-01-25
+### CI
+- Types-check workflow ([#42](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/42))
 
 ## [v1.9.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.0...v1.9.1) - 2026-01-25
 Trigger publish workflow
