@@ -1,4 +1,11 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.0...main)
+
+## [v1.9.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.1...v1.9.0) - 2026-01-25
+### ADDED
+- `poetry` support ([#41](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/41))
+
+### Optimization
+- Optimize showing packages links ([#40](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/40))
 
 ## [v1.8.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.8.0...v1.8.1) - 2025-07-21
 ### FIXED

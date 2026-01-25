@@ -14,6 +14,9 @@ Extension that shows you versions of your installed packages, and allow you to g
 ##### rust
 ![hint](images/rust-packages-installed-versions.png)
 
+##### python
+![hint](images/python-packages-installed-versions.png)
+
 ## Installation
 - Open VS Code and click on Extensions Icon in the Activity Bar.
 - Type `faissaloux.package-manager-intellisense`.
