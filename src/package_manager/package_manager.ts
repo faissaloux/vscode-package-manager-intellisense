@@ -55,4 +55,9 @@ export class PackageManager {
         // @ts-ignore
         return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLinkOfPackage(packageName);
     }
+
+    async getLatestVersions(): Promise<{package: string, version: string, latestVersion: string}[]> {
+        // @ts-ignore
+        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLatestVersions();
+    }
 }

@@ -14,6 +14,7 @@ export class Decorator {
     private readonly packagesToExclude: string[] = [
         'php',
     ];
+    private targets: Line[] = [];
 
     constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManager) {
         return this;
@@ -63,61 +64,63 @@ export class Decorator {
         ]);
 
         await this.showPackagesVersions(packagesNames);
-        await this.showPackagesLinks(packagesNames);
+        await this.showPackagesLatestVersions();
+        await this.showPackagesLinks();
     }
 
     async showPackagesVersions(packagesNames: Set<string>) {
         const decorations: vscode.DecorationOptions[] = [];
-        const latestVersionsDecorations: vscode.DecorationOptions[] = [];
 
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
                 continue;
             }
 
-            let lines = this.getLines(this.editor.document, packageName);
+            let lines: Line[] = this.getLines(this.editor.document, packageName);
             for (const line of lines) {
                 let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
-                let latestVersion = '';
 
                 if(installedPackage?.version) {
                     version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
-                if(installedPackage?.latestVersion) {
-                    latestVersion = `v${installedPackage?.latestVersion.replace('v', '')}`;
-                }
-
                 if (installedPackage !== null) {
                     decorations.push(this.decoration(version, line["lineNumber"], this.color, 1024));
-
-                    if (version !== latestVersion) {
-                        latestVersionsDecorations.push(this.decoration(latestVersion, line["lineNumber"], this.latestVersionColor, 1040));
-                    }
                 }
             }
         }
 
         this.editor.setDecorations(globals.decorationType, decorations);
-        this.editor.setDecorations(globals.latestVersionDecoration, latestVersionsDecorations);
     }
 
-    async showPackagesLinks(packagesNames: Set<string>) {
+    async showPackagesLatestVersions() {
+        const decorations: vscode.DecorationOptions[] = [];
+        const latestVersions: {package: string, version: string, latestVersion: string}[] = await this.packageManager.getLatestVersions();
+
+        for (const line of this.targets) {
+            const thePackage = latestVersions.find(pkg => pkg.package === line.package);
+
+            if (thePackage && thePackage.version !== thePackage.latestVersion) {
+                decorations.push(this.decoration(thePackage.latestVersion, line["lineNumber"], this.latestVersionColor, 1024));
+            }
+        }
+
+        this.editor.setDecorations(globals.latestVersionDecoration, decorations);
+    }
+
+    async showPackagesLinks() {
         const link = new Link;
-        for (const packageName of packagesNames) {
-            let lines = this.getLines(this.editor.document, packageName);
+        for (const line of this.targets) {
             let pkg: InstalledPackage = {
-                name: packageName,
+                name: line.package,
                 version: '',
             };
 
-            for (const line of lines) {
-                pkg['link'] = await this.packageManager.getLinkOfPackage(packageName);
+            pkg['link'] = await this.packageManager.getLinkOfPackage(line.package);
 
-                if (pkg['link']) {
-                    link.addPackageLink(pkg, line);
-                }
+            if (pkg['link']) {
+                link.addPackageLink(pkg, line);
             }
         }
 
@@ -125,7 +128,7 @@ export class Decorator {
     }
 
     getLines(document: vscode.TextDocument, packageName: string): Line[] {
-        let line: Line[] = [];
+        let lines: Line[] = [];
         let lineCount = document.lineCount;
 
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
@@ -143,11 +146,13 @@ export class Decorator {
             }
 
             if (lineText.match(new RegExp(regex))) {
-                line.push({content: lineText, lineNumber});
+                lines.push({content: lineText, package: packageName, lineNumber});
             }
         }
 
-        return line;
+        this.targets.push(...lines);
+
+        return lines;
     }
 
     decoration(text: string, line: number, color: string, char: number): vscode.DecorationOptions {

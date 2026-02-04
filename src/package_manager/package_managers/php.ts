@@ -16,7 +16,6 @@ export class Php extends LanguagePackageManager implements PackageManager {
         return {
             name: installedPackage.name,
             version: installedPackage.version,
-            latestVersion: this.getLatestVersion(packageName),
         };
     }
 
@@ -30,17 +29,22 @@ export class Php extends LanguagePackageManager implements PackageManager {
         return pathJoin(this.rootPath, 'vendor', 'composer', 'installed.json');
     }
 
-    getLatestVersion(packageName: string): string {
+    getLatestVersions(): {package: string, version: string, latestVersion: string}[] {
         const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri.fsPath
             : undefined;
 
-        const outdatedResponse = cp.execSync(`composer outdated ${packageName} --direct`, {
+        const outdatedResponse = cp.execSync(`composer outdated --direct --format=json`, {
             cwd: rootPath,
         }).toString();
-        const latestVersionLine: string = outdatedResponse.split('\n').filter(line => line.includes('latest'))[0];
-        const latestVersion: string = latestVersionLine.split(':')[1].split(' ')[1];
+        const installedPackages = JSON.parse(outdatedResponse).installed.map((pkg: {name: string, version: string, latest: string}) => {
+            return {
+                package: pkg.name,
+                version: pkg.version,
+                latestVersion: pkg.latest,
+            };
+        });
 
-        return latestVersion;
+        return installedPackages;
     }
 }

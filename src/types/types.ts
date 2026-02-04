@@ -1,7 +1,6 @@
 export type InstalledPackage = {
     name: string,
     version: string,
-    latestVersion?: string,
     link?: string,
 };
 
@@ -15,5 +14,6 @@ export type ComposerInstalledPackage = {
 
 export type Line = {
     content: string,
+    package: string,
     lineNumber: number,
 };
