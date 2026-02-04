@@ -1,6 +1,7 @@
 export type InstalledPackage = {
     name: string,
     version: string,
+    latestVersion?: string,
     link?: string,
 };
 

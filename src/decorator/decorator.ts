@@ -9,6 +9,7 @@ import { Line, InstalledPackage } from '../types/types';
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
     private readonly color: string = 'grey';
+    private readonly latestVersionColor: string = '#F56747';
     private readonly margin: string = '0 0 0 1rem';
     private readonly packagesToExclude: string[] = [
         'php',
@@ -77,13 +78,22 @@ export class Decorator {
             for (const line of lines) {
                 let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
+                let latestVersion = '';
 
                 if(installedPackage?.version) {
                     version = `v${installedPackage?.version.replace('v', '')}`;
                 }
 
+                if(installedPackage?.latestVersion) {
+                    latestVersion = `v${installedPackage?.latestVersion.replace('v', '')}`;
+                }
+
                 if (installedPackage !== null) {
-                    decorations.push(this.decoration(version, line["lineNumber"]));
+                    decorations.push(this.decoration(version, line["lineNumber"], this.color, 1024));
+
+                    if (version !== latestVersion) {
+                        decorations.push(this.decoration(latestVersion, line["lineNumber"], this.latestVersionColor, 1040));
+                    }
                 }
             }
         }
@@ -138,12 +148,12 @@ export class Decorator {
         return line;
     }
 
-    decoration(text: string, line: number): vscode.DecorationOptions {
-        const range: vscode.Range = new vscode.Range(line, 1024, line, 1024);
+    decoration(text: string, line: number, color: string, char: number): vscode.DecorationOptions {
+        const range: vscode.Range = new vscode.Range(line, char, line, char);
         const renderOptions = {
             after: {
                 contentText: text,
-                color: this.color,
+                color,
                 margin: this.margin,
             }
         };
