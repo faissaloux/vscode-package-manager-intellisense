@@ -41,6 +41,7 @@ function decorate(): void {
 function clearDecoration(): void {
 	vscode.window.visibleTextEditors.forEach(textEditor => {
 		textEditor.setDecorations(globals.decorationType, []);
+		textEditor.setDecorations(globals.latestVersionDecoration, []);
 	});
 }
 

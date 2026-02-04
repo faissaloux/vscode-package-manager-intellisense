@@ -68,6 +68,7 @@ export class Decorator {
 
     async showPackagesVersions(packagesNames: Set<string>) {
         const decorations: vscode.DecorationOptions[] = [];
+        const latestVersionsDecorations: vscode.DecorationOptions[] = [];
 
         for (const packageName of packagesNames) {
             if (this.packagesToExclude.indexOf(packageName) !== -1) {
@@ -92,13 +93,14 @@ export class Decorator {
                     decorations.push(this.decoration(version, line["lineNumber"], this.color, 1024));
 
                     if (version !== latestVersion) {
-                        decorations.push(this.decoration(latestVersion, line["lineNumber"], this.latestVersionColor, 1040));
+                        latestVersionsDecorations.push(this.decoration(latestVersion, line["lineNumber"], this.latestVersionColor, 1040));
                     }
                 }
             }
         }
 
         this.editor.setDecorations(globals.decorationType, decorations);
+        this.editor.setDecorations(globals.latestVersionDecoration, latestVersionsDecorations);
     }
 
     async showPackagesLinks(packagesNames: Set<string>) {
