@@ -62,7 +62,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             .then(data => {
                 link = data.repository ? data.repository.url : data.homepage;
 
-                link = link.replace(".git", "").replace("git+", "").replace("git:", "https:");
+                link = link ? link.replace(".git", "").replace("git+", "").replace("git:", "https:") : '';
             });
 
         return link;
