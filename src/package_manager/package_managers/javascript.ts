@@ -9,6 +9,7 @@ import { InstalledPackage, outdated } from '../../types/types';
 import { JsPkgManager } from './javascript/JsPkgManager';
 import { Bun } from './javascript/bun';
 import { Npm } from './javascript/npm';
+import { Yarn } from './javascript/yarn';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
@@ -40,6 +41,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     private packageManagers: {[key in JavascriptPackageManager]: typeof JsPkgManager} = {
         'bun': Bun,
         'npm': Npm,
+        'yarn': Yarn,
     };
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage|undefined> {
