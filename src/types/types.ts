@@ -17,3 +17,9 @@ export type Line = {
     package: string,
     lineNumber: number,
 };
+
+export type outdated = {
+    package: string,
+    version: string,
+    latestVersion: string,
+};

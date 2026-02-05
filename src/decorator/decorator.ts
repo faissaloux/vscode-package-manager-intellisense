@@ -4,7 +4,7 @@ import * as globals from '../util/globals';
 import { PackageManager } from '../package_manager/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 import { Link } from './link';
-import { Line, InstalledPackage } from '../types/types';
+import { Line, InstalledPackage, outdated } from '../types/types';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
@@ -96,7 +96,7 @@ export class Decorator {
 
     async showPackagesLatestVersions() {
         const decorations: vscode.DecorationOptions[] = [];
-        const latestVersions: {package: string, version: string, latestVersion: string}[] = await this.packageManager.getLatestVersions();
+        const latestVersions: outdated[] = await this.packageManager.getLatestVersions();
 
         for (const line of this.targets) {
             const thePackage = latestVersions.find(pkg => pkg.package === line.package);

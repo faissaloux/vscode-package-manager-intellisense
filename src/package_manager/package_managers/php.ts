@@ -2,7 +2,7 @@ import { pathJoin } from '../../util/globals';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { ComposerInstalledPackage, InstalledPackage } from '../../types/types';
+import { ComposerInstalledPackage, InstalledPackage, outdated } from '../../types/types';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
 
@@ -29,7 +29,7 @@ export class Php extends LanguagePackageManager implements PackageManager {
         return pathJoin(this.rootPath, 'vendor', 'composer', 'installed.json');
     }
 
-    getLatestVersions(): {package: string, version: string, latestVersion: string}[] {
+    getLatestVersions(): outdated[] {
         const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri.fsPath
             : undefined;

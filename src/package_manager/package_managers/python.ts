@@ -1,7 +1,7 @@
 import { pathJoin } from '../../util/globals';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage } from '../../types/types';
+import { InstalledPackage, outdated } from '../../types/types';
 import { Parser } from '../../parser/parser';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
@@ -17,7 +17,7 @@ export class Python extends LanguagePackageManager implements PackageManager {
         };
     }
 
-    getLatestVersions(): {package: string, version: string, latestVersion: string}[] {
+    getLatestVersions(): outdated[] {
         const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri.fsPath
             : undefined;

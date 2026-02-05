@@ -5,7 +5,7 @@ import { Ruby } from './package_managers/ruby';
 import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
 import { Rust } from './package_managers/rust';
-import { InstalledPackage } from '../types/types';
+import { InstalledPackage, outdated } from '../types/types';
 import { Python } from './package_managers/python';
 
 type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python';
@@ -56,7 +56,7 @@ export class PackageManager {
         return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLinkOfPackage(packageName);
     }
 
-    async getLatestVersions(): Promise<{package: string, version: string, latestVersion: string}[]> {
+    async getLatestVersions(): Promise<outdated[]> {
         // @ts-ignore
         return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLatestVersions();
     }

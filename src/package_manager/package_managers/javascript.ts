@@ -5,13 +5,15 @@ import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { pathJoin } from '../../util/globals';
-import { InstalledPackage } from '../../types/types';
+import { InstalledPackage, outdated } from '../../types/types';
+import { JsPkgManager } from './javascript/JsPkgManager';
+import { Bun } from './javascript/bun';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
-    packageManager: JavascriptPackageManager = 'npm';
+    static packageManager: JavascriptPackageManager = 'npm';
     lockVersion: number | null = null;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[]} = {
         'npm': [
@@ -34,16 +36,19 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         },
         'bun': 'packageName',
     };
+    private packageManagers: {[key in JavascriptPackageManager]: typeof JsPkgManager} = {
+        'bun': Bun,
+    };
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage|undefined> {
-        this.packageManager = await this.getPackageManager();
-        const lockFileParsed = new Parser(this.packageManager).parse(await this.lockFileContent());
-        const installedPackages = lockFileParsed['dependencies'];
-        this.lockVersion = lockFileParsed['lockVersion'];
-
-        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${this.packageManager}.enable`)) {
+        Javascript.packageManager = await this.getPackageManager();
+        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${Javascript.packageManager}.enable`)) {
             return;
         }
+
+        const lockFileParsed = new Parser(Javascript.packageManager).parse(await this.lockFileContent());
+        const installedPackages = lockFileParsed['dependencies'];
+        this.lockVersion = lockFileParsed['lockVersion'];
 
         const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
 
@@ -52,6 +57,14 @@ export class Javascript extends LanguagePackageManager implements PackageManager
             // @ts-ignore
             version: installedPackage.version,
         };
+    }
+
+    getLatestVersions(): outdated[]|undefined {
+        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${Javascript.packageManager}.enable`)) {
+            return;
+        }
+
+        return new this.packageManagers[Javascript.packageManager]().getLatestVersions();
     }
 
     async getLinkOfPackage(packageName: string): Promise<string|void> {
@@ -69,7 +82,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     override getLockPath(): string {
-        let lockFiles: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[] = this.locks[this.packageManager];
+        let lockFiles: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[] = this.locks[Javascript.packageManager];
 
         if (typeof lockFiles === 'string') {
             lockFiles = [lockFiles as JavascriptDependenciesLockFile];
@@ -104,7 +117,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     lockPackageStartsWith(packageName: string, version: string): string {
-        const pattern =  this.startsWith[this.packageManager];
+        const pattern =  this.startsWith[Javascript.packageManager];
 
         if (typeof pattern === 'object' && this.lockVersion) {
             const lockVersion = Number(this.lockVersion);
