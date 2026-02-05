@@ -9,7 +9,7 @@ export class Bun implements JsPkgManager {
             ? vscode.workspace.workspaceFolders[0].uri.fsPath
             : undefined;
 
-        const outdatedResponse = cp.execSync(`bun outdated`, {
+        const outdatedResponse = cp.execSync('bun outdated', {
             cwd: rootPath,
         }).toString();
 

@@ -8,6 +8,7 @@ import { pathJoin } from '../../util/globals';
 import { InstalledPackage, outdated } from '../../types/types';
 import { JsPkgManager } from './javascript/JsPkgManager';
 import { Bun } from './javascript/bun';
+import { Npm } from './javascript/npm';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
@@ -38,6 +39,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     };
     private packageManagers: {[key in JavascriptPackageManager]: typeof JsPkgManager} = {
         'bun': Bun,
+        'npm': Npm,
     };
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage|undefined> {
