@@ -1,30 +1,24 @@
-import * as vscode from 'vscode';
-import * as cp from 'child_process';
-import { JsPkgManager } from "./JsPkgManager";
+import { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
 import { outdated } from '../../../types/types';
+import JavascriptPackageManager from './javascript_package_manager';
 
-export class Npm implements JsPkgManager {
+export class Npm extends JavascriptPackageManager implements JavascriptPackageManagerInterface {
+    protected readonly locks = [
+        'package-lock.json',
+        'npm-shrinkwrap.json',
+    ];
+    protected readonly startsWith: string = 'packageName';
+    protected readonly outdatedPackagesCommand: string = 'npm outdated --json';
+
+    getName(): string {
+        return 'npm';
+    }
+
     getLatestVersions(): outdated[] {
-        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : undefined;
+        const outdatedPackages: string = this.getOutdatedPackages();
 
-        let outdatedResponse: string;
-        try {
-            outdatedResponse = cp.execSync('npm outdated --json', {
-                cwd: rootPath,
-                encoding: 'utf8',
-                stdio: ['ignore', 'pipe', 'pipe'],
-            });
-        } catch (err: any) {
-            if (err.stdout) {
-                outdatedResponse = err.stdout.toString();
-            } else {
-                return [];
-            }
-        }
-
-        const outdatedPackages = Object.entries(JSON.parse(outdatedResponse))
+        return Object.entries(JSON.parse(outdatedPackages))
+            // @ts-ignore
             .map(([pkgName, pkg]: [string, {current: string, latest: string}]) => {
                 return {
                     package: pkgName,
@@ -32,7 +26,5 @@ export class Npm implements JsPkgManager {
                     latestVersion: pkg.latest,
                 };
             });
-
-        return outdatedPackages;
     }
 }

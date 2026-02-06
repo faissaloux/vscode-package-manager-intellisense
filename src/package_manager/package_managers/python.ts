@@ -1,12 +1,14 @@
-import { pathJoin } from '../../util/globals';
+import * as toml from '@iarna/toml';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage, outdated } from '../../types/types';
+import { InstalledPackage, Language, outdated } from '../../types/types';
 import { Parser } from '../../parser/parser';
-import * as cp from 'child_process';
-import * as vscode from 'vscode';
 
 export class Python extends LanguagePackageManager implements PackageManager {
+    protected name: Language = 'python';
+    protected readonly packagePattern: string = '^\\s*"placeholder(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
+    protected readonly outdatedPackagesCommand: string = 'poetry show --outdated --format json';
+
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("poetry").parse(await this.lockFileContent())['dependencies'];
         const packageFound = installedPackages.find((pkg: {[key: string]: any}) => pkg.name === packageName);
@@ -18,25 +20,36 @@ export class Python extends LanguagePackageManager implements PackageManager {
     }
 
     getLatestVersions(): outdated[] {
-        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : undefined;
+        const outdatedPackages = this.getOutdatedPackages();
 
-        const outdatedResponse = cp.execSync(`poetry show --outdated --format json`, {
-            cwd: rootPath,
-        }).toString();
-        const installedPackages = JSON.parse(outdatedResponse).map((pkg: {name: string, version: string, latest_version: string}) => {
+        return JSON.parse(outdatedPackages).map((pkg: {name: string, version: string, latest_version: string}) => {
             return {
                 package: pkg.name,
                 version: pkg.version,
                 latestVersion: pkg.latest_version,
             };
         });
-
-        return installedPackages;
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, 'poetry.lock');
+        return 'poetry.lock';
+    }
+
+    getPackagesNames(content: string): Set<string> {
+        let formatted: {[key: string]: string} = {};
+        let jsonContent = toml.parse(content);
+
+        // @ts-ignore
+        jsonContent['project']['dependencies'].map((dependency: string) => {
+            const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
+
+            formatted[dep] = version;
+        });
+
+        jsonContent['dependencies'] = formatted;
+
+        return new Set<string>([
+            ...Object.keys(jsonContent['dependencies'] || {}),
+        ]);
     }
 }
