@@ -3,12 +3,11 @@ import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
-import * as cp from 'child_process';
-import * as vscode from 'vscode';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     private static installedPackages: {[key: string]: any} = {};
     protected name: Language = 'php';
+    protected readonly outdatedPackagesCommand: string = 'composer outdated --direct --format=json';
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         Php.installedPackages = new Parser("composer").parse(await this.lockFileContent())['dependencies'];
@@ -31,20 +30,15 @@ export class Php extends LanguagePackageManager implements PackageManager {
     }
 
     getLatestVersions(): outdated[] {
-        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : undefined;
-
-        const outdatedResponse = cp.execSync(`composer outdated --direct --format=json`, {
-            cwd: rootPath,
-        }).toString();
-        const installedPackages = JSON.parse(outdatedResponse).installed.map((pkg: {name: string, version: string, latest: string}) => {
-            return {
-                package: pkg.name,
-                version: pkg.version,
-                latestVersion: pkg.latest,
-            };
-        });
+        const outdatedPackages = this.getOutdatedPackages();
+        const installedPackages = JSON.parse(outdatedPackages).installed
+            .map((pkg: {name: string, version: string, latest: string}) => {
+                return {
+                    package: pkg.name,
+                    version: pkg.version,
+                    latestVersion: pkg.latest,
+                };
+            });
 
         return installedPackages;
     }

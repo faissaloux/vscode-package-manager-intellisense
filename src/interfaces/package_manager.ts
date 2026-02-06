@@ -7,4 +7,5 @@ export interface PackageManager {
     getEditorFileName(): string;
     getLinkOfPackage(packageName: string): Promise<string>;
     getLatestVersions(): outdated[];
+    getOutdatedPackages(): string;
 }
