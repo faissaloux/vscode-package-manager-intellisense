@@ -1,4 +1,5 @@
-import { InstalledPackage, Language, outdated } from "../types/types";
+import * as vscode from 'vscode';
+import { InstalledPackage, Language, Line, outdated } from "../types/types";
 
 export interface PackageManager {
     getInstalled(packageName: string, line: string): Promise<InstalledPackage>;
@@ -9,4 +10,5 @@ export interface PackageManager {
     getLatestVersions(): outdated[];
     getOutdatedPackages(): string;
     getPackagesNames(content: string): Set<string>;
+    getLines(document: vscode.TextDocument, packageName: string): Line[];
 }

@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as toml from '@iarna/toml';
 import * as globals from '../util/globals';
 import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
 import { Link } from './link';
@@ -36,7 +35,9 @@ export class Decorator {
                 continue;
             }
 
-            let lines: Line[] = this.getLines(this.editor.document, packageName);
+            let lines: Line[] = this.packageManager.getLines(this.editor.document, packageName);
+            this.targets.push(...lines);
+
             for (const line of lines) {
                 let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
@@ -85,34 +86,6 @@ export class Decorator {
         }
 
         link.registerLinks();
-    }
-
-    getLines(document: vscode.TextDocument, packageName: string): Line[] {
-        let lines: Line[] = [];
-        let lineCount = document.lineCount;
-
-        for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
-            let lineText = document.lineAt(lineNumber).text;
-            let regex = "";
-
-            if (this.packageManager.getName() === "ruby") {
-                regex = 'gem "' + packageName + '"';
-            } else if (this.packageManager.getName() === "rust") {
-                regex = packageName + ' ';
-            } else if (this.packageManager.getName() === "python") {
-                regex = '^\\s*"' + packageName + '(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
-            } else {
-                regex = '"' + packageName + '": "';
-            }
-
-            if (lineText.match(new RegExp(regex))) {
-                lines.push({content: lineText, package: packageName, lineNumber});
-            }
-        }
-
-        this.targets.push(...lines);
-
-        return lines;
     }
 
     decoration(text: string, line: number, color: string, char: number): vscode.DecorationOptions {

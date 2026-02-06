@@ -6,6 +6,7 @@ import { Parser } from '../../parser/parser';
 
 export class Python extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'python';
+    protected readonly packagePattern: string = '^\\s*"placeholder(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
     protected readonly outdatedPackagesCommand: string = 'poetry show --outdated --format json';
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {

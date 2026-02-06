@@ -13,6 +13,7 @@ type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'javascript';
+    protected readonly packagePattern: string = '"placeholder": "';
     static packageManager: JavascriptPackageManagerInterface = new Npm;
     private packageManagers: {[key in JavascriptPackageManager]: JavascriptPackageManagerInterface} = {
         'bun': new Bun,

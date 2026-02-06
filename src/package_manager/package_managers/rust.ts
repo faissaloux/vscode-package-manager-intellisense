@@ -6,6 +6,7 @@ import { InstalledPackage, Language } from '../../types/types';
 
 export class Rust extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'rust';
+    protected readonly packagePattern: string = 'placeholder ';
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("cargo").parse(await this.lockFileContent())['dependencies'];

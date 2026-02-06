@@ -6,6 +6,7 @@ import { Parser as GemfileParser } from '@faissaloux/gemfile';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'ruby';
+    protected readonly packagePattern: string = 'gem "placeholder"';
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("rubygems").parse(await this.lockFileContent())['dependencies'];

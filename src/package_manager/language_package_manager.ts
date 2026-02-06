@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
-import { Language } from '../types/types';
-import { pathJoin, rootPath } from '../util/globals';
 import * as path from 'path';
+import * as cp from 'child_process';
+import { Language, Line } from '../types/types';
+import { pathJoin, rootPath } from '../util/globals';
 
 export abstract class LanguagePackageManager {
     protected abstract name: Language;
+    protected abstract readonly packagePattern: string;
     protected readonly defaultVersion: string = 'n/a';
     protected readonly outdatedPackagesCommand: string = '';
 
@@ -52,5 +53,21 @@ export abstract class LanguagePackageManager {
         }
 
         return outdatedResponse;
+    }
+
+    getLines(document: vscode.TextDocument, packageName: string): Line[] {
+        let lines: Line[] = [];
+        let lineCount: number = document.lineCount;
+
+        for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
+            let lineText: string = document.lineAt(lineNumber).text;
+            const packagePattern: string = this.packagePattern.replace('placeholder', packageName);
+
+            if (lineText.match(new RegExp(packagePattern))) {
+                lines.push({content: lineText, package: packageName, lineNumber});
+            }
+        }
+
+        return lines;
     }
 }
