@@ -7,4 +7,5 @@ export interface JavascriptPackageManagerInterface {
     lockPackageStartsWith(packageName: string, version: string): string;
     setLockVersion(version: number): void;
     isAlive(): boolean;
+    getOutdatedPackages(): string;
 }

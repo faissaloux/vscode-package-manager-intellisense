@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as cp from 'child_process';
 import { pathJoin } from '../../../util/globals';
 
 export default abstract class JavascriptPackageManager {
     protected abstract readonly locks: string[];
     protected abstract readonly startsWith: {[version: string | number]: string}|string;
     protected lockVersion: number = 0;
+    protected abstract readonly outdatedPackagesCommand: string;
 
     setLockVersion(version: number): void {
         this.lockVersion = version;
@@ -69,5 +71,28 @@ export default abstract class JavascriptPackageManager {
         }
 
         return (pattern as string).replace('packageName', packageName).replace('version', version);
+    }
+
+    getOutdatedPackages(): string {
+        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
+            ? vscode.workspace.workspaceFolders[0].uri.fsPath
+            : undefined;
+
+        let outdatedResponse: string;
+        try {
+            outdatedResponse = cp.execSync(this.outdatedPackagesCommand, {
+                cwd: rootPath,
+                encoding: 'utf8',
+                stdio: ['ignore', 'pipe', 'pipe'],
+            });
+        } catch (err: any) {
+            if (err.stdout) {
+                outdatedResponse = err.stdout.toString();
+            } else {
+                return '';
+            }
+        }
+
+        return outdatedResponse;
     }
 }
