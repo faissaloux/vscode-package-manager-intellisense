@@ -1,11 +1,12 @@
-import { pathJoin } from '../../util/globals';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { Parser } from '../../parser/parser';
-import { InstalledPackage } from '../../types/types';
+import { InstalledPackage, Language } from '../../types/types';
 
 export class Rust extends LanguagePackageManager implements PackageManager {
-    async getInstalled(packageName: string): Promise<InstalledPackage|undefined> {
+    protected name: Language = 'rust';
+
+    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("cargo").parse(await this.lockFileContent())['dependencies'];
 
         const packageFound = installedPackages.find((pkg: {name: string}) => pkg.name === packageName);
@@ -17,10 +18,10 @@ export class Rust extends LanguagePackageManager implements PackageManager {
             };
         }
 
-        return;
+        return { name: '', version: ''};
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, 'Cargo.lock');
+        return 'Cargo.lock';
     }
 }

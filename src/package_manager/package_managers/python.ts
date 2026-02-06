@@ -1,12 +1,13 @@
-import { pathJoin } from '../../util/globals';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage, outdated } from '../../types/types';
+import { InstalledPackage, Language, outdated } from '../../types/types';
 import { Parser } from '../../parser/parser';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
 
 export class Python extends LanguagePackageManager implements PackageManager {
+    protected name: Language = 'python';
+
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("poetry").parse(await this.lockFileContent())['dependencies'];
         const packageFound = installedPackages.find((pkg: {[key: string]: any}) => pkg.name === packageName);
@@ -37,6 +38,6 @@ export class Python extends LanguagePackageManager implements PackageManager {
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, 'poetry.lock');
+        return 'poetry.lock';
     }
 }

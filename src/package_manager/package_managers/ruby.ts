@@ -1,11 +1,12 @@
-import { pathJoin } from '../../util/globals';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage } from '../../types/types';
+import { InstalledPackage, Language } from '../../types/types';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
-    async getInstalled(packageName: string): Promise<InstalledPackage|undefined> {
+    protected name: Language = 'ruby';
+
+    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("rubygems").parse(await this.lockFileContent())['dependencies'];
 
         const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
@@ -21,10 +22,10 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
             };
         }
 
-        return;
+        return { name: '', version: ''};
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, 'Gemfile.lock');
+        return 'Gemfile.lock';
     }
 }

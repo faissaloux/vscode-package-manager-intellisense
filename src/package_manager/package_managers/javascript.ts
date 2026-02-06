@@ -1,22 +1,23 @@
-import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as vscode from 'vscode';
 import axios from 'axios';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { pathJoin } from '../../util/globals';
-import { InstalledPackage, outdated } from '../../types/types';
-import { JsPkgManager } from './javascript/JsPkgManager';
+import { InstalledPackage, Language, outdated } from '../../types/types';
+import { JavascriptPackageManagerInterface } from '../../interfaces/javascript_package_manager';
 import { Bun } from './javascript/bun';
 import { Npm } from './javascript/npm';
 import { Yarn } from './javascript/yarn';
+import { pathJoin } from '../../util/globals';
+import { Pnpm } from './javascript/pnpm';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
-    static packageManager: JavascriptPackageManager = 'npm';
-    lockVersion: number | null = null;
+    protected name: Language = 'javascript';
+    static packageManager: JavascriptPackageManagerInterface = Npm;
     locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[]} = {
         'npm': [
             'package-lock.json',
@@ -26,33 +27,19 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         'pnpm': 'pnpm-lock.yaml',
         'bun': 'bun.lock',
     };
-    startsWith: {[key: string]: string | {[version: string | number]: string}} = {
-        'npm': 'packageName',
-        'yarn': 'packageName@version',
-        'pnpm': {
-            /* eslint-disable @typescript-eslint/naming-convention */
-            '5.3': '/packageName/',
-            '6': '/packageName@',
-            '9': 'packageName@',
-            /* eslint-enable */
-        },
-        'bun': 'packageName',
-    };
-    private packageManagers: {[key in JavascriptPackageManager]: typeof JsPkgManager} = {
+    private packageManagers: {[key in JavascriptPackageManager]: typeof JavascriptPackageManagerInterface} = {
         'bun': Bun,
         'npm': Npm,
         'yarn': Yarn,
+        'pnpm': Pnpm,
     };
 
-    async getInstalled(packageName: string, line: string): Promise<InstalledPackage|undefined> {
-        Javascript.packageManager = await this.getPackageManager();
-        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${Javascript.packageManager}.enable`)) {
-            return;
-        }
+    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
+        Javascript.packageManager = await this.getSubPackageManager();
 
-        const lockFileParsed = new Parser(Javascript.packageManager).parse(await this.lockFileContent());
+        const lockFileParsed = new Parser(Javascript.packageManager.getName()).parse(await this.lockFileContent());
         const installedPackages = lockFileParsed['dependencies'];
-        this.lockVersion = lockFileParsed['lockVersion'];
+        Javascript.packageManager.setLockVersion(lockFileParsed['lockVersion'] ?? 0);
 
         const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
 
@@ -63,15 +50,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         };
     }
 
-    getLatestVersions(): outdated[]|undefined {
-        if (!vscode.workspace.getConfiguration().get(`package-manager-intellisense.${Javascript.packageManager}.enable`)) {
-            return;
-        }
-
-        return new this.packageManagers[Javascript.packageManager]().getLatestVersions();
-    }
-
-    async getLinkOfPackage(packageName: string): Promise<string|void> {
+    async getLinkOfPackage(packageName: string): Promise<string> {
         let link: string = '';
 
         await axios.get(`https://registry.npmjs.org/${packageName}`)
@@ -85,67 +64,27 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         return link;
     }
 
-    override getLockPath(): string {
-        let lockFiles: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[] = this.locks[Javascript.packageManager];
-
-        if (typeof lockFiles === 'string') {
-            lockFiles = [lockFiles as JavascriptDependenciesLockFile];
-        }
-
-        for (const lockFile of lockFiles as JavascriptDependenciesLockFile[]) {
-            const lockPath: string = pathJoin(this.rootPath, lockFile);
-
-            if (fs.existsSync(lockPath)) {
-                return lockPath;
-            }
-        };
-
-        return '';
-    }
-
-    async getPackageManager(): Promise<JavascriptPackageManager> {
-        for (let [packageManager, lockFiles] of Object.entries(this.locks)) {
+    async getSubPackageManager(): Promise<JavascriptPackageManagerInterface> {
+        for (let [pkgManager, lockFiles] of Object.entries(this.locks)) {
             if (typeof lockFiles === 'string') {
                 lockFiles = [lockFiles];
             }
 
             for (const lockFile of lockFiles) {
-                const lockPath: string = pathJoin(this.rootPath, lockFile);
+                const rootPath = (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0)
+                    ? vscode.workspace.workspaceFolders[0].uri.fsPath
+                    : '';
+
+                const lockPath: string = pathJoin(rootPath, lockFile);
                 if (fs.existsSync(lockPath)) {
-                    return packageManager as JavascriptPackageManager;
+                    // @ts-ignore
+                    return new this.packageManagers[pkgManager];
                 }
             };
         }
 
-        return (Object.keys(this.locks) as JavascriptPackageManager[])[0];
-    }
-
-    lockPackageStartsWith(packageName: string, version: string): string {
-        const pattern =  this.startsWith[Javascript.packageManager];
-
-        if (typeof pattern === 'object' && this.lockVersion) {
-            const lockVersion = Number(this.lockVersion);
-
-            if (pattern[lockVersion]) {
-                return pattern[lockVersion].replace('packageName', packageName).replace('version', version);
-            }
-
-            let lastVersion = Object.keys(pattern).sort().at(0);
-
-            if (lastVersion !== undefined) {
-                for (const version of Object.keys(pattern).sort()) {
-                    if (Number(version) > lockVersion ) {
-                        return pattern[lastVersion].replace('packageName', packageName).replace('version', version);
-                    }
-
-                    lastVersion = version;
-                }
-
-                return pattern[lastVersion].replace('packageName', packageName).replace('version', version);
-            }
-        }
-
-        return (pattern as string).replace('packageName', packageName).replace('version', version);
+        // @ts-ignore
+        return new Javascript.packageManager;
     }
 
     getVersion(line: string): string {
@@ -157,5 +96,17 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         }
 
         return version;
+    }
+
+    getLatestVersions(): outdated[] {
+        return Javascript.packageManager.getLatestVersions();
+    }
+
+    override getLockPath(): string {
+        return Javascript.packageManager.getLockPath();
+    }
+
+    lockPackageStartsWith(packageName: string, version: string): string {
+        return Javascript.packageManager.lockPackageStartsWith(packageName, version);
     }
 }

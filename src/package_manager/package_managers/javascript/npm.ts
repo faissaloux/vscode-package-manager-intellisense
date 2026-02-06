@@ -1,9 +1,20 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
-import { JsPkgManager } from "./JsPkgManager";
+import { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
 import { outdated } from '../../../types/types';
+import JavascriptPackageManager from './javascript_package_manager';
 
-export class Npm implements JsPkgManager {
+export class Npm extends JavascriptPackageManager implements JavascriptPackageManagerInterface {
+    protected readonly locks = [
+        'package-lock.json',
+        'npm-shrinkwrap.json',
+    ];
+    protected readonly startsWith: string = 'packageName';
+
+    getName(): string {
+        return 'npm';
+    }
+
     getLatestVersions(): outdated[] {
         const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri.fsPath

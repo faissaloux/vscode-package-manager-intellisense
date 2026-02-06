@@ -33,7 +33,10 @@ function decorate(): void {
 	if (openEditors.length) {
 		for (const openEditor of openEditors) {
 			const packageManager = new PackageManager(openEditor).get();
-			new Decorator(openEditor, packageManager).decorate();
+
+			if (packageManager) {
+				new Decorator(openEditor, packageManager).decorate();
+			}
 		}
 	}
 }

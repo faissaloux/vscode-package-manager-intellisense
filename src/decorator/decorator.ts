@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as toml from '@iarna/toml';
 import * as globals from '../util/globals';
-import { PackageManager } from '../package_manager/package_manager';
+import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 import { Link } from './link';
 import { Line, InstalledPackage, outdated } from '../types/types';
@@ -16,7 +16,7 @@ export class Decorator {
     ];
     private targets: Line[] = [];
 
-    constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManager) {
+    constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManagerInterface) {
         return this;
     }
 
@@ -25,9 +25,9 @@ export class Decorator {
         let packagesNames: Set<string>;
         let contentJson;
 
-        if (this.packageManager["packageManager"] === "ruby") {
+        if (this.packageManager.getName() === "ruby") {
             let formatted: {[key: string]: string} = {};
-            contentJson = new GemfileParser().file(this.packageManager["editorFileName"]).parse();
+            contentJson = new GemfileParser().file(this.packageManager.getEditorFileName()).parse();
             contentJson = JSON.parse(contentJson);
 
             contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
@@ -35,9 +35,9 @@ export class Decorator {
             });
 
             contentJson['dependencies'] = formatted;
-        } else if (this.packageManager["packageManager"] === "rust") {
+        } else if (this.packageManager.getName() === "rust") {
             contentJson = toml.parse(content);
-        } else if (this.packageManager["packageManager"] === "python") {
+        } else if (this.packageManager.getName() === "python") {
             let formatted: {[key: string]: string} = {};
 
             contentJson = toml.parse(content);
@@ -135,11 +135,11 @@ export class Decorator {
             let lineText = document.lineAt(lineNumber).text;
             let regex = "";
 
-            if (this.packageManager["packageManager"] === "ruby") {
+            if (this.packageManager.getName() === "ruby") {
                 regex = 'gem "' + packageName + '"';
-            } else if (this.packageManager["packageManager"] === "rust") {
+            } else if (this.packageManager.getName() === "rust") {
                 regex = packageName + ' ';
-            } else if (this.packageManager["packageManager"] === "python") {
+            } else if (this.packageManager.getName() === "python") {
                 regex = '^\\s*"' + packageName + '(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
             } else {
                 regex = '"' + packageName + '": "';

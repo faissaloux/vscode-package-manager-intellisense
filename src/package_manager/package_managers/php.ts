@@ -2,12 +2,13 @@ import { pathJoin } from '../../util/globals';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { ComposerInstalledPackage, InstalledPackage, outdated } from '../../types/types';
+import { ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     private static installedPackages: {[key: string]: any} = {};
+    protected name: Language = 'php';
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         Php.installedPackages = new Parser("composer").parse(await this.lockFileContent())['dependencies'];
@@ -19,14 +20,14 @@ export class Php extends LanguagePackageManager implements PackageManager {
         };
     }
 
-    getLinkOfPackage(packageName: string): Promise<string|void> {
+    getLinkOfPackage(packageName: string): Promise<string> {
         const installedPackage = Php.installedPackages.find((pkg: ComposerInstalledPackage) => pkg.name === packageName);
 
         return installedPackage?.source.url.replace(".git", "");
     }
 
     override getLockPath(): string {
-        return pathJoin(this.rootPath, 'vendor', 'composer', 'installed.json');
+        return pathJoin('vendor', 'composer', 'installed.json');
     }
 
     getLatestVersions(): outdated[] {
