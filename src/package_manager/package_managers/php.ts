@@ -31,7 +31,8 @@ export class Php extends LanguagePackageManager implements PackageManager {
 
     getLatestVersions(): outdated[] {
         const outdatedPackages = this.getOutdatedPackages();
-        const installedPackages = JSON.parse(outdatedPackages).installed
+
+        return JSON.parse(outdatedPackages).installed
             .map((pkg: {name: string, version: string, latest: string}) => {
                 return {
                     package: pkg.name,
@@ -39,7 +40,5 @@ export class Php extends LanguagePackageManager implements PackageManager {
                     latestVersion: pkg.latest,
                 };
             });
-
-        return installedPackages;
     }
 }

@@ -19,16 +19,14 @@ export class Python extends LanguagePackageManager implements PackageManager {
 
     getLatestVersions(): outdated[] {
         const outdatedPackages = this.getOutdatedPackages();
-        console.log(outdatedPackages);
-        const installedPackages = JSON.parse(outdatedPackages).map((pkg: {name: string, version: string, latest_version: string}) => {
+
+        return JSON.parse(outdatedPackages).map((pkg: {name: string, version: string, latest_version: string}) => {
             return {
                 package: pkg.name,
                 version: pkg.version,
                 latestVersion: pkg.latest_version,
             };
         });
-
-        return installedPackages;
     }
 
     override getLockPath(): string {
