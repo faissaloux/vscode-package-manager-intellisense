@@ -11,4 +11,5 @@ export interface PackageManager {
     getOutdatedPackages(): string;
     getPackagesNames(content: string): Set<string>;
     getLines(document: vscode.TextDocument, packageName: string): Line[];
+    isExcluded(packageName: string): boolean;
 }

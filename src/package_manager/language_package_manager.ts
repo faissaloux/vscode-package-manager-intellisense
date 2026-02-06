@@ -9,6 +9,7 @@ export abstract class LanguagePackageManager {
     protected abstract readonly packagePattern: string;
     protected readonly defaultVersion: string = 'n/a';
     protected readonly outdatedPackagesCommand: string = '';
+    protected readonly excluded: string[] = [];
 
     constructor(private readonly editorFileName: string) {}
 
@@ -18,6 +19,10 @@ export abstract class LanguagePackageManager {
 
     getEditorFileName(): string {
         return this.editorFileName;
+    }
+
+    isExcluded(packageName: string): boolean {
+        return this.excluded.includes(packageName);
     }
 
     async lockFileContent(): Promise<string> {

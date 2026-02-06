@@ -9,6 +9,9 @@ export class Php extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'php';
     protected readonly outdatedPackagesCommand: string = 'composer outdated --direct --format=json';
     protected readonly packagePattern: string = '"placeholder": "';
+    protected override readonly excluded: string[] = [
+        'php',
+    ];
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         Php.installedPackages = new Parser("composer").parse(await this.lockFileContent())['dependencies'];

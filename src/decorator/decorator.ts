@@ -9,9 +9,6 @@ export class Decorator {
     private readonly color: string = 'grey';
     private readonly latestVersionColor: string = '#F56747';
     private readonly margin: string = '0 0 0 1rem';
-    private readonly packagesToExclude: string[] = [
-        'php',
-    ];
     private targets: Line[] = [];
 
     constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManagerInterface) {
@@ -31,7 +28,7 @@ export class Decorator {
         const decorations: vscode.DecorationOptions[] = [];
 
         for (const packageName of packagesNames) {
-            if (this.packagesToExclude.indexOf(packageName) !== -1) {
+            if (this.packageManager.isExcluded(packageName)) {
                 continue;
             }
 
