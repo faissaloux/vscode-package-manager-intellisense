@@ -6,4 +6,5 @@ export interface JavascriptPackageManagerInterface {
     getLockPath(): string;
     lockPackageStartsWith(packageName: string, version: string): string;
     setLockVersion(version: number): void;
+    isAlive(): boolean;
 }

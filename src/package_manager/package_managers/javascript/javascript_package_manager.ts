@@ -10,6 +10,22 @@ export default abstract class JavascriptPackageManager {
     setLockVersion(version: number): void {
         this.lockVersion = version;
     }
+    
+    isAlive(): boolean {
+        const rootPath = (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0)
+            ? vscode.workspace.workspaceFolders[0].uri.fsPath
+            : '';
+
+        for (const lockFile of this.locks) {
+            const lockPath: string = pathJoin(rootPath, lockFile);
+
+            if (fs.existsSync(lockPath)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     getLockPath(): string {
         for (const lockFile of this.locks) {

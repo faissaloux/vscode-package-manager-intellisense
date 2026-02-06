@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as vscode from 'vscode';
 import axios from 'axios';
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
@@ -9,29 +7,18 @@ import { JavascriptPackageManagerInterface } from '../../interfaces/javascript_p
 import { Bun } from './javascript/bun';
 import { Npm } from './javascript/npm';
 import { Yarn } from './javascript/yarn';
-import { pathJoin } from '../../util/globals';
 import { Pnpm } from './javascript/pnpm';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
-type JavascriptDependenciesLockFile = 'package-lock.json' | 'npm-shrinkwrap.json' | 'yarn.lock' | 'pnpm-lock.yaml' | 'bun.lock';
 
 export class Javascript extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'javascript';
-    static packageManager: JavascriptPackageManagerInterface = Npm;
-    locks: {[key in JavascriptPackageManager]: JavascriptDependenciesLockFile|JavascriptDependenciesLockFile[]} = {
-        'npm': [
-            'package-lock.json',
-            'npm-shrinkwrap.json',
-        ],
-        'yarn': 'yarn.lock',
-        'pnpm': 'pnpm-lock.yaml',
-        'bun': 'bun.lock',
-    };
-    private packageManagers: {[key in JavascriptPackageManager]: typeof JavascriptPackageManagerInterface} = {
-        'bun': Bun,
-        'npm': Npm,
-        'yarn': Yarn,
-        'pnpm': Pnpm,
+    static packageManager: JavascriptPackageManagerInterface = new Npm;
+    private packageManagers: {[key in JavascriptPackageManager]: JavascriptPackageManagerInterface} = {
+        'bun': new Bun,
+        'npm': new Npm,
+        'yarn': new Yarn,
+        'pnpm': new Pnpm,
     };
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
@@ -65,26 +52,13 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     }
 
     async getSubPackageManager(): Promise<JavascriptPackageManagerInterface> {
-        for (let [pkgManager, lockFiles] of Object.entries(this.locks)) {
-            if (typeof lockFiles === 'string') {
-                lockFiles = [lockFiles];
+        for (const packagemanager of Object.values(this.packageManagers)) {
+            if (packagemanager.isAlive()) {
+                return packagemanager;
             }
-
-            for (const lockFile of lockFiles) {
-                const rootPath = (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0)
-                    ? vscode.workspace.workspaceFolders[0].uri.fsPath
-                    : '';
-
-                const lockPath: string = pathJoin(rootPath, lockFile);
-                if (fs.existsSync(lockPath)) {
-                    // @ts-ignore
-                    return new this.packageManagers[pkgManager];
-                }
-            };
         }
 
-        // @ts-ignore
-        return new Javascript.packageManager;
+        return Javascript.packageManager;
     }
 
     getVersion(line: string): string {
