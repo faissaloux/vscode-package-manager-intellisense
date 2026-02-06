@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import { Language } from '../types/types';
-import { pathJoin } from '../util/globals';
-import path = require('path');
+import { pathJoin, rootPath } from '../util/globals';
+import * as path from 'path';
 
 export abstract class LanguagePackageManager {
     protected abstract name: Language;
@@ -35,10 +35,6 @@ export abstract class LanguagePackageManager {
     }
 
     getOutdatedPackages(): string {
-        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : undefined;
-
         let outdatedResponse: string;
         try {
             outdatedResponse = cp.execSync(this.outdatedPackagesCommand, {

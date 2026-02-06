@@ -1,7 +1,6 @@
-import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as cp from 'child_process';
-import { pathJoin } from '../../../util/globals';
+import { pathJoin, rootPath } from '../../../util/globals';
 
 export default abstract class JavascriptPackageManager {
     protected abstract readonly locks: string[];
@@ -14,12 +13,8 @@ export default abstract class JavascriptPackageManager {
     }
     
     isAlive(): boolean {
-        const rootPath = (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0)
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : '';
-
         for (const lockFile of this.locks) {
-            const lockPath: string = pathJoin(rootPath, lockFile);
+            const lockPath: string = pathJoin(rootPath ?? '', lockFile);
 
             if (fs.existsSync(lockPath)) {
                 return true;
@@ -31,11 +26,7 @@ export default abstract class JavascriptPackageManager {
 
     getLockPath(): string {
         for (const lockFile of this.locks) {
-            const rootPath = (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0)
-                ? vscode.workspace.workspaceFolders[0].uri.fsPath
-                : '';
-
-            const lockPath: string = pathJoin(rootPath, lockFile);
+            const lockPath: string = pathJoin(rootPath ?? '', lockFile);
 
             if (fs.existsSync(lockPath)) {
                 return lockFile;
@@ -74,10 +65,6 @@ export default abstract class JavascriptPackageManager {
     }
 
     getOutdatedPackages(): string {
-        const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
-            ? vscode.workspace.workspaceFolders[0].uri.fsPath
-            : undefined;
-
         let outdatedResponse: string;
         try {
             outdatedResponse = cp.execSync(this.outdatedPackagesCommand, {
