@@ -18,6 +18,7 @@ export class Npm extends JavascriptPackageManager implements JavascriptPackageMa
         const outdatedPackages: string = this.getOutdatedPackages();
 
         return Object.entries(JSON.parse(outdatedPackages))
+            // @ts-ignore
             .map(([pkgName, pkg]: [string, {current: string, latest: string}]) => {
                 return {
                     package: pkgName,

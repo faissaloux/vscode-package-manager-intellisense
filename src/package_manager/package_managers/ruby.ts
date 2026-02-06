@@ -41,9 +41,11 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
             formatted[dependency["name"]] = dependency["version"] ?? this.defaultVersion;
         });
 
+        // @ts-ignore
         jsonContent['dependencies'] = formatted;
 
         return new Set<string>([
+            // @ts-ignore
             ...Object.keys(jsonContent['dependencies'] || {}),
         ]);
     }
