@@ -41,4 +41,14 @@ export class Php extends LanguagePackageManager implements PackageManager {
                 };
             });
     }
+
+    getPackagesNames(content: string): Set<string> {
+        const jsonContent = JSON.parse(content);
+
+        return new Set<string>([
+            ...Object.keys(jsonContent['require'] || {}),
+            ...Object.keys(jsonContent['require-dev'] || {}),
+            ...Object.keys(jsonContent['conflict'] || {}),
+        ]);
+    }
 }

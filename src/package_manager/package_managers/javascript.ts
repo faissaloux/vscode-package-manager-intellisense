@@ -83,4 +83,13 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     lockPackageStartsWith(packageName: string, version: string): string {
         return Javascript.packageManager.lockPackageStartsWith(packageName, version);
     }
+
+    getPackagesNames(content: string): Set<string> {
+        const jsonContent = JSON.parse(content);
+
+        return new Set<string>([
+            ...Object.keys(jsonContent['dependencies'] || {}),
+            ...Object.keys(jsonContent['devDependencies'] || {}),
+        ]);
+    }
 }

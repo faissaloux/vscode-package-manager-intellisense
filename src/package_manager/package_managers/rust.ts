@@ -1,3 +1,4 @@
+import * as toml from '@iarna/toml';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { Parser } from '../../parser/parser';
@@ -23,5 +24,14 @@ export class Rust extends LanguagePackageManager implements PackageManager {
 
     override getLockPath(): string {
         return 'Cargo.lock';
+    }
+
+    getPackagesNames(content: string): Set<string> {
+        const jsonContent = toml.parse(content);
+
+        return new Set<string>([
+            ...Object.keys(jsonContent['dependencies'] || {}),
+            ...Object.keys(jsonContent['dev-dependencies'] || {}),
+        ]);
     }
 }

@@ -1,3 +1,4 @@
+import * as toml from '@iarna/toml';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
 import { InstalledPackage, Language, outdated } from '../../types/types';
@@ -31,5 +32,23 @@ export class Python extends LanguagePackageManager implements PackageManager {
 
     override getLockPath(): string {
         return 'poetry.lock';
+    }
+
+    getPackagesNames(content: string): Set<string> {
+        let formatted: {[key: string]: string} = {};
+        let jsonContent = toml.parse(content);
+
+        // @ts-ignore
+        jsonContent['project']['dependencies'].map((dependency: string) => {
+            const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
+
+            formatted[dep] = version;
+        });
+
+        jsonContent['dependencies'] = formatted;
+
+        return new Set<string>([
+            ...Object.keys(jsonContent['dependencies'] || {}),
+        ]);
     }
 }

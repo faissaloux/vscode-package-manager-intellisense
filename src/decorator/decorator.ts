@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as toml from '@iarna/toml';
 import * as globals from '../util/globals';
 import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
-import { Parser as GemfileParser } from '@faissaloux/gemfile';
 import { Link } from './link';
 import { Line, InstalledPackage, outdated } from '../types/types';
 
@@ -22,46 +21,7 @@ export class Decorator {
 
     async decorate() {
         let content: string = this.editor.document.getText();
-        let packagesNames: Set<string>;
-        let contentJson;
-
-        if (this.packageManager.getName() === "ruby") {
-            let formatted: {[key: string]: string} = {};
-            contentJson = new GemfileParser().file(this.packageManager.getEditorFileName()).parse();
-            contentJson = JSON.parse(contentJson);
-
-            contentJson['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
-                formatted[dependency["name"]] = dependency["version"] ?? this.defaultVersion;
-            });
-
-            contentJson['dependencies'] = formatted;
-        } else if (this.packageManager.getName() === "rust") {
-            contentJson = toml.parse(content);
-        } else if (this.packageManager.getName() === "python") {
-            let formatted: {[key: string]: string} = {};
-
-            contentJson = toml.parse(content);
-
-            // @ts-ignore
-            contentJson['project']['dependencies'].map((dependency: string) => {
-                const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
-
-                formatted[dep] = version;
-            });
-
-            contentJson['dependencies'] = formatted;
-        } else {
-            contentJson = JSON.parse(content);
-        }
-
-        packagesNames = new Set<string>([
-            ...Object.keys(contentJson['dependencies'] || {}),
-            ...Object.keys(contentJson['devDependencies'] || {}),
-            ...Object.keys(contentJson['require'] || {}),
-            ...Object.keys(contentJson['require-dev'] || {}),
-            ...Object.keys(contentJson['conflict'] || {}),
-            ...Object.keys(contentJson['dev-dependencies'] || {}),
-        ]);
+        const packagesNames: Set<string> = this.packageManager.getPackagesNames(content);
 
         await this.showPackagesVersions(packagesNames);
         await this.showPackagesLatestVersions();

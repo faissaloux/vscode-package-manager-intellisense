@@ -8,4 +8,5 @@ export interface PackageManager {
     getLinkOfPackage(packageName: string): Promise<string>;
     getLatestVersions(): outdated[];
     getOutdatedPackages(): string;
+    getPackagesNames(content: string): Set<string>;
 }

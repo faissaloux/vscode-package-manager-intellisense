@@ -6,6 +6,7 @@ import * as path from 'path';
 
 export abstract class LanguagePackageManager {
     protected abstract name: Language;
+    protected readonly defaultVersion: string = 'n/a';
     protected readonly outdatedPackagesCommand: string = '';
 
     constructor(private readonly editorFileName: string) {}
