@@ -1,11 +1,12 @@
 import { Parser } from '../../parser/parser';
 import { PackageManager } from '../../interfaces/package_manager';
 import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage, Language } from '../../types/types';
+import { InstalledPackage, Language, outdated } from '../../types/types';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'ruby';
+    protected readonly outdatedPackagesCommand: string = 'bundle outdated --only-explicit';
     protected readonly packagePattern: string = 'gem "placeholder"';
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
@@ -29,6 +30,22 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
 
     override getLockPath(): string {
         return 'Gemfile.lock';
+    }
+
+    getLatestVersions(): outdated[] {
+        const outdatedPackages = this.getOutdatedPackages();
+
+        return outdatedPackages.split('\n')
+            .filter(line => /\d/.test(line))
+            .map(line => {
+                const lineParts = line.split('  ').filter(part => part !== '').map(part => part.trim());
+
+                return {
+                    package: lineParts[0],
+                    version: lineParts[1],
+                    latestVersion: lineParts[2],
+                };
+            });
     }
 
     getPackagesNames(content: string): Set<string> {

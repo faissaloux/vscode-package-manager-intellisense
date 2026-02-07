@@ -38,7 +38,7 @@ export abstract class LanguagePackageManager {
     }
 
     async getLinkOfPackage(packageName: string): Promise<string> {
-        throw new Error("Not Implemented!");
+        return '';
     }
 
     getOutdatedPackages(): string {
