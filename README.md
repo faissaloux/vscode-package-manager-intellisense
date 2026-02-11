@@ -29,26 +29,22 @@ _red:_ latest available version.
 - Type `faissaloux.package-manager-intellisense`.
 - Install.
 
-## Supported Package Managers
-- npm
-- yarn
-- pnpm
-- bun
-- composer
-- bundler
-- cargo
-- poetry
+## Support
 
-### Links support
-- npm
-- yarn
-- pnpm
-- bun
-- composer
+| Package Manager | installed versions | latest versions | links |
+---|---|---|---|
+| npm | ✔️ | ✔️ | ✔️ |
+| yarn | ✔️ | ✔️ | ✔️ |
+| pnpm | ✔️ | ✔️ | ✔️ |
+| bun | ✔️ | ✔️ | ✔️ |
+| composer | ✔️ | ✔️ | ✔️ |
+| bundler | ✔️ | ✔️ | ❌ |
+| cargo | ✔️ | ✔️ | ❌ |
+| poetry | ✔️ | ✔️ | ❌ |
 
 ## Usage
-- Install your packages using `npm`, `yarn`, `pnpm`, `bun`, `composer`, `bundler`, `cargo` or `poetry`.
-- Open your `package.json`, `composer.json`, `Gemfile`, `Cargo.toml` or `pyproject.toml` file.
-- Installed versions gonna be displayed to you.
+- Install your dependencies.
+- Open your dependencies file.
+- See more informations about your dependencies.
 
 **Enjoy!**
