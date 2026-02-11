@@ -1,3 +1,5 @@
+export type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python';
+
 export type InstalledPackage = {
     name: string,
     version: string,
@@ -14,5 +16,12 @@ export type ComposerInstalledPackage = {
 
 export type Line = {
     content: string,
+    package: string,
     lineNumber: number,
+};
+
+export type outdated = {
+    package: string,
+    version: string,
+    latestVersion: string,
 };

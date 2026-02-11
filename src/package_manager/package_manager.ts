@@ -2,18 +2,16 @@ import * as vscode from 'vscode';
 import { Javascript } from './package_managers/javascript';
 import { Php } from './package_managers/php';
 import { Ruby } from './package_managers/ruby';
-import path = require('path');
 import { LanguagePackageManager } from './language_package_manager';
+import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
 import { Rust } from './package_managers/rust';
-import { InstalledPackage } from '../types/types';
+import { Language } from '../types/types';
 import { Python } from './package_managers/python';
 
-type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python';
 export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml' | 'pyproject.toml';
 
 export class PackageManager {
     private editorFileName: string;
-    private packageManager: string = '';
     private languagesPackagesFiles: {[key in Language]: DependenciesFile} = {
         'php': 'composer.json',
         'javascript': 'package.json',
@@ -35,24 +33,16 @@ export class PackageManager {
         return this;
     }
 
-    get(): this {
+    get(): PackageManagerInterface | null {
+        let thePackageManager: PackageManagerInterface | null = null;
         for (const [language, packagesFile] of Object.entries(this.languagesPackagesFiles)) {
             if (this.editorFileName.endsWith(packagesFile)){
-                this.packageManager = language;
+                // @ts-ignore
+                thePackageManager =  new this.packageManagers[language](this.editorFileName);
                 break;
             }
         }
 
-        return this;
-    }
-
-    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
-        // @ts-ignore
-        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getInstalled(packageName, line);
-    }
-
-    async getLinkOfPackage(packageName: string): Promise<string> {
-        // @ts-ignore
-        return await new this.packageManagers[this.packageManager](path.dirname(this.editorFileName)).getLinkOfPackage(packageName);
+        return thePackageManager;
     }
 }

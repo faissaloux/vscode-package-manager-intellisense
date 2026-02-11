@@ -33,7 +33,10 @@ function decorate(): void {
 	if (openEditors.length) {
 		for (const openEditor of openEditors) {
 			const packageManager = new PackageManager(openEditor).get();
-			new Decorator(openEditor, packageManager).decorate();
+
+			if (packageManager) {
+				new Decorator(openEditor, packageManager).decorate();
+			}
 		}
 	}
 }
@@ -41,6 +44,7 @@ function decorate(): void {
 function clearDecoration(): void {
 	vscode.window.visibleTextEditors.forEach(textEditor => {
 		textEditor.setDecorations(globals.decorationType, []);
+		textEditor.setDecorations(globals.latestVersionDecoration, []);
 	});
 }
 
