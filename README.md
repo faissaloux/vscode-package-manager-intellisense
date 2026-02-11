@@ -1,6 +1,13 @@
 # VSCode package manager intellisense
 
-Extension that shows you versions of your installed packages, and allow you to go to their links by clicking on them.
+[![Lint](https://github.com/faissaloux/vscode-package-manager-intellisense/actions/workflows/lint.yml/badge.svg)](https://github.com/faissaloux/vscode-package-manager-intellisense/actions/workflows/lint.yml)
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/faissaloux.package-manager-intellisense)
+
+Extension that shows you versions of your installed packages, latest available versions and allow you to go to their links by clicking on them.
+
+#### Legend
+_gray:_ installed version.\
+_red:_ latest available version.
 
 ##### Javascript
 ![hint](images/javascript-packages-installed-versions.png)
