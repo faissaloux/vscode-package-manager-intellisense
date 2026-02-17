@@ -19,8 +19,12 @@ export class Python extends LanguagePackageManager implements PackageManager {
         };
     }
 
-    getLatestVersions(): outdated[] {
+    getLatestVersions(): outdated[]|false {
         const outdatedPackages = this.getOutdatedPackages();
+
+        if (outdatedPackages.length === 0) {
+            return false;
+        }
 
         return JSON.parse(outdatedPackages).map((pkg: {name: string, version: string, latest_version: string}) => {
             return {

@@ -7,7 +7,7 @@ export interface PackageManager {
     getName(): Language;
     getEditorFileName(): string;
     getLinkOfPackage(packageName: string): Promise<string>;
-    getLatestVersions(): outdated[];
+    getLatestVersions(): outdated[]|false;
     getOutdatedPackages(): string;
     getPackagesNames(content: string): Set<string>;
     getLines(document: vscode.TextDocument, packageName: string): Line[];

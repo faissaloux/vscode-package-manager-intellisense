@@ -54,17 +54,19 @@ export class Decorator {
 
     async showPackagesLatestVersions() {
         const decorations: vscode.DecorationOptions[] = [];
-        const latestVersions: outdated[] = await this.packageManager.getLatestVersions();
+        const latestVersions: outdated[]|false = await this.packageManager.getLatestVersions();
 
-        for (const line of this.targets) {
-            const thePackage = latestVersions.find(pkg => pkg.package === line.package);
-
-            if (thePackage && thePackage.version !== thePackage.latestVersion) {
-                decorations.push(this.decoration(thePackage.latestVersion, line["lineNumber"], this.latestVersionColor, 1024));
+        if (latestVersions) {
+            for (const line of this.targets) {
+                const thePackage = latestVersions.find(pkg => pkg.package === line.package);
+    
+                if (thePackage && thePackage.version !== thePackage.latestVersion) {
+                    decorations.push(this.decoration(thePackage.latestVersion, line["lineNumber"], this.latestVersionColor, 1024));
+                }
             }
+    
+            this.editor.setDecorations(globals.latestVersionDecoration, decorations);
         }
-
-        this.editor.setDecorations(globals.latestVersionDecoration, decorations);
     }
 
     async showPackagesLinks() {
