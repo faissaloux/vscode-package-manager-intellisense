@@ -18,7 +18,7 @@ export class Pnpm extends JavascriptPackageManager implements JavascriptPackageM
     }
 
     getLatestVersions(): outdated[] {
-        const outdatedPackages: string = this.getOutdatedPackages();
+        const outdatedPackages: string = this.getOutdatedPackages().replace(/.*(WARN|FAIL).*/g, '');
 
         return Object.entries(JSON.parse(outdatedPackages))
             // @ts-ignore

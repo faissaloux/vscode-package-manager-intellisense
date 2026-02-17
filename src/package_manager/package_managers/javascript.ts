@@ -47,7 +47,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
                 link = data.repository ? data.repository.url : data.homepage;
 
                 link = link ? link.replace(".git", "").replace("git+", "").replace("git:", "https:") : '';
-            });
+            }).catch(_ => {});
 
         return link;
     }
@@ -73,7 +73,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         return version;
     }
 
-    getLatestVersions(): outdated[] {
+    getLatestVersions(): outdated[]|false {
         return Javascript.packageManager.getLatestVersions();
     }
 

@@ -11,8 +11,12 @@ export class Yarn extends JavascriptPackageManager implements JavascriptPackageM
         return 'yarn';
     }
 
-    getLatestVersions(): outdated[] {
+    getLatestVersions(): outdated[]|false {
         const outdatedPackages: string = this.getOutdatedPackages().split('\n')[1];
+
+        if (typeof JSON.parse(outdatedPackages).data === 'string') {
+            return false;
+        }
 
         return JSON.parse(outdatedPackages).data.body
             .map((pkg: string[]) => {

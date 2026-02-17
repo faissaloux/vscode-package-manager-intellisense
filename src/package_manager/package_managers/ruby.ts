@@ -32,8 +32,12 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
         return 'Gemfile.lock';
     }
 
-    getLatestVersions(): outdated[] {
+    getLatestVersions(): outdated[]|false {
         const outdatedPackages = this.getOutdatedPackages();
+
+        if (outdatedPackages.length === 0) {
+            return false;
+        }
 
         return outdatedPackages.split('\n')
             .filter(line => /\d/.test(line))
