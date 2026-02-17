@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.1...main)
+
+## [v1.10.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.0...v1.10.1) - 2026-02-17
+### FIXED
+- Ignore package latest version when network is lost ([#46](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/46))
 
 ## [v1.10.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.9.2...v1.10.0) - 2026-02-12
 ### ADDED
