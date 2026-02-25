@@ -4,7 +4,6 @@ import { InstalledPackage, Line } from '../types/types';
 export class Link {
     private registered: boolean = false;
     private links: vscode.DocumentLink[] = [];
-    private suppportedFiles = ["composer.json", "package.json", "pubspec.yaml"];
 
     constructor() {
         this.links = [];
@@ -30,7 +29,7 @@ export class Link {
         vscode.languages.registerDocumentLinkProvider({scheme: 'file'}, {provideDocumentLinks: (document) => {
             const fileName = document.uri.path.split('/').pop();
 
-            if (!this.registered && fileName && this.suppportedFiles.includes(fileName)) {
+            if (!this.registered && fileName) {
                 this.registered = true;
 
                 return this.links;
