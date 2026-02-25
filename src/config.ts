@@ -3,7 +3,7 @@ import { DependenciesFile } from "./package_manager/package_manager";
 import { type PackageManager } from './types/types';
 
 export class Config {
-    static PackageManagersFiles: Record<PackageManager, DependenciesFile> = {
+    static #packageManagersFiles: Record<PackageManager, DependenciesFile> = {
         'npm': 'package.json',
         'yarn': 'package.json',
         'pnpm': 'package.json',
@@ -18,11 +18,11 @@ export class Config {
     static enabledPackageManagers(): DependenciesFile[] {
         const packagesFiles: DependenciesFile[] = [];
 
-        Object.entries(Config.PackageManagersFiles).forEach(([packageManager, file]) => {
+        Object.entries(Config.#packageManagersFiles).forEach(([packageManager, file]) => {
             if (vscode.workspace.getConfiguration().get(`package-manager-intellisense.${packageManager}.enable`) && !packagesFiles.includes(file)) {
                 packagesFiles.push(file);
             }
-        })
+        });
 
         return packagesFiles;
     }
