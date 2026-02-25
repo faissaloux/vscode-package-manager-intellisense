@@ -22,6 +22,10 @@ function supportedOpenEditors(): vscode.TextEditor[] {
 		packagesFiles.push('pyproject.toml');
 	}
 
+	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.pub.enable')) {
+		packagesFiles.push('pubspec.yaml');
+	}
+
 	return vscode.window.visibleTextEditors.filter(
 		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
 	);
