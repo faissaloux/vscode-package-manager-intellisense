@@ -1,33 +1,12 @@
 import * as vscode from 'vscode';
 import * as globals from './util/globals';
 import { Decorator } from './decorator/decorator';
-import { DependenciesFile, PackageManager } from './package_manager/package_manager';
+import { PackageManager } from './package_manager/package_manager';
+import { Config } from './config';
 
 function supportedOpenEditors(): vscode.TextEditor[] {
-	const packagesFiles: DependenciesFile[] = ['package.json'];
-
-	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.composer.enable')) {
-		packagesFiles.push('composer.json');
-	}
-
-	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.bundler.enable')) {
-		packagesFiles.push('Gemfile');
-	}
-
-	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.cargo.enable')) {
-		packagesFiles.push('Cargo.toml');
-	}
-
-	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.poetry.enable')) {
-		packagesFiles.push('pyproject.toml');
-	}
-
-	if (vscode.workspace.getConfiguration().get('package-manager-intellisense.pub.enable')) {
-		packagesFiles.push('pubspec.yaml');
-	}
-
 	return vscode.window.visibleTextEditors.filter(
-		editor => globals.endsWithAny(packagesFiles, editor.document.fileName)
+		editor => globals.endsWithAny(Config.enabledPackageManagers(), editor.document.fileName)
 	);
 }
 

@@ -1,4 +1,23 @@
-export type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python' | 'dart';
+export type Language =
+    | 'php'
+    | 'javascript'
+    | 'ruby'
+    | 'rust'
+    | 'python'
+    | 'dart'
+    ;
+
+export type PackageManager =
+    | 'npm'
+    | 'yarn'
+    | 'pnpm'
+    | 'bun'
+    | 'composer'
+    | 'bundler'
+    | 'cargo'
+    | 'poetry'
+    | 'pub'
+    ;
 
 export type InstalledPackage = {
     name: string,
