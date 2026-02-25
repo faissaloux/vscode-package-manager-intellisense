@@ -9,20 +9,35 @@ Extension that shows you versions of your installed packages, latest available v
 _gray:_ installed version.\
 _red:_ latest available version.
 
-##### Javascript
-![hint](images/javascript-packages-installed-versions.png)
+<details>
+    <summary>javascript</summary>
+    <img src="./images/javascript-packages-installed-versions.png">
+</details>
 
-##### php
-![hint](images/php-packages-installed-versions.png)
+<details>
+    <summary>php</summary>
+    <img src="./images/php-packages-installed-versions.png">
+</details>
 
-##### ruby
-![hint](images/ruby-packages-installed-versions.png)
+<details>
+    <summary>ruby</summary>
+    <img src="./images/ruby-packages-installed-versions.png">
+</details>
 
-##### rust
-![hint](images/rust-packages-installed-versions.png)
+<details>
+    <summary>rust</summary>
+    <img src="./images/rust-packages-installed-versions.png">
+</details>
 
-##### python
-![hint](images/python-packages-installed-versions.png)
+<details>
+    <summary>python</summary>
+    <img src="./images/python-packages-installed-versions.png">
+</details>
+
+<details>
+    <summary>dart</summary>
+    <img src="./images/dart-packages-installed-versions.png">
+</details>
 
 ## Installation
 - Open VS Code and click on Extensions Icon in the Activity Bar.
