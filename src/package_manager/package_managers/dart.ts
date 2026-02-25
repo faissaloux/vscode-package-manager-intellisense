@@ -51,7 +51,9 @@ export class Dart extends LanguagePackageManager implements PackageManager {
         const depFileContent = jsYaml.load(content);
 
         return new Set<string>([
+            // @ts-ignore
             ...Object.keys(depFileContent['dependencies'] || {}),
+            // @ts-ignore
             ...Object.keys(depFileContent['dev_dependencies'] || {}),
         ]);
     }
