@@ -41,6 +41,7 @@ _red:_ latest available version.
 | bundler | ✔️ | ✔️ | ❌ |
 | cargo | ✔️ | ✔️ | ❌ |
 | poetry | ✔️ | ✔️ | ❌ |
+| pub | ✔️ | ✔️ | ✔️ |
 
 ## Usage
 - Install your dependencies.
