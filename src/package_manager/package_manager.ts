@@ -7,8 +7,9 @@ import { PackageManager as PackageManagerInterface } from '../interfaces/package
 import { Rust } from './package_managers/rust';
 import { Language } from '../types/types';
 import { Python } from './package_managers/python';
+import { Dart } from './package_managers/dart';
 
-export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml' | 'pyproject.toml';
+export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml' | 'pyproject.toml' | 'pubspec.yaml';
 
 export class PackageManager {
     private editorFileName: string;
@@ -18,6 +19,7 @@ export class PackageManager {
         'ruby': 'Gemfile',
         'rust': 'Cargo.toml',
         'python': 'pyproject.toml',
+        'dart': 'pubspec.yaml',
     };
     private packageManagers: {[key in Language]: typeof LanguagePackageManager} = {
         'php': Php,
@@ -25,6 +27,7 @@ export class PackageManager {
         'ruby': Ruby,
         'rust': Rust,
         'python': Python,
+        'dart': Dart,
     };
 
     constructor(private readonly editor: vscode.TextEditor) {

@@ -1,4 +1,4 @@
-export type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python';
+export type Language = 'php' | 'javascript' | 'ruby' | 'rust' | 'python' | 'dart';
 
 export type InstalledPackage = {
     name: string,
