@@ -1,9 +1,9 @@
-import { LockParser } from "../interfaces/lock_parser";
+import type { LockParser } from "../interfaces/lock_parser";
 import { NpmLockV2 } from "./npmLockV2";
 import { NpmLockV3 } from "./npmLockV3";
 
 export class NpmLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
     private lockfileVersion: number;
 
     constructor(content: string) {
@@ -13,7 +13,7 @@ export class NpmLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         if (this.lockfileVersion === 3) {
             return new NpmLockV3(this.content).dependencies();
         }

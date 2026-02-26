@@ -1,8 +1,8 @@
 import * as yarnlockfile from '@yarnpkg/lockfile';
-import { LockParser } from '../interfaces/lock_parser';
+import type { LockParser } from '../interfaces/lock_parser';
 
 export class YarnLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
 
     constructor(content: string) {
         this.content = yarnlockfile.parse(content);
@@ -10,7 +10,7 @@ export class YarnLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         return this.content.object;
     }
 

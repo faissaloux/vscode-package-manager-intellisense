@@ -1,6 +1,6 @@
-import { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
-import { outdated } from '../../../types/types';
 import JavascriptPackageManager from './javascript_package_manager';
+import type { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
+import type { outdated } from '../../../types/types';
 
 export class Npm extends JavascriptPackageManager implements JavascriptPackageManagerInterface {
     protected readonly locks = [
@@ -19,12 +19,10 @@ export class Npm extends JavascriptPackageManager implements JavascriptPackageMa
 
         return Object.entries(JSON.parse(outdatedPackages))
             // @ts-ignore
-            .map(([pkgName, pkg]: [string, {current: string, latest: string}]) => {
-                return {
+            .map(([pkgName, pkg]: [string, {current: string, latest: string}]) => ({
                     package: pkgName,
                     version: pkg.current,
                     latestVersion: pkg.latest,
-                };
-            });
+                }));
     }
 }

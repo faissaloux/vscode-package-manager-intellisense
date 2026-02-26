@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { InstalledPackage, Line } from '../types/types';
+import type { InstalledPackage, Line } from '../types/types';
 
 export class Link {
     private registered: boolean = false;

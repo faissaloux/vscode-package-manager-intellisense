@@ -1,8 +1,8 @@
 import { LockParser as GemfileLockParser } from '@faissaloux/gemfile';
-import { LockParser } from '../interfaces/lock_parser';
+import type { LockParser } from '../interfaces/lock_parser';
 
 export class GemfileLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
 
     constructor(content: string) {
         this.content = JSON.parse(new GemfileLockParser().text(content).parse());
@@ -10,7 +10,7 @@ export class GemfileLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         return this.content;
     }
 

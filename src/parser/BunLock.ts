@@ -1,7 +1,7 @@
-import { LockParser } from "../interfaces/lock_parser";
+import type { LockParser } from "../interfaces/lock_parser";
 
 export class BunLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
 
     constructor(content: string) {
         content = this.removeTrailingCommas(content);
@@ -11,7 +11,7 @@ export class BunLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         return this.content.packages;
     }
 

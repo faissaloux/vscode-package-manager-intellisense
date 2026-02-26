@@ -1,12 +1,12 @@
-import { YarnLock } from './yarnLock';
-import { ComposerLock } from './composerLock';
-import { PnpmLock } from './pnpmLock';
-import { GemfileLock } from './gemfileLock';
-import { NpmLock } from './npmLock';
 import { BunLock } from './BunLock';
 import { CargoLock } from './cargoLock';
+import { ComposerLock } from './composerLock';
+import { GemfileLock } from './gemfileLock';
+import { NpmLock } from './npmLock';
+import { PnpmLock } from './pnpmLock';
 import { PoetryLock } from './poetryLock';
 import { PubLock } from './PubLock';
+import { YarnLock } from './yarnLock';
 
 export class Parser {
     private readonly parsers = {

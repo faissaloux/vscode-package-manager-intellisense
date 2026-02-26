@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { Parser } from '../../parser/parser';
-import { PackageManager } from '../../interfaces/package_manager';
-import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage, Language, outdated } from '../../types/types';
-import { JavascriptPackageManagerInterface } from '../../interfaces/javascript_package_manager';
+import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { Bun } from './javascript/bun';
+import type { JavascriptPackageManagerInterface } from '../../interfaces/javascript_package_manager';
+import { LanguagePackageManager } from '../language_package_manager';
 import { Npm } from './javascript/npm';
-import { Yarn } from './javascript/yarn';
+import type { PackageManager } from '../../interfaces/package_manager';
+import { Parser } from '../../parser/parser';
 import { Pnpm } from './javascript/pnpm';
+import { Yarn } from './javascript/yarn';
+import axios from 'axios';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 
@@ -15,7 +15,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
     protected name: Language = 'javascript';
     protected readonly packagePattern: string = '"placeholder": "';
     static packageManager: JavascriptPackageManagerInterface = new Npm;
-    private packageManagers: {[key in JavascriptPackageManager]: JavascriptPackageManagerInterface} = {
+    private packageManagers: Record<JavascriptPackageManager, JavascriptPackageManagerInterface> = {
         'bun': new Bun,
         'npm': new Npm,
         'yarn': new Yarn,

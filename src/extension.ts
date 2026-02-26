@@ -1,16 +1,14 @@
-import * as vscode from 'vscode';
 import * as globals from './util/globals';
+import * as vscode from 'vscode';
+import { Config } from './config';
 import { Decorator } from './decorator/decorator';
 import { PackageManager } from './package_manager/package_manager';
-import { Config } from './config';
 
-function supportedOpenEditors(): vscode.TextEditor[] {
-	return vscode.window.visibleTextEditors.filter(
-		editor => globals.endsWithAny(Config.enabledPackageManagers(), editor.document.fileName)
-	);
-}
+const supportedOpenEditors = (): vscode.TextEditor[] => vscode.window.visibleTextEditors.filter(
+	editor => globals.endsWithAny(Config.enabledPackageManagers(), editor.document.fileName)
+);
 
-function decorate(): void {
+const decorate = (): void => {
 	const openEditors = supportedOpenEditors();
 
 	if (openEditors.length) {
@@ -24,14 +22,14 @@ function decorate(): void {
 	}
 }
 
-function clearDecoration(): void {
+const clearDecoration = (): void => {
 	vscode.window.visibleTextEditors.forEach(textEditor => {
 		textEditor.setDecorations(globals.decorationType, []);
 		textEditor.setDecorations(globals.latestVersionDecoration, []);
 	});
 }
 
-export function activate(context: vscode.ExtensionContext) {
+export const activate = (context: vscode.ExtensionContext) => {
 	decorate();
 
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(() => setTimeout(() => decorate(), 100)));
@@ -39,6 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.workspace.onWillSaveTextDocument(() => decorate()));
 }
 
-export function deactivate() {
+export const deactivate = () => {
 	clearDecoration();
 }

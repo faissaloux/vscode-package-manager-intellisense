@@ -1,9 +1,9 @@
-import * as vscode from 'vscode';
 import * as toml from '@iarna/toml';
-import { PackageManager } from '../../interfaces/package_manager';
+import * as vscode from 'vscode';
+import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { LanguagePackageManager } from '../language_package_manager';
+import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
-import { InstalledPackage, Language, outdated } from '../../types/types';
 
 export class Rust extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'rust';

@@ -5,5 +5,15 @@
     "curly": "warn",
     "eqeqeq": "warn",
     "no-throw-literal": "warn",
+    "no-alert": "error",
+    "no-console": ["error", { "allow": ["error"] }],
+    "consistent-type-imports": "error",
+    "sort-imports": "error",
+    "prefer-const": "error",
+    "arrow-body-style": "error",
+    "func-style": ["error", "expression"],
+    "consistent-indexed-object-style": "error",
+    "catch-error-name": "error",
+    "max-statements": ["error", { "max": 20 }],
   }
 }

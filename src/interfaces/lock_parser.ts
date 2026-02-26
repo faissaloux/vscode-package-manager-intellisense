@@ -1,4 +1,4 @@
 export interface LockParser {
-    dependencies(): {[key: string]: any}
+    dependencies(): Record<string, any>
     lockVersion(): number | null
 }

@@ -1,8 +1,8 @@
-import { Parser } from '../../parser/parser';
-import { PackageManager } from '../../interfaces/package_manager';
-import { LanguagePackageManager } from '../language_package_manager';
-import { InstalledPackage, Language, outdated } from '../../types/types';
+import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
+import { LanguagePackageManager } from '../language_package_manager';
+import type { PackageManager } from '../../interfaces/package_manager';
+import { Parser } from '../../parser/parser';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'ruby';
@@ -53,12 +53,12 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
     }
 
     getPackagesNames(content: string): Set<string> {
-        let formatted: {[key: string]: string} = {};
+        const formatted: Record<string, string> = {};
         let jsonContent = new GemfileParser().text(content).parse();
         jsonContent = JSON.parse(jsonContent);
 
         // @ts-ignore
-        jsonContent['dependencies'].forEach(( dependency: {[key: string]: string} ) => {
+        jsonContent['dependencies'].forEach(( dependency: Record<string, string> ) => {
             formatted[dependency["name"]] = dependency["version"] ?? this.defaultVersion;
         });
 

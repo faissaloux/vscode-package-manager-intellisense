@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DependenciesFile } from "./package_manager/package_manager";
+import type { DependenciesFile } from "./package_manager/package_manager";
 import { type PackageManager } from './types/types';
 
 export class Config {

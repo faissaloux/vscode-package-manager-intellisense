@@ -1,7 +1,7 @@
-import { LockParser } from "../interfaces/lock_parser";
+import type { LockParser } from "../interfaces/lock_parser";
 
 export class ComposerLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
 
     constructor(content: string) {
         this.content = JSON.parse(content);
@@ -9,7 +9,7 @@ export class ComposerLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         return this.content.packages;
     }
 

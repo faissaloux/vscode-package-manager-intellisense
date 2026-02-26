@@ -1,6 +1,6 @@
-import { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
-import { outdated } from '../../../types/types';
 import JavascriptPackageManager from './javascript_package_manager';
+import type { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
+import type { outdated } from '../../../types/types';
 
 export class Yarn extends JavascriptPackageManager implements JavascriptPackageManagerInterface {
     protected readonly locks = ['yarn.lock'];
@@ -19,12 +19,10 @@ export class Yarn extends JavascriptPackageManager implements JavascriptPackageM
         }
 
         return JSON.parse(outdatedPackages).data.body
-            .map((pkg: string[]) => {
-                return {
+            .map((pkg: string[]) => ({
                     package: pkg[0],
                     version: pkg[1],
                     latestVersion: pkg[3],
-                };
-            });
+                }));
     }
 }
