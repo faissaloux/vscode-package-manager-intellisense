@@ -20,7 +20,7 @@ export class BunLock implements LockParser {
     }
 
     removeTrailingCommas(content: string): string {
-        const regex = /\,(?!\s*?[\{\[\"\'\w])/g;
+        const regex = /,(?!\s*?[{["'\w])/g;
 
         return content.replace(regex, '');
     }

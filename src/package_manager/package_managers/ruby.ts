@@ -9,7 +9,7 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
     protected readonly outdatedPackagesCommand: string = 'bundle outdated --only-explicit';
     protected readonly packagePattern: string = 'gem "placeholder"';
 
-    async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
+    async getInstalled(packageName: string, _line: string): Promise<InstalledPackage> {
         const installedPackages = new Parser("rubygems").parse(await this.lockFileContent())['dependencies'];
 
         const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
@@ -65,9 +65,7 @@ export class Ruby extends LanguagePackageManager implements PackageManager {
         // @ts-ignore
         jsonContent['dependencies'] = formatted;
 
-        return new Set<string>([
-            // @ts-ignore
-            ...Object.keys(jsonContent['dependencies'] || {}),
-        ]);
+        // @ts-ignore
+        return new Set<string>(Object.keys(jsonContent['dependencies'] || {}));
     }
 }

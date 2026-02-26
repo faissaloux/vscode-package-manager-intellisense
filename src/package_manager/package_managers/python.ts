@@ -52,8 +52,6 @@ export class Python extends LanguagePackageManager implements PackageManager {
 
         jsonContent['dependencies'] = formatted;
 
-        return new Set<string>([
-            ...Object.keys(jsonContent['dependencies'] || {}),
-        ]);
+        return new Set<string>(Object.keys(jsonContent['dependencies'] || {}));
     }
 }

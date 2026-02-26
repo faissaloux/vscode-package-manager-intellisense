@@ -29,7 +29,8 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         const installedPackages = lockFileParsed['dependencies'];
         Javascript.packageManager.setLockVersion(lockFileParsed['lockVersion'] ?? 0);
 
-        const installedPackage = Object.entries(installedPackages).find(([title, details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
+        const installedPackage = Object.entries(installedPackages)
+            .find(([title, _details]) => title.startsWith(this.lockPackageStartsWith(packageName, this.getVersion(line))))?.[1];
 
         return {
             name: packageName,
