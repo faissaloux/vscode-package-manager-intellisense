@@ -15,5 +15,8 @@
     "consistent-indexed-object-style": "error",
     "catch-error-name": "error",
     "max-statements": ["error", { "max": 20 }],
+    "complexity": "error",
+    "max-depth": "error",
+    "no-var": "error"
   }
 }
