@@ -1,8 +1,8 @@
-import * as vscode from 'vscode';
 import * as globals from '../util/globals';
-import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
+import * as vscode from 'vscode';
+import type { InstalledPackage, Line, outdated } from '../types/types';
 import { Link } from './link';
-import { Line, InstalledPackage, outdated } from '../types/types';
+import type { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
@@ -16,7 +16,7 @@ export class Decorator {
     }
 
     async decorate() {
-        let content: string = this.editor.document.getText();
+        const content: string = this.editor.document.getText();
         const packagesNames: Set<string> = this.packageManager.getPackagesNames(content);
 
         await this.showPackagesVersions(packagesNames);
@@ -32,11 +32,11 @@ export class Decorator {
                 continue;
             }
 
-            let lines: Line[] = this.packageManager.getLines(this.editor.document, packageName);
+            const lines: Line[] = this.packageManager.getLines(this.editor.document, packageName);
             this.targets.push(...lines);
 
             for (const line of lines) {
-                let installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
+                const installedPackage = await this.packageManager.getInstalled(packageName, line["content"]);
                 let version = this.defaultVersion;
 
                 if(installedPackage?.version) {
@@ -72,7 +72,7 @@ export class Decorator {
     async showPackagesLinks() {
         const link = new Link;
         for (const line of this.targets) {
-            let pkg: InstalledPackage = {
+            const pkg: InstalledPackage = {
                 name: line.package,
                 version: '',
             };

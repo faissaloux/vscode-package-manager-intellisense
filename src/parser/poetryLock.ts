@@ -1,8 +1,8 @@
 import * as toml from '@iarna/toml';
-import { LockParser } from '../interfaces/lock_parser';
+import type { LockParser } from '../interfaces/lock_parser';
 
 export class PoetryLock implements LockParser {
-    private content: {[key: string]: any};
+    private content: Record<string, any>;
     private lockfileVersion: number;
 
     constructor(content: string) {
@@ -12,7 +12,7 @@ export class PoetryLock implements LockParser {
         return this;
     }
 
-    dependencies(): {[key: string]: any} {
+    dependencies(): Record<string, any> {
         return this.content.package;
     }
 

@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
 import * as cp from 'child_process';
-import { Language, Line } from '../types/types';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import type { Language, Line } from '../types/types';
 import { pathJoin, rootPath } from '../util/globals';
 
 export abstract class LanguagePackageManager {
@@ -37,7 +37,7 @@ export abstract class LanguagePackageManager {
         throw new Error("Not Implemented!");
     }
 
-    async getLinkOfPackage(packageName: string): Promise<string> {
+    async getLinkOfPackage(_packageName: string): Promise<string> {
         return '';
     }
 
@@ -49,9 +49,9 @@ export abstract class LanguagePackageManager {
                 encoding: 'utf8',
                 stdio: ['ignore', 'pipe', 'pipe'],
             });
-        } catch (err: any) {
-            if (err.stdout) {
-                outdatedResponse = err.stdout.toString();
+        } catch (error: any) {
+            if (error.stdout) {
+                outdatedResponse = error.stdout.toString();
             } else {
                 return '';
             }
@@ -61,11 +61,11 @@ export abstract class LanguagePackageManager {
     }
 
     getLines(document: vscode.TextDocument, packageName: string): Line[] {
-        let lines: Line[] = [];
-        let lineCount: number = document.lineCount;
+        const lines: Line[] = [];
+        const lineCount: number = document.lineCount;
 
         for (let lineNumber: number = 0; lineNumber < lineCount; lineNumber++) {
-            let lineText: string = document.lineAt(lineNumber).text;
+            const lineText: string = document.lineAt(lineNumber).text;
             const packagePattern: string = this.packagePattern.replace('placeholder', packageName);
 
             if (lineText.match(new RegExp(packagePattern))) {

@@ -1,19 +1,19 @@
-import * as vscode from 'vscode';
-import { Javascript } from './package_managers/javascript';
-import { Php } from './package_managers/php';
-import { Ruby } from './package_managers/ruby';
-import { LanguagePackageManager } from './language_package_manager';
-import { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
-import { Rust } from './package_managers/rust';
-import { Language } from '../types/types';
-import { Python } from './package_managers/python';
+import type * as vscode from 'vscode';
 import { Dart } from './package_managers/dart';
+import { Javascript } from './package_managers/javascript';
+import type { Language } from '../types/types';
+import type { LanguagePackageManager } from './language_package_manager';
+import type { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
+import { Php } from './package_managers/php';
+import { Python } from './package_managers/python';
+import { Ruby } from './package_managers/ruby';
+import { Rust } from './package_managers/rust';
 
 export type DependenciesFile = 'composer.json' | 'package.json' | 'Gemfile' | 'Cargo.toml' | 'pyproject.toml' | 'pubspec.yaml';
 
 export class PackageManager {
     private editorFileName: string;
-    private languagesPackagesFiles: {[key in Language]: DependenciesFile} = {
+    private languagesPackagesFiles: Record<Language, DependenciesFile> = {
         'php': 'composer.json',
         'javascript': 'package.json',
         'ruby': 'Gemfile',
@@ -21,7 +21,7 @@ export class PackageManager {
         'python': 'pyproject.toml',
         'dart': 'pubspec.yaml',
     };
-    private packageManagers: {[key in Language]: typeof LanguagePackageManager} = {
+    private packageManagers: Record<Language, typeof LanguagePackageManager> = {
         'php': Php,
         'javascript': Javascript,
         'ruby': Ruby,

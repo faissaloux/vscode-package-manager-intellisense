@@ -1,11 +1,11 @@
-import { pathJoin } from '../../util/globals';
-import { Parser } from '../../parser/parser';
-import { PackageManager } from '../../interfaces/package_manager';
+import type { ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
 import { LanguagePackageManager } from '../language_package_manager';
-import { ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
+import type { PackageManager } from '../../interfaces/package_manager';
+import { Parser } from '../../parser/parser';
+import { pathJoin } from '../../util/globals';
 
 export class Php extends LanguagePackageManager implements PackageManager {
-    private static installedPackages: {[key: string]: any} = {};
+    private static installedPackages: Record<string, any> = {};
     protected name: Language = 'php';
     protected readonly outdatedPackagesCommand: string = 'composer outdated --direct --format=json';
     protected readonly packagePattern: string = '"placeholder": "';
@@ -37,13 +37,11 @@ export class Php extends LanguagePackageManager implements PackageManager {
         const outdatedPackages = this.getOutdatedPackages();
 
         return JSON.parse(outdatedPackages).installed
-            .map((pkg: {name: string, version: string, latest: string}) => {
-                return {
+            .map((pkg: {name: string, version: string, latest: string}) => ({
                     package: pkg.name,
                     version: pkg.version,
                     latestVersion: pkg.latest,
-                };
-            });
+                }));
     }
 
     getPackagesNames(content: string): Set<string> {

@@ -1,10 +1,10 @@
-import * as fs from 'fs';
 import * as cp from 'child_process';
+import * as fs from 'fs';
 import { pathJoin, rootPath } from '../../../util/globals';
 
 export default abstract class JavascriptPackageManager {
     protected abstract readonly locks: string[];
-    protected abstract readonly startsWith: {[version: string | number]: string}|string;
+    protected abstract readonly startsWith: Record<string | number, string>|string;
     protected lockVersion: number = 0;
     protected abstract readonly outdatedPackagesCommand: string;
 
@@ -72,9 +72,9 @@ export default abstract class JavascriptPackageManager {
                 encoding: 'utf8',
                 stdio: ['ignore', 'pipe', 'pipe'],
             });
-        } catch (err: any) {
-            if (err.stdout) {
-                outdatedResponse = err.stdout.toString();
+        } catch (error: any) {
+            if (error.stdout) {
+                outdatedResponse = error.stdout.toString();
             } else {
                 return '';
             }

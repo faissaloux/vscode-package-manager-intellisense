@@ -1,6 +1,6 @@
-import { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
-import { outdated } from '../../../types/types';
 import JavascriptPackageManager from './javascript_package_manager';
+import type { JavascriptPackageManagerInterface } from "../../../interfaces/javascript_package_manager";
+import type { outdated } from '../../../types/types';
 
 export class Bun extends JavascriptPackageManager implements JavascriptPackageManagerInterface {
     protected readonly locks = ['bun.lock'];

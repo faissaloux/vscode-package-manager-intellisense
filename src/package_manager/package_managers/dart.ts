@@ -1,11 +1,11 @@
 import * as jsYaml from 'js-yaml';
-import { PackageManager } from '../../interfaces/package_manager';
-import { Parser } from '../../parser/parser';
-import { InstalledPackage, Language, outdated } from '../../types/types';
+import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { LanguagePackageManager } from '../language_package_manager';
+import type { PackageManager } from '../../interfaces/package_manager';
+import { Parser } from '../../parser/parser';
 
 export class Dart extends LanguagePackageManager implements PackageManager {
-    private static installedPackages: {[key: string]: any} = {};
+    private static installedPackages: Record<string, any> = {};
     protected name: Language = 'dart';
     protected readonly outdatedPackagesCommand: string = 'dart pub outdated --json';
     protected readonly packagePattern: string = 'placeholder: ';
@@ -38,13 +38,11 @@ export class Dart extends LanguagePackageManager implements PackageManager {
         const outdatedPackages = this.getOutdatedPackages();
 
         return JSON.parse(outdatedPackages).packages
-            .map((pkg: {package: string, current: {version: string}, latest: {version: string}}) => {
-                return {
+            .map((pkg: {package: string, current: {version: string}, latest: {version: string}}) => ({
                     package: pkg.package,
                     version: pkg.current.version,
                     latestVersion: pkg.latest.version,
-                };
-            });
+                }));
     }
 
     getPackagesNames(content: string): Set<string> {
