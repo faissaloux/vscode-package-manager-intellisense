@@ -1,4 +1,14 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.11.0...main)
+
+## [v1.11.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.1...v1.11.0) - 2026-02-27
+### ADDED
+- `pub` support ([#47](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/47))
+
+### REFACTOR
+- Refactor configuration ([#48](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/48))
+
+### CHORE
+- migrate to oxlint ([#49](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/49))
 
 ## [v1.10.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.0...v1.10.1) - 2026-02-17
 ### FIXED
