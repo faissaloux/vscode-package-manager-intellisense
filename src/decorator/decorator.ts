@@ -37,7 +37,7 @@ export class Decorator {
     }
 
     async showPackagesVersions(packagesNames: Set<string>) {
-        let decorations: vscode.DecorationOptions[] = [];
+        const decorations: vscode.DecorationOptions[] = [];
         for (const packageName of packagesNames) {
             if (this.packageManager.isExcluded(packageName)) {
                 continue;
@@ -67,7 +67,7 @@ export class Decorator {
     }
 
     async showPackagesLatestVersions() {
-        let decorations: vscode.DecorationOptions[] = [];
+        const decorations: vscode.DecorationOptions[] = [];
         const latestVersions: outdated[]|false = await this.packageManager.getLatestVersions();
 
         if (latestVersions) {
@@ -86,7 +86,7 @@ export class Decorator {
     }
 
     async showAbandoned() {
-        let decorations: vscode.DecorationOptions[] = [];
+        const decorations: vscode.DecorationOptions[] = [];
         const abandoned: abandoned[] = await (this.packageManager as Php).getAbandoned();
 
         for (const line of this.targets) {
