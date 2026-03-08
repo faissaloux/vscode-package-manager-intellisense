@@ -1,9 +1,9 @@
-import type { abandoned, ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
+import * as cp from 'child_process';
+import type { ComposerInstalledPackage, InstalledPackage, Language, abandoned, outdated } from '../../types/types';
+import { pathJoin, rootPath } from '../../util/globals';
 import { LanguagePackageManager } from '../language_package_manager';
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
-import { pathJoin, rootPath } from '../../util/globals';
-import * as cp from 'child_process';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     private static installedPackages: Record<string, any> = {};

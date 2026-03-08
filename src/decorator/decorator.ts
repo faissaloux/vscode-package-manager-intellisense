@@ -1,9 +1,9 @@
 import * as globals from '../util/globals';
 import * as vscode from 'vscode';
-import type { abandoned, InstalledPackage, Line, outdated } from '../types/types';
+import type { InstalledPackage, Line, abandoned, outdated } from '../types/types';
 import { Link } from './link';
 import type { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
-import { Php } from '../package_manager/package_managers/php';
+import type { Php } from '../package_manager/package_managers/php';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';

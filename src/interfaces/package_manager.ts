@@ -1,5 +1,5 @@
 import type * as vscode from 'vscode';
-import type { abandoned, InstalledPackage, Language, Line, outdated } from "../types/types";
+import type { InstalledPackage, Language, Line, abandoned, outdated } from "../types/types";
 
 export interface PackageManager {
     getInstalled(packageName: string, line: string): Promise<InstalledPackage>;
