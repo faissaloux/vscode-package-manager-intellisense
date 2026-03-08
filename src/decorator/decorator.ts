@@ -1,19 +1,26 @@
 import * as globals from '../util/globals';
 import * as vscode from 'vscode';
-import type { InstalledPackage, Line, outdated } from '../types/types';
+import type { InstalledPackage, Line, abandoned, outdated } from '../types/types';
 import { Link } from './link';
 import type { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
+import type { Php } from '../package_manager/package_managers/php';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
     private readonly color: string = 'grey';
     private readonly latestVersionColor: string = '#F56747';
+    private readonly abandonedColor: string = '#e8e229';
     private readonly margin: string = '0 0 0 1rem';
     private targets: Line[] = [];
+    private decorations: Record<string, {
+        decoration_type: vscode.TextEditorDecorationType,
+        decorations: vscode.DecorationOptions[]
+    }> = {};
 
-    constructor (private readonly editor: vscode.TextEditor, private readonly packageManager: PackageManagerInterface) {
-        return this;
-    }
+    constructor (
+        private readonly editor: vscode.TextEditor,
+        private readonly packageManager: PackageManagerInterface
+    ) {}
 
     async decorate() {
         const content: string = this.editor.document.getText();
@@ -22,11 +29,15 @@ export class Decorator {
         await this.showPackagesVersions(packagesNames);
         await this.showPackagesLatestVersions();
         await this.showPackagesLinks();
+        if (this.packageManager.getName() === 'php') {
+            await this.showAbandoned();
+        }
+
+        this.applyDecorations();
     }
 
     async showPackagesVersions(packagesNames: Set<string>) {
         const decorations: vscode.DecorationOptions[] = [];
-
         for (const packageName of packagesNames) {
             if (this.packageManager.isExcluded(packageName)) {
                 continue;
@@ -49,7 +60,10 @@ export class Decorator {
             }
         }
 
-        this.editor.setDecorations(globals.decorationType, decorations);
+        this.decorations['versions'] = {
+            decoration_type: globals.decorationType,
+            decorations: decorations,
+        };
     }
 
     async showPackagesLatestVersions() {
@@ -64,9 +78,28 @@ export class Decorator {
                     decorations.push(this.decoration(thePackage.latestVersion, line["lineNumber"], this.latestVersionColor, 1024));
                 }
             }
-    
-            this.editor.setDecorations(globals.latestVersionDecoration, decorations);
         }
+        this.decorations['latest_versions'] = {
+            decoration_type: globals.latestVersionDecoration,
+            decorations: decorations,
+        };
+    }
+
+    async showAbandoned() {
+        const decorations: vscode.DecorationOptions[] = [];
+        const abandoned: abandoned[] = await (this.packageManager as Php).getAbandoned();
+
+        for (const line of this.targets) {
+            const thePackage = abandoned.find((pkg: abandoned) => pkg.package === line.package);
+    
+            if (thePackage) {
+                decorations.push(this.decoration('abandoned', line["lineNumber"], this.abandonedColor, 1024));
+            }
+        }
+        this.decorations['abandoned'] = {
+            decoration_type: globals.abandonedDecoration,
+            decorations: decorations,
+        };
     }
 
     async showPackagesLinks() {
@@ -87,7 +120,7 @@ export class Decorator {
         link.registerLinks();
     }
 
-    decoration(text: string, line: number, color: string, char: number): vscode.DecorationOptions {
+    private decoration(text: string, line: number, color: string, char: number): vscode.DecorationOptions {
         const range: vscode.Range = new vscode.Range(line, char, line, char);
         const renderOptions = {
             after: {
@@ -98,5 +131,11 @@ export class Decorator {
         };
 
         return {range: range, renderOptions: renderOptions};
+    }
+
+    private applyDecorations(): void {
+        for (const decorations of Object.values(this.decorations)) {
+            this.editor.setDecorations(decorations.decoration_type, decorations.decorations);
+        }
     }
 }

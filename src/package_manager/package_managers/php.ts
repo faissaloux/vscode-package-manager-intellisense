@@ -1,13 +1,15 @@
-import type { ComposerInstalledPackage, InstalledPackage, Language, outdated } from '../../types/types';
+import * as cp from 'child_process';
+import type { ComposerInstalledPackage, InstalledPackage, Language, abandoned, outdated } from '../../types/types';
+import { pathJoin, rootPath } from '../../util/globals';
 import { LanguagePackageManager } from '../language_package_manager';
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
-import { pathJoin } from '../../util/globals';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     private static installedPackages: Record<string, any> = {};
     protected name: Language = 'php';
     protected readonly outdatedPackagesCommand: string = 'composer outdated --direct --format=json';
+    protected readonly abondonedPackagesCommand: string = 'composer audit --format=json';
     protected readonly packagePattern: string = '"placeholder": "';
     protected override readonly excluded: string[] = [
         'php',
@@ -52,5 +54,26 @@ export class Php extends LanguagePackageManager implements PackageManager {
             ...Object.keys(jsonContent['require-dev'] || {}),
             ...Object.keys(jsonContent['conflict'] || {}),
         ]);
+    }
+
+    getAbandoned(): abandoned[] {
+        let abondonedPackages: string;
+        try {
+            abondonedPackages = cp.execSync(this.abondonedPackagesCommand, {
+                cwd: rootPath,
+                encoding: 'utf8',
+                stdio: ['ignore', 'pipe', 'pipe'],
+            });
+        } catch (error: any) {
+            if (error.stdout) {
+                abondonedPackages = error.stdout.toString();
+            } else {
+                return [];
+            }
+        }
+
+        return Object.keys(JSON.parse(abondonedPackages).abandoned).map(pkg => ({
+            'package': pkg,
+        }));
     }
 }

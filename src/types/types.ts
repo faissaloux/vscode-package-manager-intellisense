@@ -44,3 +44,7 @@ export type outdated = {
     version: string,
     latestVersion: string,
 };
+
+export type abandoned = {
+    package: string,
+}

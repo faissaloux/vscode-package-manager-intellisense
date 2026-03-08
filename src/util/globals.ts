@@ -9,6 +9,10 @@ export const latestVersionDecoration = vscode.window.createTextEditorDecorationT
     color: '#F56747',
 });
 
+export const abandonedDecoration = vscode.window.createTextEditorDecorationType({
+    color: '#e8e229',
+});
+
 export const pathJoin = (...parts: string[]): string => parts.join(path.sep);
 
 export const endsWithAny = (options: string[], string: string): boolean => options.some((option: string) => string.endsWith(option));
