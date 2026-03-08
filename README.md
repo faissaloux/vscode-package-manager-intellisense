@@ -46,17 +46,17 @@ _red:_ latest available version.
 
 ## Support
 
-| Package Manager | installed versions | latest versions | links |
----|---|---|---|
-| npm | ✔️ | ✔️ | ✔️ |
-| yarn | ✔️ | ✔️ | ✔️ |
-| pnpm | ✔️ | ✔️ | ✔️ |
-| bun | ✔️ | ✔️ | ✔️ |
-| composer | ✔️ | ✔️ | ✔️ |
-| bundler | ✔️ | ✔️ | ❌ |
-| cargo | ✔️ | ✔️ | ❌ |
-| poetry | ✔️ | ✔️ | ❌ |
-| pub | ✔️ | ✔️ | ✔️ |
+| Package Manager | installed versions | latest versions | links | abandoned
+---|---|---|---| ---|
+| npm | ✔️ | ✔️ | ✔️ | ❌ |
+| yarn | ✔️ | ✔️ | ✔️ | ❌ |
+| pnpm | ✔️ | ✔️ | ✔️ | ❌ |
+| bun | ✔️ | ✔️ | ✔️ | ❌ |
+| composer | ✔️ | ✔️ | ✔️ | ✔️ |
+| bundler | ✔️ | ✔️ | ❌ | ❌ |
+| cargo | ✔️ | ✔️ | ❌ | ❌ |
+| poetry | ✔️ | ✔️ | ❌ | ❌ |
+| pub | ✔️ | ✔️ | ✔️ | ❌ |
 
 ## Usage
 - Install your dependencies.
