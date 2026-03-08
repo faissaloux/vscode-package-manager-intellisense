@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.11.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.0...main)
+
+## [v1.12.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.11.0...v1.12.0) - 2026-03-08
+### ADDED
+- `abandoned` dependencies in composer ([#50](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/50))
 
 ## [v1.11.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.10.1...v1.11.0) - 2026-02-27
 ### ADDED
