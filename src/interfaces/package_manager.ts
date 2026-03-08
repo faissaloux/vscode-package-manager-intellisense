@@ -1,5 +1,5 @@
 import type * as vscode from 'vscode';
-import type { InstalledPackage, Language, Line, outdated } from "../types/types";
+import type { abandoned, InstalledPackage, Language, Line, outdated } from "../types/types";
 
 export interface PackageManager {
     getInstalled(packageName: string, line: string): Promise<InstalledPackage>;
@@ -12,4 +12,5 @@ export interface PackageManager {
     getPackagesNames(content: string): Set<string>;
     getLines(document: vscode.TextDocument, packageName: string): Line[];
     isExcluded(packageName: string): boolean;
+    getAbandoned?(): abandoned[];
 }

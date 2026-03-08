@@ -1,13 +1,15 @@
 import * as globals from '../util/globals';
 import * as vscode from 'vscode';
-import type { InstalledPackage, Line, outdated } from '../types/types';
+import type { abandoned, InstalledPackage, Line, outdated } from '../types/types';
 import { Link } from './link';
 import type { PackageManager as PackageManagerInterface } from '../interfaces/package_manager';
+import { Php } from '../package_manager/package_managers/php';
 
 export class Decorator {
     private readonly defaultVersion: string = 'n/a';
     private readonly color: string = 'grey';
     private readonly latestVersionColor: string = '#F56747';
+    private readonly abandonedColor: string = '#e8e229';
     private readonly margin: string = '0 0 0 1rem';
     private targets: Line[] = [];
 
@@ -22,6 +24,9 @@ export class Decorator {
         await this.showPackagesVersions(packagesNames);
         await this.showPackagesLatestVersions();
         await this.showPackagesLinks();
+        if (this.packageManager.getName() === 'php') {
+            await this.showAbandoned();
+        }
     }
 
     async showPackagesVersions(packagesNames: Set<string>) {
@@ -67,6 +72,21 @@ export class Decorator {
     
             this.editor.setDecorations(globals.latestVersionDecoration, decorations);
         }
+    }
+
+    async showAbandoned() {
+        const decorations: vscode.DecorationOptions[] = [];
+        const abandoned: abandoned[] = await (this.packageManager as Php).getAbandoned();
+
+        for (const line of this.targets) {
+            const thePackage = abandoned.find((pkg: abandoned) => pkg.package === line.package);
+    
+            if (thePackage) {
+                decorations.push(this.decoration('abandoned', line["lineNumber"], this.abandonedColor, 1024));
+            }
+        }
+
+        this.editor.setDecorations(globals.latestVersionDecoration, decorations);
     }
 
     async showPackagesLinks() {
