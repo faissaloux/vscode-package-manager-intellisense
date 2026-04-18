@@ -68,7 +68,7 @@ export abstract class LanguagePackageManager {
             const lineText: string = document.lineAt(lineNumber).text;
             const packagePattern: string = this.packagePattern.replace('placeholder', packageName);
 
-            if (lineText.match(new RegExp(packagePattern))) {
+            if (lineText.match(new RegExp(packagePattern)) && lineText.match(/:\s*".?\d+(\.\d+){0,2}"/)) {
                 lines.push({content: lineText, package: packageName, lineNumber});
             }
         }
