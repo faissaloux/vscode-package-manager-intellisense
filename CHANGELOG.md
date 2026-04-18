@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.1...main)
+
+## [v1.12.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.0...v1.12.1) - 2026-04-18
+### FIXED
+- Fix package detection conflict ([#51](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/51))
 
 ## [v1.12.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.11.0...v1.12.0) - 2026-03-08
 ### ADDED
