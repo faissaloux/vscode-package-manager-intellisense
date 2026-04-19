@@ -1,4 +1,9 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.2...main)
+
+## [v1.12.2](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.1...v1.12.2) - 2026-04-19
+### FIXED
+- Fix x version support ([#52](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/52))
+- Fix yarn outdated packages ([#53](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/53))
 
 ## [v1.12.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.0...v1.12.1) - 2026-04-18
 ### FIXED
