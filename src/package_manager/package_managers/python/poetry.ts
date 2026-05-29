@@ -1,6 +1,6 @@
-import { PythonPackageManagerInterface } from "../../../interfaces/python_package_manager";
-import { outdated } from "../../../types/types";
 import PythonPackageManager from "./python_package_manager";
+import type { PythonPackageManagerInterface } from "../../../interfaces/python_package_manager";
+import type { outdated } from "../../../types/types";
 
 export class Poetry extends PythonPackageManager implements PythonPackageManagerInterface {
     protected readonly locks = [

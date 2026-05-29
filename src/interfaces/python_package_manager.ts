@@ -1,4 +1,4 @@
-import { outdated } from "../types/types";
+import type { outdated } from "../types/types";
 
 export interface PythonPackageManagerInterface {
     getLatestVersions(): outdated[]|false;

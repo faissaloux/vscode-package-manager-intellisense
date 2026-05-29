@@ -1,6 +1,6 @@
+import * as cp from 'child_process';
 import * as fs from 'fs';
 import { pathJoin, rootPath } from '../../../util/globals';
-import * as cp from 'child_process';
 
 export default abstract class PythonPackageManager {
     protected abstract readonly locks: string[];

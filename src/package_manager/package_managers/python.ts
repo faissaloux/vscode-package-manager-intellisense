@@ -4,7 +4,7 @@ import { LanguagePackageManager } from '../language_package_manager';
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
 import { Poetry } from './python/poetry';
-import { PythonPackageManagerInterface } from '../../interfaces/python_package_manager';
+import type { PythonPackageManagerInterface } from '../../interfaces/python_package_manager';
 
 type PythonPackageManager = 'poetry';
 
