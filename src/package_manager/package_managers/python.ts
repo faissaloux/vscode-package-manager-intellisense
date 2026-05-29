@@ -3,14 +3,24 @@ import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { LanguagePackageManager } from '../language_package_manager';
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
+import { Poetry } from './python/poetry';
+import type { PythonPackageManagerInterface } from '../../interfaces/python_package_manager';
+
+type PythonPackageManager = 'poetry';
 
 export class Python extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'python';
     protected readonly packagePattern: string = '^\\s*"placeholder(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
+    static packageManager: PythonPackageManagerInterface = new Poetry;
+    private packageManagers: Record<PythonPackageManager, PythonPackageManagerInterface> = {
+        'poetry': new Poetry,
+    };
     protected readonly outdatedPackagesCommand: string = 'poetry show --outdated --format json';
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {
-        const installedPackages = new Parser("poetry").parse(await this.lockFileContent())['dependencies'];
+        Python.packageManager = await this.getSubPackageManager();
+
+        const installedPackages = new Parser(Python.packageManager.getName()).parse(await this.lockFileContent())['dependencies'];
         const packageFound = installedPackages.find((pkg: Record<string, any>) => pkg.name === packageName);
 
         return {
@@ -20,21 +30,21 @@ export class Python extends LanguagePackageManager implements PackageManager {
     }
 
     getLatestVersions(): outdated[]|false {
-        const outdatedPackages = this.getOutdatedPackages();
-
-        if (outdatedPackages.length === 0) {
-            return false;
-        }
-
-        return JSON.parse(outdatedPackages).map((pkg: {name: string, version: string, latest_version: string}) => ({
-                package: pkg.name,
-                version: pkg.version,
-                latestVersion: pkg.latest_version,
-            }));
+        return Python.packageManager.getLatestVersions();
     }
 
     override getLockPath(): string {
-        return 'poetry.lock';
+        return Python.packageManager.getLockPath();
+    }
+
+    async getSubPackageManager(): Promise<PythonPackageManagerInterface> {
+        for (const packagemanager of Object.values(this.packageManagers)) {
+            if (packagemanager.isAlive()) {
+                return packagemanager;
+            }
+        }
+
+        return Python.packageManager;
     }
 
     getPackagesNames(content: string): Set<string> {
