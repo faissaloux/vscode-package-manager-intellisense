@@ -5,15 +5,17 @@ import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
 import { Poetry } from './python/poetry';
 import type { PythonPackageManagerInterface } from '../../interfaces/python_package_manager';
+import { Uv } from './python/uv';
 
-type PythonPackageManager = 'poetry';
+type PythonPackageManager = 'poetry' | 'uv';
 
 export class Python extends LanguagePackageManager implements PackageManager {
     protected name: Language = 'python';
-    protected readonly packagePattern: string = '^\\s*"placeholder(?:\\[[a-zA-Z,]+\\])?\\s\\([^)]+\\)';
+    protected readonly packagePattern: string = '^\\s*"placeholder(?:\\s*\\(([^"]+)\\)|([<>=!~].*?))"\\s*,?\\s*$';
     static packageManager: PythonPackageManagerInterface = new Poetry;
     private packageManagers: Record<PythonPackageManager, PythonPackageManagerInterface> = {
         'poetry': new Poetry,
+        'uv': new Uv,
     };
     protected readonly outdatedPackagesCommand: string = 'poetry show --outdated --format json';
 
@@ -53,9 +55,16 @@ export class Python extends LanguagePackageManager implements PackageManager {
 
         // @ts-ignore
         jsonContent['project']['dependencies'].map((dependency: string) => {
-            const [dep, version] = dependency.replace(/\[.*?\]/g, '').split(' ');
+            dependency = dependency.replace(/\[.*?\]/g, '');
 
-            formatted[dep] = version;
+            const depVersionPattern = /^([A-Za-z0-9_.-]+)\s*(.*)$/;
+            const match = dependency.match(depVersionPattern);
+
+            if (match) {
+                const [, dep, version] = match;
+
+                formatted[dep] = version;
+            }
         });
 
         jsonContent['dependencies'] = formatted;

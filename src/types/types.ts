@@ -16,6 +16,7 @@ export type PackageManager =
     | 'bundler'
     | 'cargo'
     | 'poetry'
+    | 'uv'
     | 'pub'
     ;
 

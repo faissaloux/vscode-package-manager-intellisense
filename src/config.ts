@@ -12,6 +12,7 @@ export class Config {
         'bundler': 'Gemfile',
         'cargo': 'Cargo.toml',
         'poetry': 'pyproject.toml',
+        'uv': 'pyproject.toml',
         'pub': 'pubspec.yaml',
     };
 

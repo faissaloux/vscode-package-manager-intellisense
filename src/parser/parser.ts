@@ -6,6 +6,7 @@ import { NpmLock } from './npmLock';
 import { PnpmLock } from './pnpmLock';
 import { PoetryLock } from './poetryLock';
 import { PubLock } from './PubLock';
+import { UvLock } from './uvLock';
 import { YarnLock } from './yarnLock';
 
 export class Parser {
@@ -18,6 +19,7 @@ export class Parser {
         "rubygems": GemfileLock,
         "cargo": CargoLock,
         "poetry": PoetryLock,
+        "uv": UvLock,
         "pub": PubLock,
     };
 
