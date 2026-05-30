@@ -73,7 +73,7 @@ export class Decorator {
         if (latestVersions) {
             for (const line of this.targets) {
                 const thePackage = latestVersions.find(pkg => pkg.package === line.package);
-    
+
                 if (thePackage && thePackage.version !== thePackage.latestVersion) {
                     decorations.push(this.decoration(thePackage.latestVersion, line["lineNumber"], this.latestVersionColor, 1024));
                 }
@@ -91,7 +91,7 @@ export class Decorator {
 
         for (const line of this.targets) {
             const thePackage = abandoned.find((pkg: abandoned) => pkg.package === line.package);
-    
+
             if (thePackage) {
                 decorations.push(this.decoration('abandoned', line["lineNumber"], this.abandonedColor, 1024));
             }
