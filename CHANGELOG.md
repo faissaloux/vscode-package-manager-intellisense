@@ -1,4 +1,11 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.2...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.0...main)
+
+## [v1.13.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.2...v1.13.0) - 2026-05-30
+### ADDED
+- `uv` support ([#56](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/56))
+
+### REFACTOR
+- Refactor python package manager ([#55](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/55))
 
 ## [v1.12.2](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.1...v1.12.2) - 2026-04-19
 ### FIXED
