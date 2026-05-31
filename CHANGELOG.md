@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.0...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.1...main)
+
+## [v1.13.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.0...v1.13.1) - 2026-05-31
+### FIXED
+- Fix composer packages undefined attributes ([#57](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/57))
 
 ## [v1.13.0](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.12.2...v1.13.0) - 2026-05-30
 ### ADDED
