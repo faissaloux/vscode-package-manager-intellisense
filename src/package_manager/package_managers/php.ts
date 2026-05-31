@@ -20,15 +20,15 @@ export class Php extends LanguagePackageManager implements PackageManager {
         const installedPackage = Php.installedPackages.find((pkg: ComposerInstalledPackage) => pkg.name === packageName);
 
         return {
-            name: installedPackage.name,
-            version: installedPackage.version,
+            name: installedPackage?.name ?? '',
+            version: installedPackage?.version ?? '',
         };
     }
 
     getLinkOfPackage(packageName: string): Promise<string> {
         const installedPackage = Php.installedPackages.find((pkg: ComposerInstalledPackage) => pkg.name === packageName);
 
-        return installedPackage?.source.url.replace(".git", "");
+        return installedPackage?.source?.url.replace(".git", "") ?? '';
     }
 
     override getLockPath(): string {
