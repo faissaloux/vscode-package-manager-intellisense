@@ -1,4 +1,14 @@
-## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.1...main)
+## [Unreleased](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.2...main)
+
+## [v1.13.2](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.1...v1.13.2) - 2026-10-02
+
+### FIXED
+
+- Support subdirectories ([#58](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/58))
+
+### CI
+
+- Automate format - #59 ([#59](https://github.com/faissaloux/vscode-package-manager-intellisense/pull/59))
 
 ## [v1.13.1](https://github.com/faissaloux/vscode-package-manager-intellisense/compare/v1.13.0...v1.13.1) - 2026-05-31
 
