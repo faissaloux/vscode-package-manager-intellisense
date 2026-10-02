@@ -1,9 +1,9 @@
-import type { outdated } from "../types/types";
+import type { outdated } from '../types/types';
 
 export interface PythonPackageManagerInterface {
-    getLatestVersions(): outdated[]|false;
-    getName(): string;
-    getLockPath(): string;
-    isAlive(): boolean;
-    setProjectDirectory(dir: string): void;
+  getLatestVersions(): outdated[] | false;
+  getName(): string;
+  getLockPath(): string;
+  isAlive(): boolean;
+  setProjectDirectory(dir: string): void;
 }

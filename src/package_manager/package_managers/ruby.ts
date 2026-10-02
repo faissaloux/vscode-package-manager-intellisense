@@ -1,71 +1,80 @@
-import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { Parser as GemfileParser } from '@faissaloux/gemfile';
-import { LanguagePackageManager } from '../language_package_manager';
+
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
+import type { InstalledPackage, Language, outdated } from '../../types/types';
+import { LanguagePackageManager } from '../language_package_manager';
 
 export class Ruby extends LanguagePackageManager implements PackageManager {
-    protected name: Language = 'ruby';
-    protected readonly outdatedPackagesCommand: string = 'bundle outdated --only-explicit';
-    protected readonly packagePattern: string = 'gem "placeholder"';
+  protected name: Language = 'ruby';
+  protected readonly outdatedPackagesCommand: string = 'bundle outdated --only-explicit';
+  protected readonly packagePattern: string = 'gem "placeholder"';
 
-    async getInstalled(packageName: string, _line: string): Promise<InstalledPackage> {
-        const installedPackages = new Parser("rubygems").parse(await this.lockFileContent())['dependencies'];
+  async getInstalled(packageName: string, _line: string): Promise<InstalledPackage> {
+    const installedPackages = new Parser('rubygems').parse(await this.lockFileContent())[
+      'dependencies'
+    ];
 
-        const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) => pkg.startsWith(packageName));
+    const packageFound = Object.keys(installedPackages.GEM.specs).find((pkg: string) =>
+      pkg.startsWith(packageName),
+    );
 
-        if (packageFound) {
-            const packageAndVersion = packageFound.split(" ");
-            const betweenParenthesesRegExp = /\(([^)]+)\)/;
-            const version = betweenParenthesesRegExp.exec(packageAndVersion[1]) || "n/a";
+    if (packageFound) {
+      const packageAndVersion = packageFound.split(' ');
+      const betweenParenthesesRegExp = /\(([^)]+)\)/;
+      const version = betweenParenthesesRegExp.exec(packageAndVersion[1]) || 'n/a';
 
-            return {
-                name: packageAndVersion[0],
-                version: version[1],
-            };
-        }
-
-        return { name: '', version: ''};
+      return {
+        name: packageAndVersion[0],
+        version: version[1],
+      };
     }
 
-    override getLockPath(): string {
-        return 'Gemfile.lock';
+    return { name: '', version: '' };
+  }
+
+  override getLockPath(): string {
+    return 'Gemfile.lock';
+  }
+
+  getLatestVersions(): outdated[] | false {
+    const outdatedPackages = this.getOutdatedPackages();
+
+    if (outdatedPackages.length === 0) {
+      return false;
     }
 
-    getLatestVersions(): outdated[]|false {
-        const outdatedPackages = this.getOutdatedPackages();
+    return outdatedPackages
+      .split('\n')
+      .filter((line) => /\d/.test(line))
+      .map((line) => {
+        const lineParts = line
+          .split('  ')
+          .filter((part) => part !== '')
+          .map((part) => part.trim());
 
-        if (outdatedPackages.length === 0) {
-            return false;
-        }
+        return {
+          package: lineParts[0],
+          version: lineParts[1],
+          latestVersion: lineParts[2],
+        };
+      });
+  }
 
-        return outdatedPackages.split('\n')
-            .filter(line => /\d/.test(line))
-            .map(line => {
-                const lineParts = line.split('  ').filter(part => part !== '').map(part => part.trim());
+  getPackagesNames(content: string): Set<string> {
+    const formatted: Record<string, string> = {};
+    let jsonContent = new GemfileParser().text(content).parse();
+    jsonContent = JSON.parse(jsonContent);
 
-                return {
-                    package: lineParts[0],
-                    version: lineParts[1],
-                    latestVersion: lineParts[2],
-                };
-            });
-    }
+    // @ts-ignore
+    jsonContent['dependencies'].forEach((dependency: Record<string, string>) => {
+      formatted[dependency['name']] = dependency['version'] ?? this.defaultVersion;
+    });
 
-    getPackagesNames(content: string): Set<string> {
-        const formatted: Record<string, string> = {};
-        let jsonContent = new GemfileParser().text(content).parse();
-        jsonContent = JSON.parse(jsonContent);
+    // @ts-ignore
+    jsonContent['dependencies'] = formatted;
 
-        // @ts-ignore
-        jsonContent['dependencies'].forEach(( dependency: Record<string, string> ) => {
-            formatted[dependency["name"]] = dependency["version"] ?? this.defaultVersion;
-        });
-
-        // @ts-ignore
-        jsonContent['dependencies'] = formatted;
-
-        // @ts-ignore
-        return new Set<string>(Object.keys(jsonContent['dependencies'] || {}));
-    }
+    // @ts-ignore
+    return new Set<string>(Object.keys(jsonContent['dependencies'] || {}));
+  }
 }

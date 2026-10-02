@@ -1,18 +1,20 @@
 import * as path from 'path';
+
 import * as vscode from 'vscode';
 
 export const decorationType = vscode.window.createTextEditorDecorationType({
-    color: 'grey',
+  color: 'grey',
 });
 
 export const latestVersionDecoration = vscode.window.createTextEditorDecorationType({
-    color: '#F56747',
+  color: '#F56747',
 });
 
 export const abandonedDecoration = vscode.window.createTextEditorDecorationType({
-    color: '#e8e229',
+  color: '#e8e229',
 });
 
 export const pathJoin = (...parts: string[]): string => parts.join(path.sep);
 
-export const endsWithAny = (options: string[], string: string): boolean => options.some((option: string) => string.endsWith(option));
+export const endsWithAny = (options: string[], string: string): boolean =>
+  options.some((option: string) => string.endsWith(option));

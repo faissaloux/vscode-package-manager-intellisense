@@ -8,7 +8,12 @@
     "no-alert": "error",
     "no-console": ["error", { "allow": ["error"] }],
     "consistent-type-imports": "error",
-    "sort-imports": "error",
+    "eslint/sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ],
     "prefer-const": "error",
     "arrow-body-style": "error",
     "func-style": ["error", "expression"],

@@ -1,51 +1,40 @@
 {
   "name": "package-manager-intellisense",
   "displayName": "package-manager-intellisense",
-  "description": "Intellisense for package managers files",
   "version": "1.13.1",
-  "engines": {
-    "vscode": "^1.78.0"
-  },
+  "description": "Intellisense for package managers files",
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "bundler",
+    "cargo",
+    "composer",
+    "composer.json",
+    "dependency",
+    "gemfile",
+    "installed package version",
+    "manager",
+    "npm",
+    "package hints",
+    "package hints in VS Code",
+    "package.json",
+    "pnpm",
+    "yarn"
+  ],
+  "homepage": "https://github.com/faissaloux/vscode-package-manager-intellisense/blob/master/README.md",
+  "bugs": {
+    "url": "https://github.com/faissaloux/vscode-package-manager-intellisense/issues"
+  },
+  "license": "MIT",
   "author": {
     "name": "Faissal Wahabali"
   },
-  "publisher": "faissaloux",
-  "license": "MIT",
-  "icon": "images/logo.png",
-  "homepage": "https://github.com/faissaloux/vscode-package-manager-intellisense/blob/master/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/faissaloux/vscode-package-manager-intellisense"
   },
-  "bugs": {
-    "url": "https://github.com/faissaloux/vscode-package-manager-intellisense/issues"
-  },
-  "keywords": [
-    "npm",
-    "yarn",
-    "pnpm",
-    "composer",
-    "bundler",
-    "cargo",
-    "dependency",
-    "manager",
-    "installed package version",
-    "package hints in VS Code",
-    "package hints",
-    "package.json",
-    "composer.json",
-    "gemfile"
-  ],
-  "activationEvents": [
-    "onLanguage:json",
-    "onLanguage:toml",
-    "onLanguage:text",
-    "onLanguage:yaml",
-    "onFileSystem:**"
-  ],
+  "publisher": "faissaloux",
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "yarn run package",
@@ -57,8 +46,17 @@
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
     "lint:check": "oxlint",
     "lint": "oxlint --fix",
+    "format:check": "oxfmt --check",
+    "format": "oxfmt",
     "type:check": "tsc --noEmit",
     "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "@faissaloux/gemfile": "^0.3.0",
+    "@iarna/toml": "^2.2.5",
+    "@yarnpkg/lockfile": "^1.1.0",
+    "axios": "^1.10.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
@@ -70,18 +68,12 @@
     "@vscode/test-electron": "^2.3.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
+    "oxfmt": "^0.71.0",
     "oxlint": "^1.50.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
     "webpack": "^5.81.0",
     "webpack-cli": "^5.0.2"
-  },
-  "dependencies": {
-    "@faissaloux/gemfile": "^0.3.0",
-    "@iarna/toml": "^2.2.5",
-    "@yarnpkg/lockfile": "^1.1.0",
-    "axios": "^1.10.0",
-    "js-yaml": "^4.1.0"
   },
   "contributes": {
     "configuration": [
@@ -141,5 +133,16 @@
         }
       }
     ]
+  },
+  "activationEvents": [
+    "onFileSystem:**",
+    "onLanguage:json",
+    "onLanguage:text",
+    "onLanguage:toml",
+    "onLanguage:yaml"
+  ],
+  "icon": "images/logo.png",
+  "engines": {
+    "vscode": "^1.78.0"
   }
 }
