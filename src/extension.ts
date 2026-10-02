@@ -32,7 +32,7 @@ const clearDecoration = (): void => {
 export const activate = (context: vscode.ExtensionContext) => {
 	decorate();
 
-	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(() => setTimeout(() => decorate(), 100)));
+	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(() => setTimeout(() => decorate(), 1000)));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(() => decorate()));
 	context.subscriptions.push(vscode.workspace.onWillSaveTextDocument(() => decorate()));
 }

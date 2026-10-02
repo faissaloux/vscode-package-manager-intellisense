@@ -1,9 +1,10 @@
 import * as cp from 'child_process';
+import * as path from 'path';
 import type { ComposerInstalledPackage, InstalledPackage, Language, abandoned, outdated } from '../../types/types';
-import { pathJoin, rootPath } from '../../util/globals';
 import { LanguagePackageManager } from '../language_package_manager';
 import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
+import { pathJoin } from '../../util/globals';
 
 export class Php extends LanguagePackageManager implements PackageManager {
     private static installedPackages: Record<string, any> = {};
@@ -25,7 +26,7 @@ export class Php extends LanguagePackageManager implements PackageManager {
         };
     }
 
-    getLinkOfPackage(packageName: string): Promise<string> {
+    getLinkOfPackage(packageName: string): string {
         const installedPackage = Php.installedPackages.find((pkg: ComposerInstalledPackage) => pkg.name === packageName);
 
         return installedPackage?.source?.url.replace(".git", "") ?? '';
@@ -60,7 +61,7 @@ export class Php extends LanguagePackageManager implements PackageManager {
         let abondonedPackages: string;
         try {
             abondonedPackages = cp.execSync(this.abondonedPackagesCommand, {
-                cwd: rootPath,
+                cwd: path.dirname(this.getEditorFileName()),
                 encoding: 'utf8',
                 stdio: ['ignore', 'pipe', 'pipe'],
             });

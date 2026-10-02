@@ -26,7 +26,7 @@ export class Dart extends LanguagePackageManager implements PackageManager {
         return { name: '', version: '' };
     }
     
-    async getLinkOfPackage(packageName: string): Promise<string> {
+    getLinkOfPackage(packageName: string): string {
         return `https://pub.dev/packages/${packageName}`;
     }
 

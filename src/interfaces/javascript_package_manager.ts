@@ -8,4 +8,5 @@ export interface JavascriptPackageManagerInterface {
     setLockVersion(version: number): void;
     isAlive(): boolean;
     getOutdatedPackages(): string;
+    setProjectDirectory(dir: string): void;
 }

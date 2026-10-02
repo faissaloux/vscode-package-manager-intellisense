@@ -104,6 +104,7 @@ export class Decorator {
 
     async showPackagesLinks() {
         const link = new Link;
+
         for (const line of this.targets) {
             const pkg: InstalledPackage = {
                 name: line.package,
