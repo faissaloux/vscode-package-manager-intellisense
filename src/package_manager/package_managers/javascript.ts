@@ -1,3 +1,4 @@
+import * as path from 'path';
 import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { Bun } from './javascript/bun';
 import type { JavascriptPackageManagerInterface } from '../../interfaces/javascript_package_manager';
@@ -7,7 +8,6 @@ import type { PackageManager } from '../../interfaces/package_manager';
 import { Parser } from '../../parser/parser';
 import { Pnpm } from './javascript/pnpm';
 import { Yarn } from './javascript/yarn';
-import axios from 'axios';
 
 type JavascriptPackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 
@@ -24,6 +24,7 @@ export class Javascript extends LanguagePackageManager implements PackageManager
 
     async getInstalled(packageName: string, line: string): Promise<InstalledPackage> {
         Javascript.packageManager = await this.getSubPackageManager();
+        Javascript.packageManager.setProjectDirectory(path.dirname(this.getEditorFileName()));
 
         const lockFileParsed = new Parser(Javascript.packageManager.getName()).parse(await this.lockFileContent());
         const installedPackages = lockFileParsed['dependencies'];
@@ -39,18 +40,8 @@ export class Javascript extends LanguagePackageManager implements PackageManager
         };
     }
 
-    async getLinkOfPackage(packageName: string): Promise<string> {
-        let link: string = '';
-
-        await axios.get(`https://registry.npmjs.org/${packageName}`)
-            .then(response => response.data)
-            .then(data => {
-                link = data.repository ? data.repository.url : data.homepage;
-
-                link = link ? link.replace(".git", "").replace("git+", "").replace("git:", "https:") : '';
-            }).catch(_ => {});
-
-        return link;
+    getLinkOfPackage(packageName: string): string {
+        return `https://www.npmjs.com/package/${packageName}`;
     }
 
     async getSubPackageManager(): Promise<JavascriptPackageManagerInterface> {

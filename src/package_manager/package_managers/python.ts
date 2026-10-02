@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as toml from '@iarna/toml';
 import type { InstalledPackage, Language, outdated } from '../../types/types';
 import { LanguagePackageManager } from '../language_package_manager';
@@ -21,6 +22,7 @@ export class Python extends LanguagePackageManager implements PackageManager {
 
     async getInstalled(packageName: string): Promise<InstalledPackage> {
         Python.packageManager = await this.getSubPackageManager();
+        Python.packageManager.setProjectDirectory(path.dirname(this.getEditorFileName()));
 
         const installedPackages = new Parser(Python.packageManager.getName()).parse(await this.lockFileContent())['dependencies'];
         const packageFound = installedPackages.find((pkg: Record<string, any>) => pkg.name === packageName);

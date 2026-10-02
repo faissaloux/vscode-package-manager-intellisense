@@ -6,7 +6,7 @@ export interface PackageManager {
     getLockPath(): string;
     getName(): Language;
     getEditorFileName(): string;
-    getLinkOfPackage(packageName: string): Promise<string>;
+    getLinkOfPackage(packageName: string): string;
     getLatestVersions(): outdated[]|false;
     getOutdatedPackages(): string;
     getPackagesNames(content: string): Set<string>;

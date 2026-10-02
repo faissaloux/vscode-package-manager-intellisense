@@ -2,7 +2,7 @@ import * as cp from 'child_process';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import type { Language, Line } from '../types/types';
-import { pathJoin, rootPath } from '../util/globals';
+import { pathJoin } from '../util/globals';
 
 export abstract class LanguagePackageManager {
     protected abstract name: Language;
@@ -37,7 +37,7 @@ export abstract class LanguagePackageManager {
         throw new Error("Not Implemented!");
     }
 
-    async getLinkOfPackage(_packageName: string): Promise<string> {
+    getLinkOfPackage(_packageName: string): string {
         return '';
     }
 
@@ -45,7 +45,7 @@ export abstract class LanguagePackageManager {
         let outdatedResponse: string;
         try {
             outdatedResponse = cp.execSync(this.outdatedPackagesCommand, {
-                cwd: rootPath,
+                cwd: path.dirname(this.getEditorFileName()),
                 encoding: 'utf8',
                 stdio: ['ignore', 'pipe', 'pipe'],
             });
