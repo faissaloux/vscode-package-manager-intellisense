@@ -1,16 +1,17 @@
 import type * as vscode from 'vscode';
-import type { InstalledPackage, Language, Line, abandoned, outdated } from "../types/types";
+
+import type { InstalledPackage, Language, Line, abandoned, outdated } from '../types/types';
 
 export interface PackageManager {
-    getInstalled(packageName: string, line: string): Promise<InstalledPackage>;
-    getLockPath(): string;
-    getName(): Language;
-    getEditorFileName(): string;
-    getLinkOfPackage(packageName: string): string;
-    getLatestVersions(): outdated[]|false;
-    getOutdatedPackages(): string;
-    getPackagesNames(content: string): Set<string>;
-    getLines(document: vscode.TextDocument, packageName: string): Line[];
-    isExcluded(packageName: string): boolean;
-    getAbandoned?(): abandoned[];
+  getInstalled(packageName: string, line: string): Promise<InstalledPackage>;
+  getLockPath(): string;
+  getName(): Language;
+  getEditorFileName(): string;
+  getLinkOfPackage(packageName: string): string;
+  getLatestVersions(): outdated[] | false;
+  getOutdatedPackages(): string;
+  getPackagesNames(content: string): Set<string>;
+  getLines(document: vscode.TextDocument, packageName: string): Line[];
+  isExcluded(packageName: string): boolean;
+  getAbandoned?(): abandoned[];
 }

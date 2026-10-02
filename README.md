@@ -6,6 +6,7 @@
 Extension that shows you versions of your installed packages, latest available versions and allow you to go to their links by clicking on them.
 
 #### Legend
+
 _gray:_ installed version.\
 _red:_ latest available version.
 
@@ -40,26 +41,28 @@ _red:_ latest available version.
 </details>
 
 ## Installation
+
 - Open VS Code and click on Extensions Icon in the Activity Bar.
 - Type `faissaloux.package-manager-intellisense`.
 - Install.
 
 ## Support
 
-| Package Manager | installed versions | latest versions | links | abandoned
----|---|---|---| ---|
-| npm | ✔️ | ✔️ | ✔️ | ❌ |
-| yarn | ✔️ | ✔️ | ✔️ | ❌ |
-| pnpm | ✔️ | ✔️ | ✔️ | ❌ |
-| bun | ✔️ | ✔️ | ✔️ | ❌ |
-| composer | ✔️ | ✔️ | ✔️ | ✔️ |
-| bundler | ✔️ | ✔️ | ❌ | ❌ |
-| cargo | ✔️ | ✔️ | ❌ | ❌ |
-| poetry | ✔️ | ✔️ | ❌ | ❌ |
-| uv | ✔️ | ✔️ | ❌ | ❌ |
-| pub | ✔️ | ✔️ | ✔️ | ❌ |
+| Package Manager | installed versions | latest versions | links | abandoned |
+| --------------- | ------------------ | --------------- | ----- | --------- |
+| npm             | ✔️                 | ✔️              | ✔️    | ❌        |
+| yarn            | ✔️                 | ✔️              | ✔️    | ❌        |
+| pnpm            | ✔️                 | ✔️              | ✔️    | ❌        |
+| bun             | ✔️                 | ✔️              | ✔️    | ❌        |
+| composer        | ✔️                 | ✔️              | ✔️    | ✔️        |
+| bundler         | ✔️                 | ✔️              | ❌    | ❌        |
+| cargo           | ✔️                 | ✔️              | ❌    | ❌        |
+| poetry          | ✔️                 | ✔️              | ❌    | ❌        |
+| uv              | ✔️                 | ✔️              | ❌    | ❌        |
+| pub             | ✔️                 | ✔️              | ✔️    | ❌        |
 
 ## Usage
+
 - Install your dependencies.
 - Open your dependencies file.
 - See more informations about your dependencies.

@@ -1,4 +1,4 @@
-name: Types Check
+name: Format
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  types-check:
+  format:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,5 +26,5 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Types check
-        run: yarn type:check
+      - name: Check format
+        run: yarn format:check

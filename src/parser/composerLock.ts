@@ -1,19 +1,19 @@
-import type { LockParser } from "../interfaces/lock_parser";
+import type { LockParser } from '../interfaces/lock_parser';
 
 export class ComposerLock implements LockParser {
-    private content: Record<string, any>;
+  private content: Record<string, any>;
 
-    constructor(content: string) {
-        this.content = JSON.parse(content);
+  constructor(content: string) {
+    this.content = JSON.parse(content);
 
-        return this;
-    }
+    return this;
+  }
 
-    dependencies(): Record<string, any> {
-        return this.content.packages;
-    }
+  dependencies(): Record<string, any> {
+    return this.content.packages;
+  }
 
-    lockVersion(): null {
-        return null;
-    }
+  lockVersion(): null {
+    return null;
+  }
 }

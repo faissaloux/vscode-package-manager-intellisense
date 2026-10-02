@@ -1,30 +1,36 @@
 import * as vscode from 'vscode';
-import type { DependenciesFile } from "./package_manager/package_manager";
+
+import type { DependenciesFile } from './package_manager/package_manager';
 import { type PackageManager } from './types/types';
 
 export class Config {
-    static #packageManagersFiles: Record<PackageManager, DependenciesFile> = {
-        'npm': 'package.json',
-        'yarn': 'package.json',
-        'pnpm': 'package.json',
-        'bun': 'package.json',
-        'composer': 'composer.json',
-        'bundler': 'Gemfile',
-        'cargo': 'Cargo.toml',
-        'poetry': 'pyproject.toml',
-        'uv': 'pyproject.toml',
-        'pub': 'pubspec.yaml',
-    };
+  static #packageManagersFiles: Record<PackageManager, DependenciesFile> = {
+    npm: 'package.json',
+    yarn: 'package.json',
+    pnpm: 'package.json',
+    bun: 'package.json',
+    composer: 'composer.json',
+    bundler: 'Gemfile',
+    cargo: 'Cargo.toml',
+    poetry: 'pyproject.toml',
+    uv: 'pyproject.toml',
+    pub: 'pubspec.yaml',
+  };
 
-    static enabledPackageManagers(): DependenciesFile[] {
-        const packagesFiles: DependenciesFile[] = [];
+  static enabledPackageManagers(): DependenciesFile[] {
+    const packagesFiles: DependenciesFile[] = [];
 
-        Object.entries(Config.#packageManagersFiles).forEach(([packageManager, file]) => {
-            if (vscode.workspace.getConfiguration().get(`package-manager-intellisense.${packageManager}.enable`) && !packagesFiles.includes(file)) {
-                packagesFiles.push(file);
-            }
-        });
+    Object.entries(Config.#packageManagersFiles).forEach(([packageManager, file]) => {
+      if (
+        vscode.workspace
+          .getConfiguration()
+          .get(`package-manager-intellisense.${packageManager}.enable`) &&
+        !packagesFiles.includes(file)
+      ) {
+        packagesFiles.push(file);
+      }
+    });
 
-        return packagesFiles;
-    }
+    return packagesFiles;
+  }
 }
